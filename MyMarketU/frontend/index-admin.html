@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - Cosmetico</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/styleA.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Admin Header -->
+        <section class="section-head">
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <div class="logo">
+                            <span class="text">
+                                <a href="admin-dashboard.html">MyMarketU</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <div class="admin-profile">
+                            <span>Welcome, Admin</span>
+                            <a href="logout.html">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Navigation -->
+        <div class="admin-nav">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="products-admin.html">Products</a></li>
+                    <li><a href="orders-admin.html">Orders</a></li>
+                    <li><a href="customersmenu-admin.html">Customers</a></li>
+                    <li><a href="reports-admin.html">Reports</a></li>
+                    <li><a href="profile-settings-admin.html">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <section class="admin-content">
+            <div class="container">
+                <!-- Statistics Summary -->
+                <div class="row-fluid stats-summary">
+                    <div class="span3">
+                        <div class="stat-box">
+                            <h3>Total Sales</h3>
+                            <span class="stat-number">Rp30.560.000</span>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="stat-box">
+                            <h3>Orders</h3>
+                            <span class="stat-number">156</span>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="stat-box">
+                            <h3>Customers</h3>
+                            <span class="stat-number">2,450</span>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="stat-box">
+                            <h3>Products</h3>
+                            <span class="stat-number">50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <h2>Recent Orders</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#12345</td>
+                                    <td>John Doe</td>
+                                    <td>Versace Yellow Diamond</td>
+                                    <td>$270.00</td>
+                                    <td>Pending</td>
+                                    <td>
+                                        <a href="#" class="btn btn-small">View</a>
+                                        <a href="#" class="btn btn-small btn-primary">Process</a>
+                                    </td>
+                                </tr>
+                                <!-- Add more order rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alert -->
+                <div class="row-fluid">
+                    <div class="span6">
+                        <h2>Low Stock Alert</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Current Stock</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Burberry Perfume</td>
+                                    <td>5</td>
+                                    <td><a href="#" class="btn btn-small btn-warning">Reorder</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <section class="section-footer">
+            <div class="container">
+                <div class="copyright">
+                    <p>© MyMarketU 2024. All rights reserved.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/admin-script.js"></script>
+</body>
+</html>
