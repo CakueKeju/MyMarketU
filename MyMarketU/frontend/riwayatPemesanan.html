@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pemesanan</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox dan min-vh-100 untuk tinggi penuh -->
+
+    <!-- Header -->
+    <header class="bg-white py-2 border-bottom shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="#" class="text-decoration-none text-danger fw-bold fs-4">MyMarketU</a>
+            <div class="input-group w-50">
+                <input type="text" class="form-control" placeholder="Cari produk, makanan atau minuman..">
+                <button class="btn btn-outline-danger" type="button">Cari</button>
+            </div>
+            <div>
+                <a href="#" class="text-muted me-3">Akun Saya</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-4 flex-grow-1">
+        <!-- Card Riwayat -->
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title mb-1">Nama Barang</h5>
+                    <p class="card-text mb-1">Harga: Rp 50,000</p>
+                    <p class="card-text text-muted">Tanggal Pembelian: 12 Mei 2024</p>
+                </div>
+                <div>
+                    <a href="#" class="text-danger me-3">Hapus Riwayat</a>
+                    <button class="btn btn-dark btn-sm">Rincian Pesanan</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title mb-1">Nama Barang</h5>
+                    <p class="card-text mb-1">Harga: Rp 100,000</p>
+                    <p class="card-text text-muted">Tanggal Pembelian: 10 Mei 2024</p>
+                </div>
+                <div>
+                    <a href="#" class="text-danger me-3">Hapus Riwayat</a>
+                    <button class="btn btn-dark btn-sm">Rincian Pesanan</button>
+                </div>
+            </div>
+        </div>
+
+       
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-3 mt-auto">
+        <div class="container text-center">
+            &copy; 2024 MyMarketU. Semua Hak Dilindungi.
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
