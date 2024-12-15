@@ -1,0 +1,13 @@
+package com.cakwe.MyMarketU;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class MyMarketUApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
