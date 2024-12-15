@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Produk MyMarketU</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #f9f9f9;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header .brand {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #a8181c;
+    }
+
+    header nav span {
+      margin: 0 15px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    header nav span:hover {
+      color: #a8181c;
+    }
+
+    header nav span::after {
+      content: '|';
+      color: #ccc;
+      margin-left: 15px;
+    }
+
+    header nav span:last-child::after {
+      content: '';
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .product-review {
+      background-color: #fff;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .product-review img {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .rating {
+      display: flex;
+      justify-content: center;
+      flex-direction: row-reverse;
+      margin: 10px 0;
+    }
+
+    .rating input {
+      display: none;
+    }
+
+    .rating label {
+      font-size: 2.5rem;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    .rating input:checked ~ label,
+    .rating input:checked ~ label ~ label {
+      color: #ffcc00;
+    }
+
+    .rating label:hover,
+    .rating label:hover ~ label {
+      color: #ffcc00;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin: 20px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #e53935;
+      color: white;
+      border: none;
+      padding: 10px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #c62828;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #a8181c;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">MyMarketU</div>
+    <nav>
+      <span>Tentang Kami</span>
+      <span>Akun Saya</span>
+      <span>Wishlist</span>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="product-review">
+      <img src="https://via.placeholder.com/200" alt="NAMA PRODUK">
+      <h2>NAMA PRODUK</h2>
+      <div class="rating">
+        <input type="radio" id="star5" name="rating" value="5">
+        <label for="star5">&#9733;</label>
+        <input type="radio" id="star4" name="rating" value="4">
+        <label for="star4">&#9733;</label>
+        <input type="radio" id="star3" name="rating" value="3">
+        <label for="star3">&#9733;</label>
+        <input type="radio" id="star2" name="rating" value="2">
+        <label for="star2">&#9733;</label>
+        <input type="radio" id="star1" name="rating" value="1">
+        <label for="star1">&#9733;</label>
+      </div>
+      <textarea placeholder="Ceritakan pengalamanmu terkait produk ini..."></textarea>
+      <button>SIMPAN</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Bergabunglah dengan buletin kami secara gratis<br>
+    Daftar sekarang untuk mendapatkan update tentang promosi & kupon. Jangan khawatir, kami tidak mengirim spam!</p>
+    <p>Butuh Bantuan? Hubungi kami di <a href="mailto:info@contoh.com">info@contoh.com</a> | Telp: 62 188 188 111</p>
+    <p>&copy; 2024 MyMarketU. Semua Hak Dilindungi.</p>
+  </footer>
+
+  <script>
+    const ratingInputs = document.querySelectorAll('input[name="rating"]');
+    const button = document.querySelector('button');
+
+    button.addEventListener('click', function() {
+      const selectedRating = document.querySelector('input[name="rating"]:checked');
+      const textarea = document.querySelector('textarea');
+      if (selectedRating) {
+        alert(`Terima kasih! Anda memberikan ${selectedRating.value} bintang.\nKomentar: ${textarea.value}`);
+      } else {
+        alert('Silakan pilih bintang dan berikan komentar.');
+      }
+    });
+  </script>
+</body>
+</html>
