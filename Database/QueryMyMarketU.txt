@@ -1,0 +1,11 @@
+INSERT INTO products (id, nama, kategori, deskripsi, harga, stok, nama_file_gambar) VALUES
+(1, 'Mister Potato Snack Crisps Original 35G', 'Snack', 'Keripik kentang original renyah dan gurih.', 10999, 30, 'mister_potato_original.jpg'),
+(2, 'Chitato Snack Potato Chips Sapi Panggang 68G', 'Snack', 'Keripik kentang rasa sapi panggang dengan bumbu gurih.', 9000, 19, 'chitato_sapi_panggang.jpg'),
+(3, 'Melon Segar', 'Buah', 'Buah melon segar dengan rasa manis alami.', 36000, 25, 'melon_segar.jpg'),
+(4, 'Fruit Tea Minuman Teh Blackcurrant 250ml', 'Minuman', 'Minuman teh rasa blackcurrant yang menyegarkan.', 5900, 50, 'fruit_tea_blackcurrant.jpg'),
+(5, 'Tisu Wajah', 'Kebutuhan Rumah Tangga', 'Tisu wajah lembut dan nyaman untuk kulit.', 13000, 100, 'tisu_wajah.jpg'),
+(6, 'Bango Kecap Manis Refill 735ml', 'Bumbu Dapur', 'Kecap manis berkualitas dengan rasa khas.', 26700, 40, 'bango_kecap_manis.jpg'),
+(7, 'Indomilk Kental Manis Putih 545G', 'Bahan Minuman', 'Susu kental manis putih untuk berbagai keperluan masak.', 14400, 35, 'indomilk_kental_manis.jpg'),
+(8, 'Pisang Cavendish Single 1S', 'Buah', 'Pisang cavendish segar kaya nutrisi.', 3800, 60, 'pisang_cavendish.jpg'),
+(9, 'Onigiri PREMIUM Salmon Krimi', 'Makanan Siap Saji', 'Nasi kepal onigiri dengan isian salmon dan krim.', 11000, 20, 'onigiri_salmon_krimi.jpg'),
+(10, 'Kapal Api Kopi Bubuk Special 200G', 'Minuman', 'Kopi bubuk dengan aroma khas dari Kapal Api.', 18800, 50, 'kapal_api_kopi_bubuk.jpg');

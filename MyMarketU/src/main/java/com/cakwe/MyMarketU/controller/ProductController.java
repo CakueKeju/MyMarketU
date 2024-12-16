@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -117,5 +118,27 @@ public class ProductController {
         repo.save(product);
         
         return "redirect:/product"; 
+    }
+    
+    @GetMapping("/edit")
+    public String showEditPage (Model model,@RequestParam int id){
+        try{
+            Product product = repo.findById(id).get();
+            model.addAttribute("product",product);
+            
+            ProductDTO productDTO = new  ProductDTO();
+            productDTO.setNama(product.getNama());
+            productDTO.setKategori(product.getKategori());
+            productDTO.setDeskripsi(product.getDeskripsi());
+            productDTO.setHarga(product.getHarga());
+            
+        }catch(Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            return "redirect:/product";
+        }
+        
+        return "product/EditProduct";
+    
+        
     }
 }
