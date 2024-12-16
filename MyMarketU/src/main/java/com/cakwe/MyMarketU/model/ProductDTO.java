@@ -16,7 +16,7 @@ public class ProductDTO {
     private String deskripsi;
     private double harga;
     private int stok;
-    private MultipartFile imageFile;
+    private MultipartFile namaFileGambar;
 
     public String getNama() {
         return nama;
@@ -79,12 +79,12 @@ public class ProductDTO {
         this.stok = stok;
     }
 
-    public MultipartFile getImageFile() {
-        return imageFile;
+    public MultipartFile getnamaFileGambar() {
+        return namaFileGambar;
     }
 
-    public void setImageFile(MultipartFile imageFile) {
-        this.imageFile = imageFile;
+    public void setnamaFileGambar(MultipartFile namaFileGambar) {
+        this.namaFileGambar = namaFileGambar;
     }
     
 }
