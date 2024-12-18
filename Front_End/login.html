@@ -9,23 +9,21 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- Header -->
-
     <header class="bg-white py-2 border-bottom shadow-sm">
-      <div class="container d-flex justify-content-between align-items-center">
-          <a href="#" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
-              <img src="img/MyMarketU.png" alt="Logo MyMarketU" width="100" height="100" class="me-2">
-              MyMarketU
-          </a>
-          <div class="input-group w-50">
-              <input type="text" class="form-control" placeholder="Cari produk, makanan atau minuman..">
-              <button class="btn btn-outline-danger" type="button">Cari</button>
-          </div>
-          <div>
-              <a href="#" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
-       
-          </div>
-      </div>
-  </header>
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
+                <img src="img/a.png" alt="Logo MyMarketU" width="40" height="48" class="me-2">
+                MyMarketU
+            </a>
+            <div class="input-group w-50">
+                <input type="text" class="form-control" placeholder="Cari produk, makanan atau minuman..">
+                <button class="btn btn-outline-danger" type="button">Cari</button>
+            </div>
+            <div>
+                <a href="index.html" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
+            </div>
+        </div>
+    </header>
   
     <!-- Login Section -->
     <main class="flex-grow-1">
@@ -35,18 +33,25 @@
                     <!-- Tautan ke Halaman Register -->
                     <h3 class="text-center mb-4">
                         <strong class="text-dark">Login</strong>
-                        <a href="registrasi.html" class="text-decoration-none text-muted">Register</a> 
+                        <a href="register.html" class="text-decoration-none text-muted">Register</a> 
                     </h3>
 
                     <form>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username </label>
+                            <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" placeholder="Masukkan Username">
                         </div>
                         
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password </label>
+                            <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
+                        </div>
+
+                        <!-- Link Forgot Password -->
+                        <div class="mb-3 text-end">
+                            <a href="forgotPass.html" class="text-decoration-none text-danger small">
+                                Forgot Password?
+                            </a>
                         </div>
                                           
                         <button type="submit" class="btn btn-danger w-100">Login</button>
