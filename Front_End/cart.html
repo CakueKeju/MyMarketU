@@ -8,27 +8,26 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<header>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="/">
-                <img src="img/logo.png" width="120">
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Header -->
+    <header class="bg-white py-2 border-bottom shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
+                <img src="img/a.png" alt="Logo MyMarketU" width="40" height="48" class="me-2">
+                MyMarketU
             </a>
-            
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link text-white" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="/#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
-                </ul>
+            <div class="input-group w-50">
+                <input type="text" class="form-control" placeholder="Cari produk, makanan atau minuman..">
+                <button class="btn btn-outline-danger" type="button">Cari</button>
             </div>
-            
-        </nav>
-    </div>
-</header>
-<body>
-    
+            <div>
+                <a href="index.html" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shopping Cart Section -->
     <section class="py-3">
         <div class="container">
             <h1>Your Shopping Cart</h1>
@@ -42,11 +41,11 @@
                 <div class="cart-item">
                     <div class="row">
                         <div class="col-md-3">
-                            <img src="img/product-1.jpg" class="img-fluid" alt="Product">
+                            <img src="img/Susu Bayi.jpg" class="img-fluid" alt="Product">
                         </div>
                         <div class="col-md-5">
-                            <h4>Sari Roti Sandwich Coklat</h4>
-                            <p>Rp 6.000</p>
+                            <h4>Susu Bayi</h4>
+                            <p>Rp 30.000</p>
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="form-control" value="1">
@@ -54,17 +53,17 @@
                         <div class="col-md-2">
                             <button class="btn btn-danger">Remove</button>
                         </div>
-                        <div class="col-md-3">
-                            <img src="img/product-1.jpg" class="img-fluid" alt="Product">
+                        <div class="col-md-3 mt-3">
+                            <img src="img/Qtela.jpg" class="img-fluid" alt="Product">
                         </div>
-                        <div class="col-md-5">
-                            <h4>Sooju Jinnro 360 ml</h4>
-                            <p>Rp 130.000</p>
+                        <div class="col-md-5 mt-3">
+                            <h4>Qtela</h4>
+                            <p>Rp 10.000</p>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 mt-3">
                             <input type="number" class="form-control" value="1">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 mt-3">
                             <button class="btn btn-danger">Remove</button>
                         </div>
                     </div>
@@ -78,7 +77,7 @@
                     <h3 class="mb-3">Cart Summary</h3>
                     <div class="d-flex justify-content-between">
                         <span>Subtotal</span>
-                        <span>Rp 136.000</span>
+                        <span>Rp 40.000</span>
                     </div>
                     <button class="btn btn-success w-100 mt-3" onclick="location.href='thankyou.html'">Pay</button>
                 </div>
@@ -86,12 +85,14 @@
         </div>
     </section>
 
-    <footer class="bg-dark text-light py-4 mt-auto">
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-auto">
         <div class="container text-center">
-            &copy; Copyright 2024 - MyMarketU
+            <p class="mb-0">&copy; 2024 MyMarketU. Semua Hak Dilindungi.</p>
         </div>
     </footer>
-    <script src="css/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-PPmltI4DzdaNfQz9JdGpI3TZfvlw7irzjBn3wKgNmCUp0auj/uTPmSy7Ou1EP9J4" crossorigin="anonymous"></script>
 </body>
 </html>
