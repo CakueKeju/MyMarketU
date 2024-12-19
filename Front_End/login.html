@@ -11,7 +11,7 @@
     <!-- Header -->
     <header class="bg-white py-2 border-bottom shadow-sm">
         <div class="container d-flex justify-content-between align-items-center">
-            <a href="#" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
                 <img src="img/a.png" alt="Logo MyMarketU" width="40" height="48" class="me-2">
                 MyMarketU
             </a>
@@ -20,11 +20,11 @@
                 <button class="btn btn-outline-danger" type="button">Cari</button>
             </div>
             <div>
-                <a href="#" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
+                <a href="index.html" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
             </div>
         </div>
     </header>
-    
+  
     <!-- Login Section -->
     <main class="flex-grow-1">
         <section class="container mt-5 mb-5">
@@ -35,25 +35,23 @@
                         <strong class="text-dark">Login</strong>
                         <a href="register.html" class="text-decoration-none text-muted">Register</a> 
                     </h3>
-                    
-                    <!-- Pesan -->
-                    <div class="message text-danger" th:if="${param.error}">
-                        Invalid Username or Password
-                    </div>
-                    <div class="message text-success" th:if="${param.logout}">
-                        Logout Successfully
-                    </div>
 
-                    <!-- Form -->
-                    <form th:action="@{/login}" method="post">
+                    <form>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="username" name="username" placeholder="Enter your email" required>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Masukkan Username">
                         </div>
                         
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                            <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
+                        </div>
+
+                        <!-- Link Forgot Password -->
+                        <div class="mb-3 text-end">
+                            <a href="forgotPass.html" class="text-decoration-none text-danger small">
+                                Forgot Password?
+                            </a>
                         </div>
                                           
                         <button type="submit" class="btn btn-danger w-100">Login</button>
