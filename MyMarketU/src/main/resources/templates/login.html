@@ -36,24 +36,22 @@
                         <a href="register.html" class="text-decoration-none text-muted">Register</a> 
                     </h3>
                     
-                    <!-- Pesan -->
-                    <div class="message text-danger" th:if="${param.error}">
-                        Invalid Username or Password
-                    </div>
-                    <div class="message text-success" th:if="${param.logout}">
-                        Logout Successfully
-                    </div>
+                    <!-- Pesan Error -->
+                    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                    
+                    <!-- Pesan Logout -->
+                    <div class="alert alert-success" th:if="${logoutMessage}" th:text="${logoutMessage}"></div>
 
                     <!-- Form -->
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="username" name="username" placeholder="Enter your email" required>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan Username" required>
                         </div>
                         
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Password" required>
                         </div>
                                           
                         <button type="submit" class="btn btn-danger w-100">Login</button>

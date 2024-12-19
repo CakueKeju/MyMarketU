@@ -6,7 +6,8 @@ package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.Product;
 import com.cakwe.MyMarketU.model.ProductDTO;
-import com.cakwe.MyMarketU.service.ProductRepository;
+import com.cakwe.MyMarketU.repository.ProductRepository;
+import jakarta.validation.Valid;
 import java.io.InputStream;
 import java.nio.file.*;
 import java.util.Date;
@@ -56,35 +57,15 @@ public class ProductController {
     
     
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute ProductDTO productDTO, BindingResult result, Model model) {
-        if (productDTO.getNama() == null || productDTO.getNama().trim().isEmpty()) {
-            result.addError(new FieldError("productDTO", "nama", "Nama tidak boleh kosong"));
-        }
-
-        if (productDTO.getKategori() == null || productDTO.getKategori().trim().isEmpty()) {
-            result.addError(new FieldError("productDTO", "kategori", "Kategori tidak boleh kosong"));
-        }
-
-        if (productDTO.getDeskripsi() == null || productDTO.getDeskripsi().trim().isEmpty()) {
-            result.addError(new FieldError("productDTO", "deskripsi", "Deskripsi tidak boleh kosong"));
-        }
-
-        if (productDTO.getHarga() <= 0) {
-            result.addError(new FieldError("productDTO", "harga", "Harga harus lebih dari 0"));
-        }
-
-        if (productDTO.getStok() < 0) {
-            result.addError(new FieldError("productDTO", "stok", "Stok tidak boleh negatif"));
-        }
-
-        if (productDTO.getnamaFileGambar().isEmpty()){
+    public String createProduct(@Valid @ModelAttribute ProductDTO productDTO, BindingResult result) {
+        if (productDTO.getNamaFileGambar().isEmpty()){
             result.addError(new FieldError("productDTO", "imageFile", "File image tidak valid"));
         }
         if (result.hasErrors()) {
             return "product/CreateProduct"; 
         }
         
-        MultipartFile image = productDTO.getnamaFileGambar();
+        MultipartFile image = productDTO.getNamaFileGambar();
         Date createdAt = new Date();
         String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
         
@@ -96,14 +77,8 @@ public class ProductController {
                 Files.createDirectories(uploadPath);
             }
 
-            Path targetPath = uploadPath.resolve(storageFileName);
-
-            if (Files.exists(targetPath)) {
-                Files.delete(targetPath);
-            }
-
             try (InputStream inputStream = image.getInputStream()) {
-                    Files.copy(inputStream, targetPath);
+                    Files.copy(inputStream, Paths.get(uploadDir + storageFileName),StandardCopyOption.REPLACE_EXISTING);
             }
 
         }catch (Exception ex){
@@ -151,67 +126,53 @@ public class ProductController {
     
     
     @PostMapping("/edit")
-    public String updateProduct (@ModelAttribute ProductDTO productDTO, BindingResult result, Model model, @RequestParam int id){
-    Product product = repo.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    public String updateProduct (Model model, @RequestParam int id, @Valid @ModelAttribute ProductDTO productDTO, BindingResult result){
 
-    // Validasi input
-    if (productDTO.getNama() == null || productDTO.getNama().trim().isEmpty()) {
-        result.addError(new FieldError("productDTO", "nama", "Nama tidak boleh kosong"));
-    }
-    if (productDTO.getKategori() == null || productDTO.getKategori().trim().isEmpty()) {
-        result.addError(new FieldError("productDTO", "kategori", "Kategori tidak boleh kosong"));
-    }
-    if (productDTO.getDeskripsi() == null || productDTO.getDeskripsi().trim().isEmpty()) {
-        result.addError(new FieldError("productDTO", "deskripsi", "Deskripsi tidak boleh kosong"));
-    }
-    if (productDTO.getHarga() <= 0) {
-        result.addError(new FieldError("productDTO", "harga", "Harga harus lebih dari 0"));
-    }
-    if (productDTO.getStok() < 0) {
-        result.addError(new FieldError("productDTO", "stok", "Stok tidak boleh negatif atau berkoma"));
-    }
+        try{
+            Product product = repo.findById(id).get();
+            model.addAttribute("product",product);
 
-    if (result.hasErrors()) {
-        return "product/EditProduct";
-    }
-
-    if (!productDTO.getnamaFileGambar().isEmpty()) {
-        String uploadDir = "public/images/";
-        Path oldImagePath = Paths.get(uploadDir + product.getNamaFileGambar());
-
-        try {
-            // Hapus gambar lama
-            Files.deleteIfExists(oldImagePath);
-        } catch (Exception ex) {
-            System.out.println("Exception deleting old image: " + ex.getMessage());
-        }
-
-        try {
-            MultipartFile image = productDTO.getnamaFileGambar();
-            Date createdAt = new Date();
-            String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
-            Path targetPath = Paths.get(uploadDir + storageFileName);
-
-            try (InputStream inputStream = image.getInputStream()) {
-                Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            if(result.hasErrors()){
+                return "product/EditProduct";
             }
+        
+            if (!productDTO.getNamaFileGambar().isEmpty()){
+                // Delete gambar lama
+                String uploadDir = "public/images/";
+                Path oldImagePath = Paths.get(uploadDir + product.getNamaFileGambar());
 
-            product.setNamaFileGambar(storageFileName);
-        } catch (Exception ex) {
-            System.out.println("Exception saving new image: " + ex.getMessage());
+                try{
+                    Files.delete(oldImagePath);
+                }catch(Exception ex){
+                    System.out.println("Exception: "+ ex.getMessage());
+                }
+
+                // Save gambar baru
+                MultipartFile image = productDTO.getNamaFileGambar();
+                Date createdAt = new Date();
+                String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
+
+                try (InputStream inputStream = image.getInputStream()){
+                    Files.copy(inputStream, Paths.get(uploadDir + storageFileName),StandardCopyOption.REPLACE_EXISTING);
+                }
+
+                product.setNamaFileGambar(storageFileName);
+            }
+            product.setNama(productDTO.getNama());
+            product.setKategori(productDTO.getKategori());
+            product.setDeskripsi(productDTO.getDeskripsi());
+            product.setHarga(productDTO.getHarga());
+            product.setStok(productDTO.getStok());
+
+            repo.save(product);
         }
+        catch(Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        return "redirect:/product";
     }
 
-    product.setNama(productDTO.getNama());
-    product.setKategori(productDTO.getKategori());
-    product.setDeskripsi(productDTO.getDeskripsi());
-    product.setHarga(productDTO.getHarga());
-    product.setStok(productDTO.getStok());
 
-    repo.save(product);
-
-    return "redirect:/product";
-    }
     
     @GetMapping("/delete")
     public String deleteProduct(@RequestParam int id) {
@@ -233,5 +194,5 @@ public class ProductController {
     }
 
     return "redirect:/product";
-}
+    }
 }

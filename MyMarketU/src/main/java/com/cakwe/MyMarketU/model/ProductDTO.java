@@ -4,6 +4,7 @@
  */
 package com.cakwe.MyMarketU.model;
 
+import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -11,10 +12,22 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Cakue
  */
 public class ProductDTO {
+    @NotEmpty(message = "Nama wajib diisi")
     private String nama;
+    
+    @NotEmpty(message = "Kategori wajib dipilih")
     private String kategori;
+    
+    @Size(min = 10, message = "Deskripsi minimal 10 abjad")
+    @Size(max = 20, message = "Deskripsi maksimal 2000 abjad")
     private String deskripsi;
+    
+    @Min(0)
+    @Digits(integer = 8, fraction = 3, message = "Harga maksimal 99,999,99.99")
     private double harga;
+    
+    @Min(0)
+    @Digits(integer = 4, fraction = 0, message = "Stok maksimal 9999")
     private int stok;
     private MultipartFile namaFileGambar;
 
@@ -23,9 +36,6 @@ public class ProductDTO {
     }
 
     public void setNama(String nama) {
-        if (nama == null || nama.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nama tidak boleh kosong");
-        }
         this.nama = nama;
     }
 
@@ -34,9 +44,6 @@ public class ProductDTO {
     }
 
     public void setKategori(String kategori) {
-        if (kategori == null || kategori.trim().isEmpty()) {
-            throw new IllegalArgumentException("Kategori tidak boleh kosong");
-        }
         this.kategori = kategori;
     }
 
@@ -45,15 +52,6 @@ public class ProductDTO {
     }
 
     public void setDeskripsi(String deskripsi) {
-        if (deskripsi == null || deskripsi.trim().isEmpty()) {
-            throw new IllegalArgumentException("Deskripsi tidak boleh kosong");
-        }
-        if (deskripsi.length() < 10) {
-            throw new IllegalArgumentException("Deskripsi harus memiliki minimal 10 karakter");
-        }
-        if (deskripsi.length() > 2000) {
-            throw new IllegalArgumentException("Deskripsi tidak boleh lebih dari 2000 karakter");
-        }
         this.deskripsi = deskripsi;
     }
 
@@ -62,9 +60,6 @@ public class ProductDTO {
     }
 
     public void setHarga(double harga) {
-        if (harga < 0) {
-            throw new IllegalArgumentException("Harga tidak boleh negatif");
-        }
         this.harga = harga;
     }
 
@@ -73,19 +68,16 @@ public class ProductDTO {
     }
 
     public void setStok(int stok) {
-        if (stok < 0) {
-            throw new IllegalArgumentException("Stok tidak boleh negatif");
-        }
         this.stok = stok;
     }
 
-    public MultipartFile getnamaFileGambar() {
+    public MultipartFile getNamaFileGambar() {
         return namaFileGambar;
     }
 
-    public void setnamaFileGambar(MultipartFile namaFileGambar) {
+    public void setNamaFileGambar(MultipartFile namaFileGambar) {
         this.namaFileGambar = namaFileGambar;
     }
-    
+
 }
     
