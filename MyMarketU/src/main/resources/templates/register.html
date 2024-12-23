@@ -26,45 +26,39 @@
     </header>
   
     <!-- Register Section -->
-    <main class="flex-grow-1">
+        <main class="flex-grow-1">
         <section class="container mt-5 mb-5">
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <!-- Tautan ke Halaman Login -->
                     <h3 class="text-center mb-4">
-                        <a href="login.html" class="text-decoration-none text-muted">Login</a> 
+                        <a th:href="@{/login}" class="text-decoration-none text-muted">Login</a> 
                         <strong class="text-dark">Register</strong>
                     </h3>
 
-                    <!-- Pesan Error Global -->
-                    <div class="alert alert-danger mb-3" th:if="${#fields.hasErrors('*')}">
-                        Harap perbaiki kesalahan pada form.
-                    </div>
+                    <!-- Pesan Error -->
+                    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 
                     <!-- Form -->
-                    <form th:action="@{/registration}" method="post" role="form" th:object="${userDTO}">
+                    <form th:action="@{/registration}" method="post" th:object="${user}">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Masukkan Username" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                            <label for="namaLengkap" class="form-label">Full Name</label>
+                            <input th:field="*{namaLengkap}" type="text" class="form-control" id="namaLengkap" placeholder="Enter your full name" required>
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="Masukkan Email Anda" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            <label for="email" class="form-label">Email</label>
+                            <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="Enter your email" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="nim" class="form-label">NIM</label>
-                            <input th:field="*{nim}" type="text" class="form-control" id="nim" pattern="130[0-9]{7}" placeholder="Masukkan NIM Anda" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('nim')}" th:errors="*{nim}"></div>
+                            <input th:field="*{nim}" type="text" class="form-control" id="nim" placeholder="Enter your NIM" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Masukkan Password" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Enter your password" required>
                         </div>
                         
                         <p class="text-justify">

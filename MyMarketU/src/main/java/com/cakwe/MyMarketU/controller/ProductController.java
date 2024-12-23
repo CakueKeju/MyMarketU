@@ -90,6 +90,7 @@ public class ProductController {
         product.setDeskripsi(productDTO.getDeskripsi());
         product.setHarga(productDTO.getHarga());
         product.setStok(productDTO.getStok());
+        product.setDiskon(product.getDiskon());
         product.setNamaFileGambar(storageFileName);
 
         repo.save(product);
@@ -111,6 +112,7 @@ public class ProductController {
             productDTO.setDeskripsi(product.getDeskripsi());
             productDTO.setHarga(product.getHarga());
             productDTO.setStok(product.getStok());
+            productDTO.setDiskon(product.getDiskon());
             
             model.addAttribute("categories",categories);
             model.addAttribute("productDTO", productDTO);

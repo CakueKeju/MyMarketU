@@ -3,38 +3,47 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.cakwe.MyMarketU.model;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;        
 import jakarta.persistence.*;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 /**
  *
  * @author Cakue
  */
 @Entity
-public class User implements UserDetails{
+@Table(name = "users")
+public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String username;
-
+    
+    @Column(name = "nama_lengkap", nullable = false)
+    private String namaLengkap;
+    
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+    
     @Column(nullable = false, unique = true)
     private String nim;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "foto_profil", nullable = false)
+    private String fotoProfil = "default.png";
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false) // Foreign key ke tabel role
+    private Role role;
 
+    //Getter dan Setter
     public Long getId() {
         return id;
     }
@@ -43,8 +52,12 @@ public class User implements UserDetails{
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getNamaLengkap() {
+        return namaLengkap;
+    }
+
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
     }
 
     public String getEmail() {
@@ -55,6 +68,14 @@ public class User implements UserDetails{
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getNim() {
         return nim;
     }
@@ -63,53 +84,37 @@ public class User implements UserDetails{
         this.nim = nim;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getFotoProfil() {
+        return fotoProfil;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public void setFotoProfil(String fotoProfil) {
+        this.fotoProfil = fotoProfil;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
     
-     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> (GrantedAuthority) () -> role)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
+    
 }

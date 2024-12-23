@@ -29,6 +29,11 @@ public class ProductDTO {
     @Min(0)
     @Digits(integer = 4, fraction = 0, message = "Stok maksimal 9999")
     private int stok;
+    
+    @Min(0)
+    @Max(100)
+    private int diskon;
+    
     private MultipartFile namaFileGambar;
 
     public String getNama() {
@@ -69,6 +74,14 @@ public class ProductDTO {
 
     public void setStok(int stok) {
         this.stok = stok;
+    }
+
+    public int getDiskon() {
+        return diskon;
+    }
+
+    public void setDiskon(int diskon) {
+        this.diskon = diskon;
     }
 
     public MultipartFile getNamaFileGambar() {

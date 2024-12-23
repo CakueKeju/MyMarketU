@@ -25,6 +25,7 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String deskripsi;
     private int stok;
+    private int diskon;
     private String namaFileGambar;
 
     public int getId() {
@@ -82,5 +83,13 @@ public class Product {
     public void setNamaFileGambar(String namaFileGambar) {
         this.namaFileGambar = namaFileGambar;
     }
-    
+
+    public int getDiskon() {
+        return diskon;
+    }
+
+    public void setDiskon(int diskon) {
+        this.diskon = diskon;
+    }
+   
 }
