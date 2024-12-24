@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard - Cosmetico</title>
+    <title>Admin Dashboard - MyMarketU</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="css/styleA.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +17,7 @@
                     <div class="span6">
                         <div class="logo">
                             <span class="text">
-                                <a href="admin-dashboard.html">MyMarketU</a>
+                                <a href="index-admin.html">MyMarketU</a>
                             </span>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
         <div class="admin-nav">
             <div class="container">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#dashboard">Dashboard</a></li>
+                    <li class="active"><a href="index-admin.html">Dashboard</a></li>
                     <li><a href="products-admin.html">Products</a></li>
                     <li><a href="orders-admin.html">Orders</a></li>
                     <li><a href="customersmenu-admin.html">Customers</a></li>
@@ -97,13 +97,12 @@
                                     <td>John Doe</td>
                                     <td>Versace Yellow Diamond</td>
                                     <td>$270.00</td>
-                                    <td>Pending</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
                                     <td>
-                                        <a href="#" class="btn btn-small">View</a>
-                                        <a href="#" class="btn btn-small btn-primary">Process</a>
+                                        <button class="btn btn-small btn-primary"><i class="fa fa-eye"></i> View</button>
+                                        <button class="btn btn-small btn-warning"><i class="fa fa-edit"></i> Process</button>
                                     </td>
                                 </tr>
-                                <!-- Add more order rows -->
                             </tbody>
                         </table>
                     </div>
@@ -125,7 +124,7 @@
                                 <tr>
                                     <td>Burberry Perfume</td>
                                     <td>5</td>
-                                    <td><a href="#" class="btn btn-small btn-warning">Reorder</a></td>
+                                    <td><button class="btn btn-small btn-warning"><i class="fa fa-refresh"></i> Reorder</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -144,9 +143,7 @@
         </section>
     </div>
 
-    <!-- Scripts -->
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="css/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/admin-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 </body>
 </html>
