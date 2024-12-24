@@ -34,7 +34,7 @@ public class LoginController {
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
         if (error != null) {
-            model.addAttribute("error", "Email atau password salah");
+            model.addAttribute("errorMessage", "Email atau password salah");
         }
         return "login"; // Menampilkan halaman login.html
     }
@@ -53,11 +53,11 @@ public class LoginController {
             } else if ("Customer".equalsIgnoreCase(role)) {
                 return "redirect:/customer/dashboard";
             } else {
-                redirectAttributes.addFlashAttribute("error", "Invalid role.");
+                model.addAttribute("errorMessage", "Invalid role.");
                 return "login";
             }
         } else {
-            redirectAttributes.addFlashAttribute("error", "Invalid email or password.");
+            model.addAttribute("errorMessage", "Email atau password salah.");
             return "redirect:/login";
         }
     }

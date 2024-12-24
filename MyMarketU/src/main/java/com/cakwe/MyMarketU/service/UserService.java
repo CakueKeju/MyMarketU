@@ -36,7 +36,7 @@ public class UserService {
             return "Email is already registered";
         }
         
-        if(userRepository.existsByNim(user.getEmail())){
+        if(userRepository.existsByNim(user.getNim())){
             return "NIM is already registered";
         }
         

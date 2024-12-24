@@ -31,35 +31,13 @@
         <h1 class="text-center mb-4">Produk Kami</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Kartu Produk -->
-            <div class="col">
+            <div class="col" th:each="product : ${product}">
                 <div class="card product-card">
-                    <img src="img/miegoreng.webp" class="card-img-top" alt="Sari Roti Sandwich Coklat">
+                    <img th:src="@{'/images/' + ${product.namaFileGambar}}" class="card-img-top" th:alt="${product.nama}">
                     <div class="card-body">
-                        <h5 class="card-title">Indomie Goreng</h5>
-                        <p class="card-text text-danger fw-bold">Rp 6.000</p>
-                        <a href="product-detail.html?id=123" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Produk 2 -->
-            <div class="col">
-                <div class="card product-card">
-                    <img src="img/Qtela.jpg" class="card-img-top" alt="Makanan Enak">
-                    <div class="card-body">
-                        <h5 class="card-title">Qtela</h5>
-                        <p class="card-text text-danger fw-bold">Rp 10.000</p>
-                        <a href="product-detail.html?id=124" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Produk 3 -->
-            <div class="col">
-                <div class="card product-card">
-                    <img src="img/Susu Bayi.jpg" class="card-img-top" alt="Minuman Segar">
-                    <div class="card-body">
-                        <h5 class="card-title">Susu Bayi</h5>
-                        <p class="card-text text-danger fw-bold">Rp 8.000</p>
-                        <a href="product-detail.html?id=125" class="btn btn-primary">View Details</a>
+                        <h5 class="card-title" th:text="${product.nama}">Product Name</h5>
+                        <p class="card-text text-danger fw-bold" th:text="'Rp ' + ${product.harga}">Rp 0</p>
+                        <a th:href="@{'/product-detail?id=' + ${product.id}}" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
