@@ -70,7 +70,7 @@ public class ProductController {
         String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
         
         try{
-            String uploadDir = "public/images";
+            String uploadDir = "public/images/";
             Path uploadPath = Paths.get(uploadDir);
 
             if(!Files.exists(uploadPath)) {
@@ -165,6 +165,7 @@ public class ProductController {
             product.setDeskripsi(productDTO.getDeskripsi());
             product.setHarga(productDTO.getHarga());
             product.setStok(productDTO.getStok());
+            product.setDiskon(productDTO.getDiskon());
 
             repo.save(product);
         }

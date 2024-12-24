@@ -10,7 +10,7 @@
     <div class ="container">
         <h1 class="text-center ,my-4">Product</h1>
           
-        <a class="btn btn-primary" href="/product/create">Create Product</a>
+        <a class="btn btn-primary" href="/admin/create">Create Product</a>
         <table class="table">
             <thead>
                 <tr>
@@ -20,6 +20,7 @@
                     <th>Deskripsi</th>
                     <th>Harga</th>
                     <th>Stok</th>
+                    <th>Diskon</th>
                     <th>Gambar</th>
                     <th>Aksi</th>
                 </tr>
@@ -32,6 +33,7 @@
                     <td th:text="${product.deskripsi}"></td> 
                     <td th:text="'Rp '+${product.harga}"></td> 
                     <td th:text="${product.stok}"></td> 
+                    <td th:text="${product.diskon}+'%'"></td> 
                     <td>
                         <img th:src="@{'/images/' + ${product.namaFileGambar}}" 
                              alt="Gambar Produk" width="100">
