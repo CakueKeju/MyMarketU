@@ -21,6 +21,7 @@ public class DashboardController {
 
     @GetMapping("/customer/dashboard")
     public String customerDashboard(Model model) {
+        
         return "customer"; // Mengarah ke templates/customer.html
     }
 }
