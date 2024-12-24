@@ -39,7 +39,10 @@ public class SecurityConfiguration {
                 .loginProcessingUrl("/login") // URL untuk proses login
                 .usernameParameter("email") // Email sebagai username
                 .passwordParameter("password") // Parameter password
-                .defaultSuccessUrl("/", true) // Redirect ke home setelah sukses
+                .successHandler((request, response, authentication) -> {
+                    String redirectUrl = getRedirectUrlBasedOnRole(authentication);
+                    response.sendRedirect(redirectUrl); // Redirect berdasarkan role
+                })
                 .failureUrl("/login?error=true") // Redirect jika login gagal
             )
             .logout(logout -> logout
