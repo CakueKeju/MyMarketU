@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Dashboard - MyMarketU</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link th:href="@{/css/styleA.css}" rel="stylesheet">
+   <title>Admin Dashboard - MyMarketU</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+   <link th:href="@{/css/styleA.css}" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Admin Header -->
-        <section class="section-head">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span6">
-                        <div class="logo">
-                            <span class="text">
-                                <a href="index-admin.html">MyMarketU</a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="span6">
-                        <div class="admin-profile">
-                            <span>Welcome, Admin</span>
-                            <a href="logout.html">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+   <div class="wrapper">
+       <!-- Admin Header -->
+       <section class="section-head">
+           <div class="container">
+               <div class="row-fluid">
+                   <div class="span6">
+                       <div class="logo">
+                           <span class="text">
+                               <a th:href="@{/admin/dashboard}">MyMarketU</a>
+                           </span>
+                       </div>
+                   </div>
+                   <div class="span6">
+                       <div class="admin-profile">
+                           <span>Welcome, Admin</span>
+                           <a th:href="@{/logout}">Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
 
-        <!-- Admin Navigation -->
-        <div class="admin-nav">
-            <div class="container">
-                <ul class="nav nav-tabs">   
-                    <li class="active"><a href="index-admin.html">Dashboard</a></li>
-                    <li><a href="products-admin.html">Products</a></li>
-                    <li><a href="orders-admin.html">Orders</a></li>
-                    <li><a href="customersmenu-admin.html">Customers</a></li>
-                    <li><a href="reports-admin.html">Reports</a></li>
-                    <li><a href="profile-settings-admin.html">Settings</a></li>
-                </ul>
-            </div>
-        </div>
+       <!-- Admin Navigation -->
+       <div class="admin-nav">
+           <div class="container">
+            <ul class="nav nav-tabs">   
+                <li class="active"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                <li><a th:href="@{/admin/products-admin}">Products</a></li>
+                <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
+                <li><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
+                <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
+                <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
+            </ul>
+           </div>
+       </div>
 
         <!-- Dashboard Content -->
         <section class="admin-content">

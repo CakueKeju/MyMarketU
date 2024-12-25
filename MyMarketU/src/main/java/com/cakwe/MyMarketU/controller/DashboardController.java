@@ -12,38 +12,57 @@ import java.util.stream.Collectors;
 
 @Controller
 public class DashboardController {
-    
-    @Autowired
-    private ProductRepository productRepository;
-    
-    @Autowired
-    private UserRepository userRepository;
+   @Autowired
+   private ProductRepository productRepository;
+   
+   @Autowired 
+   private UserRepository userRepository;
 
-    @GetMapping("/admin/dashboard")
-    public String adminDashboard(Model model) {
-        // Total Products
-        long totalProducts = productRepository.count();
-        model.addAttribute("totalProducts", totalProducts);
-        
-        // Total Customers (user dengan role_id = 2)
-        // Pastikan angka 2 sesuai dengan role_id customer di database
-        long totalCustomers = userRepository.countByRole_Id(2);
-        model.addAttribute("totalCustomers", totalCustomers);
-        
-        // Low Stock Products (stok < 20)
-        List<Product> lowStockProducts = productRepository.findAll().stream()
-                .filter(p -> p.getStok() < 20)
-                .collect(Collectors.toList());
-        model.addAttribute("lowStockProducts", lowStockProducts);
-        
-        // Tambahkan log untuk debugging
-        System.out.println("Total Customers: " + totalCustomers);
-        
-        return "index-admin";
-    }
+   @GetMapping("/admin/dashboard")
+   public String adminDashboard(Model model) {
+       long totalProducts = productRepository.count();
+       model.addAttribute("totalProducts", totalProducts);
+       
+       long totalCustomers = userRepository.countByRole_Id(2);
+       model.addAttribute("totalCustomers", totalCustomers);
+       
+       List<Product> lowStockProducts = productRepository.findAll().stream()
+               .filter(p -> p.getStok() < 20)
+               .collect(Collectors.toList());
+       model.addAttribute("lowStockProducts", lowStockProducts);
+       
+       System.out.println("Total Customers: " + totalCustomers);
+       
+       return "admin/index-admin";
+   }
 
-    @GetMapping("/customer/dashboard")
-    public String customerDashboard(Model model) {
-        return "customer";
-    }
+   @GetMapping("/customer/dashboard")
+   public String customerDashboard(Model model) {
+       return "customer";
+   }
+
+   @GetMapping("/admin/products-admin")
+   public String productsAdmin() {
+       return "admin/products-admin";
+   }
+   
+   @GetMapping("/admin/orders-admin") 
+   public String ordersAdmin() {
+       return "admin/orders-admin";
+   }
+   
+   @GetMapping("/admin/customersmenu-admin")
+   public String customersAdmin() {
+       return "admin/customersmenu-admin";
+   }
+   
+   @GetMapping("/admin/reports-admin")
+   public String reportsAdmin() {
+       return "admin/reports-admin";
+   }
+   
+   @GetMapping("/admin/profile-settings-admin")
+   public String settingsAdmin() {
+       return "admin/profile-settings-admin";
+   }
 }

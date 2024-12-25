@@ -18,14 +18,14 @@
                     <div class="span6">
                         <div class="logo">
                             <span class="text">
-                                <a href="admin-dashboard.html">MyMarketU</a>
+                                <a th:href="@{/admin/dashboard}">MyMarketU</a>
                             </span>
                         </div>
                     </div>
                     <div class="span6">
                         <div class="admin-profile">
                             <span>Welcome, Admin</span>
-                            <a href="logout.html">Logout</a>
+                            <a th:href="@{/logout}">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -36,12 +36,12 @@
         <div class="admin-nav">
             <div class="container">
                 <ul class="nav nav-tabs">
-                    <li><a href="index-admin.html">Dashboard</a></li>
-                    <li class="active"><a href="products-admin.html">Products</a></li>
-                    <li><a href="orders-admin.html">Orders</a></li>
-                    <li><a href="customersmenu-admin.html">Customers</a></li>
-                    <li><a href="reports-admin.html">Reports</a></li>
-                    <li><a href="profile-settings-admin.html">Settings</a></li>
+                    <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                    <li class="active"><a th:href="@{/admin/products-admin}">Products</a></li>
+                    <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
+                    <li><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
+                    <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
+                    <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
                 </ul>
             </div>
         </div>
