@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Dashboard - MyMarketU</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/styleA.css" rel="stylesheet">
+    <link th:href="@{/css/styleA.css}" rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
@@ -34,7 +34,7 @@
         <!-- Admin Navigation -->
         <div class="admin-nav">
             <div class="container">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs">   
                     <li class="active"><a href="index-admin.html">Dashboard</a></li>
                     <li><a href="products-admin.html">Products</a></li>
                     <li><a href="orders-admin.html">Orders</a></li>
@@ -65,13 +65,13 @@
                     <div class="span3">
                         <div class="stat-box">
                             <h3>Customers</h3>
-                            <span class="stat-number">2,450</span>
+                            <span class="stat-number" th:text="${totalCustomers}"></span>
                         </div>
                     </div>
                     <div class="span3">
                         <div class="stat-box">
                             <h3>Products</h3>
-                            <span class="stat-number">50</span>
+                            <span class="stat-number" th:text="${totalProducts}">0</span>
                         </div>
                     </div>
                 </div>
@@ -121,10 +121,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Burberry Perfume</td>
-                                    <td>5</td>
-                                    <td><button class="btn btn-small btn-warning"><i class="fa fa-refresh"></i> Reorder</button></td>
+                                <tr th:each="product : ${lowStockProducts}">
+                                    <td th:text="${product.nama}">Product Name</td>
+                                    <td th:text="${product.stok}">Stock</td>
+                                    <td>
+                                        <a th:href="@{/product/edit(id=${product.id})}" 
+                                           class="btn btn-small btn-warning">
+                                            <i class="fa fa-refresh"></i> Reorder
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
