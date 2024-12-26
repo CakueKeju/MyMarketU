@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Product - MyMarketU</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link th:href="@{/css/styleA.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Admin Header -->
+        <section class="section-head">
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <div class="logo">
+                            <span class="text">
+                                <a th:href="@{/admin/dashboard}">MyMarketU</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <div class="admin-profile">
+                            <span>Welcome, Admin</span>
+                            <a th:href="@{/logout}">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Navigation -->
+        <div class="admin-nav">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                    <li class="active"><a th:href="@{/admin/products-admin}">Products</a></li>
+                    <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
+                    <li><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
+                    <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
+                    <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="content-box">
+                        <h3>Edit Product</h3>
+                        <form th:action="@{'/admin/product/edit/' + ${product.id}}" method="post" enctype="multipart/form-data">
+                            <div class="control-group">
+                                <label>Product Name</label>
+                                <input type="text" name="nama" class="input-block-level" 
+                                       th:value="${product.nama}" required>
+                            </div>
+                            <div class="control-group">
+                                <label>Category</label>
+                                <select name="kategori" class="input-block-level" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Makanan" th:selected="${product.kategori == 'Makanan'}">Makanan</option>
+                                    <option value="Minuman" th:selected="${product.kategori == 'Minuman'}">Minuman</option>
+                                    <option value="Kebutuhan" th:selected="${product.kategori == 'Kebutuhan'}">Kebutuhan</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label>Price (Rupiah)</label>
+                                <input type="number" name="harga" class="input-block-level" 
+                                       th:value="${product.harga}" required>
+                            </div>
+                            <div class="control-group">
+                                <label>Stock</label>
+                                <input type="number" name="stok" class="input-block-level" 
+                                       th:value="${product.stok}" required>
+                            </div>
+                            <div class="control-group">
+                                <label>Description</label>
+                                <textarea name="deskripsi" class="input-block-level" 
+                                          rows="3" th:text="${product.deskripsi}"></textarea>
+                            </div>
+                            <div class="control-group">
+                                <label>Current Image</label>
+                                <div class="current-image">
+                                    <img th:if="${product.namaFileGambar}" 
+                                         th:src="@{'/images/' + ${product.namaFileGambar}}" 
+                                         height="100">
+                                    <p th:unless="${product.namaFileGambar}">No image uploaded</p>
+                                </div>
+                                <label>Change Image (optional)</label>
+                                <input type="file" name="imageFile" class="input-block-level" accept="image/*">
+                            </div>
+                            <div class="control-group">
+                                <label>Discount (%)</label>
+                                <input type="number" name="diskon" class="input-block-level" 
+                                       th:value="${product.diskon}" min="0" max="100">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Update Product</button>
+                                <a th:href="@{/admin/product/list}" class="btn">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <section class="section-footer">
+            <div class="container">
+                <div class="copyright">
+                    <p>© MyMarketU 2024. All rights reserved.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

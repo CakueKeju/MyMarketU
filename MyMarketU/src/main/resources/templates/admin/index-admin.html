@@ -22,10 +22,10 @@
                        </div>
                    </div>
                    <div class="span6">
-                       <div class="admin-profile">
-                           <span>Welcome, Admin</span>
-                           <a th:href="@{/logout}">Logout</a>
-                       </div>
+                        <div class="admin-profile">
+                        <span>Welcome, <span th:text="${userName}"></span></span>
+                        <a th:href="@{/logout}">Logout</a>
+                    </div>
                    </div>
                </div>
            </div>
