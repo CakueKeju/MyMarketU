@@ -68,13 +68,11 @@
                             </div>
                             <div class="control-group">
                                 <label>Price (Rupiah)</label>
-                                <input type="number" name="harga" class="input-block-level" 
-                                       th:value="${product.harga}" required>
+                                <input type="number" name="harga" min="0" step="1" required th:value="${product.harga}"/>
                             </div>
                             <div class="control-group">
                                 <label>Stock</label>
-                                <input type="number" name="stok" class="input-block-level" 
-                                       th:value="${product.stok}" required>
+                                <input type="number" name="stok" min="0" step="1" required th:value="${product.stok}"/>
                             </div>
                             <div class="control-group">
                                 <label>Description</label>
@@ -94,8 +92,7 @@
                             </div>
                             <div class="control-group">
                                 <label>Discount (%)</label>
-                                <input type="number" name="diskon" class="input-block-level" 
-                                       th:value="${product.diskon}" min="0" max="100">
+                                <input type="number" name="diskon" min="0" max="100" step="1" required th:value="${product.diskon}"/>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Update Product</button>

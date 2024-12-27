@@ -1,197 +1,189 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"></html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Customers Management - MyMarketU</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link th:href="@{/css/styleA.css}" rel="stylesheet">
+   <title>Customers Management - MyMarketU</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+   <link th:href="@{/css/styleA.css}" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Admin Header -->
-        <section class="section-head">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span6">
-                        <div class="logo">
-                            <span class="text">
-                                <a th:href="@{/admin/dashboard}">MyMarketU</a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="span6">
-                        <div class="admin-profile">
-                            <span>Welcome, Admin</span>
-                            <a th:href="@{/logout}">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+   <div class="wrapper">
+       <!-- Admin Header -->
+       <section class="section-head">
+           <div class="container">
+               <div class="row-fluid">
+                   <div class="span6">
+                       <div class="logo">
+                           <span class="text">
+                               <a th:href="@{/admin/dashboard}">MyMarketU</a>
+                           </span>
+                       </div>
+                   </div>
+                   <div class="span6">
+                       <div class="admin-profile">
+                           <span>Welcome, Admin</span>
+                           <a th:href="@{/logout}">Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
 
-        <!-- Admin Navigation -->
-        <div class="admin-nav">
-            <div class="container">
-                <ul class="nav nav-tabs">
-                    <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-                    <li><a th:href="@{/admin/products-admin}">Products</a></li>
-                    <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
-                    <li class="active"><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
-                    <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
-                    <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
-                </ul>
-            </div>
-        </div>
+       <!-- Admin Navigation -->
+       <div class="admin-nav">
+           <div class="container">
+               <ul class="nav nav-tabs">
+                   <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                   <li><a th:href="@{/admin/products-admin}">Products</a></li>
+                   <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
+                   <li class="active"><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
+                   <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
+                   <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
+               </ul>
+           </div>
+       </div>
 
-        <!-- Customer Management Content -->
-        <section class="admin-content">
-            <div class="container">
-                <!-- Customer Statistics -->
-                <div class="row-fluid stats-summary">
-                    <div class="span4">
-                        <div class="stat-box">
-                            <h3>Total Customers</h3>
-                            <span class="stat-number">2,450</span>
-                        </div>
-                    </div>
-                    <div class="span4">
-                        <div class="stat-box">
-                            <h3>New This Month</h3>
-                            <span class="stat-number">145</span>
-                        </div>
-                    </div>
-                    <div class="span4">
-                        <div class="stat-box">
-                            <h3>Active Customers</h3>
-                            <span class="stat-number">1,890</span>
-                        </div>
-                    </div>
-                </div>
+       <!-- Customer Management Content -->
+       <section class="admin-content">
+           <div class="container">
+               <!-- Customer Statistics -->
+               <div class="row-fluid stats-summary">
+                   <div class="span4">
+                       <div class="stat-box">
+                           <h3>Total Customers</h3>
+                           <span class="stat-number" th:text="${totalCustomers}">2,450</span>
+                       </div>
+                   </div>
+                   <div class="span4">
+                       <div class="stat-box">
+                           <h3>New This Month</h3>
+                           <span class="stat-number" th:text="${newCustomersThisMonth}">145</span>
+                       </div>
+                   </div>
+                   <div class="span4">
+                       <div class="stat-box">
+                           <h3>Active Customers</h3>
+                           <span class="stat-number" th:text="${activeCustomers}">1,890</span>
+                       </div>
+                   </div>
+               </div>
 
-                <!-- Customer Search and Filter -->
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="customer-filter-bar">
-                            <div class="row-fluid">
-                                <div class="span4">
-                                    <input type="text" class="search-input" placeholder="Search customers...">
-                                </div>
-                                <div class="span8">
-                                    <div class="filter-actions">
-                                        <select>
-                                            <option>All Customers</option>
-                                            <option>New Customers</option>
-                                            <option>Active Customers</option>
-                                            <option>Inactive Customers</option>
-                                        </select>
-                                        <select>
-                                            <option>Sort by Name</option>
-                                            <option>Sort by Date Joined</option>
-                                            <option>Sort by Total Orders</option>
-                                            <option>Sort by Total Spent</option>
-                                        </select>
-                                        <button class="btn btn-primary">
-                                            <i class="fa fa-filter"></i> Apply Filters
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               <!-- Customer Search and Filter -->
+               <div class="row-fluid">
+                   <div class="span12">
+                       <div class="customer-filter-bar">
+                           <div class="row-fluid">
+                               <div class="span4">
+                                   <form th:action="@{/admin/customers/search}" method="GET">
+                                       <input type="text" name="query" class="search-input" placeholder="Search customers...">
+                                   </form>
+                               </div>
+                               <div class="span8">
+                                   <div class="filter-actions">
+                                       <form th:action="@{/admin/customers/filter}" method="GET">
+                                           <select name="status">
+                                               <option value="all">All Customers</option>
+                                               <option value="new">New Customers</option>
+                                               <option value="active">Active Customers</option>
+                                               <option value="inactive">Inactive Customers</option>
+                                           </select>
+                                           <select name="sortBy">
+                                               <option value="name">Sort by Name</option>
+                                               <option value="dateJoined">Sort by Date Joined</option>
+                                               <option value="totalOrders">Sort by Total Orders</option>
+                                               <option value="totalSpent">Sort by Total Spent</option>
+                                           </select>
+                                           <button type="submit" class="btn btn-primary">
+                                               <i class="fa fa-filter"></i> Apply Filters
+                                           </button>
+                                       </form>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
 
-                <!-- Customer List -->
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="customer-table-container">
-                            <table class="table table-striped customer-table">
-                                <thead>
-                                    <tr>
-                                        <th>Customer ID</th>
-                                        <th>Customer Info</th>
-                                        <th>Status</th>
-                                        <th>Total Orders</th>
-                                        <th>Total Spent</th>
-                                        <th>Last Order</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#CST001</td>
-                                        <td>
-                                            <div class="customer-info">
-                                                <span class="customer-name">John Doe</span>
-                                                <span class="customer-email">john.doe@email.com</span>
-                                                <span class="customer-phone">+1234567890</span>
-                                            </div>
-                                        </td>
-                                        <td><span class="status-badge status-active">Active</span></td>
-                                        <td>15</td>
-                                        <td>$2,450.00</td>
-                                        <td>2024-03-15</td>
-                                        <td class="customer-actions">
-                                            <button class="btn btn-small btn-primary"><i class="fa fa-edit"></i> Edit</button>
-                                            <button class="btn btn-small btn-warning"><i class="fa fa-eye"></i> View</button>
-                                            <button class="btn btn-small btn-danger"><i class="fa fa-ban"></i> Block</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>#CST002</td>
-                                        <td>
-                                            <div class="customer-info">
-                                                <span class="customer-name">Jane Smith</span>
-                                                <span class="customer-email">jane.smith@email.com</span>
-                                                <span class="customer-phone">+1234567891</span>
-                                            </div>
-                                        </td>
-                                        <td><span class="status-badge status-active">Active</span></td>
-                                        <td>32</td>
-                                        <td>$5,890.00</td>
-                                        <td>2024-03-18</td>
-                                        <td class="customer-actions">
-                                            <button class="btn btn-small btn-primary"><i class="fa fa-edit"></i> Edit</button>
-                                            <button class="btn btn-small btn-warning"><i class="fa fa-eye"></i> View</button>
-                                            <button class="btn btn-small btn-danger"><i class="fa fa-ban"></i> Block</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+               <!-- Customer List -->
+               <div class="row-fluid">
+                   <div class="span12">
+                       <div class="customer-table-container">
+                           <table class="table table-striped customer-table">
+                               <thead>
+                                   <tr>
+                                       <th>Customer ID</th>
+                                       <th>Customer Info</th>
+                                       <th>Status</th>
+                                       <th>Total Orders</th>
+                                       <th>Total Spent</th>
+                                       <th>Last Order</th>
+                                       <th>Actions</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr th:each="customer : ${customers}">
+                                       <td th:text="${'#CST' + customer.id}"></td>
+                                       <td>
+                                           <div class="customer-info">
+                                               <span class="customer-name" th:text="${customer.namaLengkap}"></span>
+                                               <span class="customer-email" th:text="${customer.email}"></span>
+                                               <span class="customer-phone" th:text="${customer.phone}"></span>
+                                           </div>
+                                       </td>
+                                       <td><span class="status-badge" th:text="${customer.status}" th:class="${'status-badge status-' + #strings.toLowerCase(customer.status)}"></span></td>
+                                       <td th:text="${customer.totalOrders}"></td>
+                                       <td th:text="${'$' + #numbers.formatDecimal(customer.totalSpent, 1, 2)}"></td>
+                                       <td th:text="${#temporals.format(customer.lastOrder, 'yyyy-MM-dd')}"></td>
+                                       <td class="customer-actions">
+                                           <a th:href="@{/admin/customers/{id}/edit(id=${customer.id})}" class="btn btn-small btn-primary">
+                                               <i class="fa fa-edit"></i> Edit
+                                           </a>
+                                           <a th:href="@{/admin/customers/{id}(id=${customer.id})}" class="btn btn-small btn-warning">
+                                               <i class="fa fa-eye"></i> View
+                                           </a>
+                                           <form th:action="@{/admin/customers/{id}/block(id=${customer.id})}" method="POST" style="display: inline;">
+                                               <button type="submit" class="btn btn-small btn-danger">
+                                                   <i class="fa fa-ban"></i> Block
+                                               </button>
+                                           </form>
+                                       </td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                       </div>
 
-                        <!-- Pagination -->
-                        <div class="pagination-container">
-                            <ul class="pagination">
-                                <li><a href="#">«</a></li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">»</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                       <!-- Pagination -->
+                       <div class="pagination-container">
+                           <ul class="pagination">
+                               <li><a href="#">«</a></li>
+                               <li class="active"><a href="#">1</a></li>
+                               <li><a href="#">2</a></li>
+                               <li><a href="#">3</a></li>
+                               <li><a href="#">4</a></li>
+                               <li><a href="#">5</a></li>
+                               <li><a href="#">»</a></li>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
 
-        <!-- Footer -->
-        <section class="section-footer">
-            <div class="container">
-                <div class="copyright">
-                    <p>© MyMarketU 2024. All rights reserved.</p>
-                </div>
-            </div>
-        </section>
-    </div>
+       <!-- Footer -->
+       <section class="section-footer">
+           <div class="container">
+               <div class="copyright">
+                   <p>© MyMarketU 2024. All rights reserved.</p>
+               </div>
+           </div>
+       </section>
+   </div>
 
-    <!-- Scripts -->
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="css/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/admin-script.js"></script>
+   <!-- Scripts -->
+   <script src="js/jquery-1.9.1.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/admin-script.js"></script>
 </body>
 </html>

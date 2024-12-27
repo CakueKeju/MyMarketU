@@ -1234,3 +1234,15 @@
       margin-bottom: 15px;
    }
 }
+
+.add-form {
+   display: none;
+   margin-top: 20px;
+   padding: 20px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   background-color: #f9f9f9;
+}
+.product-actions {
+   margin: 20px 0;
+}
