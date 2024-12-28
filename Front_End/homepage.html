@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage - MyMarketU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            background-color: #f9f9f9;
+            transition: transform 0.2s ease;
+        }
+    
+        .product-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .product-img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 10px; /* Tambahkan jarak di bawah gambar */
+        }
+    
+        .product-name {
+            margin-top: 10px; /* Opsional: tambahkan jarak atas pada nama produk */
+        }
+    </style>
+    
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Header -->
+    <header class="bg-white py-2 border-bottom shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
+                <img src="img/a.png" alt="Logo MyMarketU" width="40" height="48" class="me-2">
+                MyMarketU
+            </a>
+            <div class="input-group w-50">
+                <input type="text" class="form-control" placeholder="Cari produk, makanan atau minuman..">
+                <button class="btn btn-outline-danger" type="button">Cari</button>
+            </div>
+            <div>
+                <a href="index.html" class="text-muted me-2">Home</a><i class="bi bi-house"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Promo and Kategori Section -->
+    <body class="d-flex flex-column min-vh-100">
+    <!-- Kategori di Paling Kiri -->
+    <aside style="position: fixed; top: 80px; left: 20px; width: 350px; z-index: 1000;">
+        <div class="p-3 border rounded" style="background-color: #f8f9fa; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h5 class="mb-3 text-center">Kategori</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#kategori-1" class="text-decoration-none text-dark">Makanan</a></li>
+                <li class="list-group-item"><a href="#kategori-2" class="text-decoration-none text-dark">Minuman</a></li>
+                <li class="list-group-item"><a href="#kategori-3" class="text-decoration-none text-dark">Camilan</a></li>
+                <li class="list-group-item"><a href="#kategori-4" class="text-decoration-none text-dark">Kesehatan</a></li>
+            </ul>
+        </div>
+    </aside>
+</body>
+    
+    <!-- Produk Section -->
+    <main class="container py-5">
+        <h2 class="text-center mb-4">Selamat Datang</h2>
+    
+        <!-- Promo Banner -->
+        <section class="mt-5 p-5 rounded" style="background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,140,0,1) 100%); color: white; margin-bottom: 30px;">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h4 class="fw-bold">Diskon Harian</h4>
+                    <h1 class="mb-3">Belanja bersama kami untuk kualitas yang lebih baik dengan harga terbaik.</h1>
+                    <p class="lead">Kami telah menyiapkan diskon khusus untuk Anda pada produk kebutuhan sehari-hari. Jangan lewatkan kesempatan ini...</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="img/promo-product.jpg" alt="Promo Product" class="img-fluid rounded">
+                </div>
+            </div>
+        </section>
+    
+        <!-- Produk Box -->
+        <div class="row g-4">
+            <!-- Product Box 1 -->
+            <div class="col-md-3">
+                <div class="product-box">
+                    <img src="img/chitato_sapi_panggang.jpg" alt="Produk 1" class="product-img">
+                    <h5>Produk 1</h5>
+                    <p class="text-muted">Rp100.000</p>
+                    <button class="btn btn-danger btn-sm">Tambahkan</button>
+                </div>
+            </div>
+            <!-- Product Box 2 -->
+            <div class="col-md-3">
+                <div class="product-box">
+                    <img src="img/kapal_api_kopi_bubuk.jpg" alt="Produk 2" class="product-img">
+                    <h5>Produk 2</h5>
+                    <p class="text-muted">Rp150.000</p>
+                    <button class="btn btn-danger btn-sm">Tambahkan</button>
+                </div>
+            </div>
+            <!-- Product Box 3 -->
+            <div class="col-md-3">
+                <div class="product-box">
+                    <img src="img/mister_potato_original.jpg" alt="Produk 3" class="product-img">
+                    <h5>Produk 3</h5>
+                    <p class="text-muted">Rp200.000</p>
+                    <button class="btn btn-danger btn-sm">Taambahkan</button>
+                </div>
+            </div>
+            <!-- Product Box 4 -->
+            <div class="col-md-3">
+                <div class="product-box">
+                    <img src="img/Qtela.jpg" alt="Produk 4" class="product-img">
+                    <h5>Produk 4</h5>
+                    <p class="text-muted">Rp250.000</p>
+                    <button class="btn btn-danger btn-sm">Beli Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-auto">
+        <div class="container text-center">
+            <p class="text-muted small mb-0">&copy; 2024 MyMarketU. Semua Hak Dilindungi.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
