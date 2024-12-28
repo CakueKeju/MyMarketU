@@ -38,11 +38,6 @@
                         <strong class="text-dark">Register</strong>
                     </h3>
 
-                    <!-- Pesan -->
-                    <div class="message text-danger mb-3" th:if="${message != null}">
-                        [[${message}]]
-                    </div>
-
                     <!-- Form -->
                     <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
                         <div class="mb-3">
