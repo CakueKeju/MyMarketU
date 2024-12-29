@@ -1,171 +1,183 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-   <title>Product Management - MyMarketU</title>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   <link th:href="@{/css/styleA.css}" rel="stylesheet">
+    <title>Manajemen Produk - MyMarketU</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-   <div class="wrapper">
-       <!-- Admin Header -->
-       <section class="section-head">
-           <div class="container">
-               <div class="row-fluid">
-                   <div class="span6">
-                       <div class="logo">
-                           <span class="text">
-                               <a th:href="@{/admin/dashboard}">MyMarketU</a>
-                           </span>
-                       </div>
-                   </div>
-                   <div class="span6">
-                       <div class="admin-profile">
-                           <span>Welcome, Admin</span>
-                           <a th:href="@{/logout}">Logout</a>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </section>
+<body class="bg-gray-50">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-red-600 min-h-screen fixed">
+            <div class="p-4">
+                <div class="flex items-center mb-8">
+                    <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
+                    <div class="text-white text-2xl font-bold">MyMarketU</div>
+                </div>
+                <nav>
+                    <a href="/admin/dashboard" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Beranda
+                    </a>
+                    <a href="/admin/products-admin" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
+                        <i class="fas fa-box mr-3"></i>
+                        Produk
+                    </a>
+                    <a href="/admin/orders-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-shopping-cart mr-3"></i>
+                        Pesanan
+                    </a>
+                    <a href="/admin/customersmenu-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-users mr-3"></i>
+                        Pelanggan
+                    </a>
+                    <a href="/admin/reports-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Laporan
+                    </a>
+                    <a href="/admin/profile-settings-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-cog mr-3"></i>
+                        Pengaturan
+                    </a>
+                </nav>
+            </div>
+        </div>
 
-       <!-- Admin Navigation -->
-       <div class="admin-nav">
-           <div class="container">
-               <ul class="nav nav-tabs">
-                   <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-                   <li class="active"><a th:href="@{/admin/products-admin}">Products</a></li>
-                   <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
-                   <li><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
-                   <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
-                   <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
-               </ul>
-           </div>
-       </div>
+        <!-- Main Content -->
+        <div class="ml-64 flex-1">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-8 py-4">
+                    <div class="text-2xl text-gray-800">Halo, <span th:text="${userName}">Admin</span> 👋</div>
+                    <div class="flex items-center space-x-4">
+                        <a href="/logout" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </header>
 
-       <!-- Content -->
-       <div class="container">
-           <!-- Add Product Button -->
-           <div class="product-actions">
-               <button onclick="showAddForm()" class="btn btn-primary">
-                   <i class="fa fa-plus"></i> Add New Product
-               </button>
-           </div>
+            <!-- Main Content -->
+            <main class="p-8">
+                <!-- Add Product Button -->
+                <div class="mb-6">
+                    <button onclick="showAddForm()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Tambah Produk Baru
+                    </button>
+                </div>
 
-           <!-- Add Product Form -->
-           <div class="add-form" id="addProductForm">
-               <div class="span12">
-                   <h3>Add New Product</h3>
-                   <form th:action="@{/admin/product/add}" method="post" enctype="multipart/form-data">
-                       <div class="control-group">
-                           <label>Product Name</label>
-                           <input type="text" name="nama" class="input-block-level" required>
-                       </div>
-                       <div class="control-group">
-                           <label>Category</label>
-                           <select name="kategori" class="input-block-level" required>
-                               <option value="">Select Category</option>
-                               <option value="Makanan">Makanan</option>
-                               <option value="Minuman">Minuman</option>
-                               <option value="Kebutuhan">Kebutuhan</option>
-                           </select>
-                       </div>
-                       <div class="control-group">
-                           <label>Harga (Rupiah)</label>
-                           <input type="number" name="harga" min="0" step="1" required>
-                       </div>
-                       <div class="control-group">
-                           <label>Stok</label>
-                           <input type="number" name="stok" min="0" step="1" required>
-                       </div>
-                       <div class="control-group">
-                           <label>Deskripsi</label>
-                           <textarea name="deskripsi" class="input-block-level" rows="3"></textarea>
-                       </div>
-                       <div class="control-group">
-                           <label>Product Image</label>
-                           <input type="file" name="imageFile" class="input-block-level" accept="image/*">
-                       </div>
-                       <div class="control-group">
-                           <label>Discount (%)</label>
-                           <input type="number" name="diskon" min="0" max="100" step="1" required>
-                       </div>
-                       <div class="form-actions">
-                           <button type="submit" class="btn btn-primary">Save Product</button>
-                           <button type="button" onclick="hideAddForm()" class="btn">Cancel</button>
-                       </div>
-                   </form>
-               </div>
-           </div>
+                <!-- Add Product Form -->
+                <div class="hidden bg-white rounded-lg shadow-md p-6 mb-6" id="addProductForm">
+                    <h2 class="text-xl font-bold mb-4">Tambah Produk Baru</h2>
+                    <form th:action="@{/admin/product/add}" method="post" enctype="multipart/form-data" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Nama Produk</label>
+                            <input type="text" name="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Kategori</label>
+                            <select name="kategori" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Makanan">Makanan</option>
+                                <option value="Minuman">Minuman</option>
+                                <option value="Kebutuhan">Kebutuhan</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Harga (Rupiah)</label>
+                                <input type="number" name="harga" min="0" step="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Stok</label>
+                                <input type="number" name="stok" min="0" step="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Deskripsi</label>
+                            <textarea name="deskripsi" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Gambar Produk</label>
+                            <input type="file" name="imageFile" accept="image/*" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Diskon (%)</label>
+                            <input type="number" name="diskon" min="0" max="100" step="1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                Simpan Produk
+                            </button>
+                            <button type="button" onclick="hideAddForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
 
-           <!-- Product List -->
-           <div class="row-fluid">
-               <div class="span12">
-                   <h3>Product List</h3>
-                   <table class="table table-striped">
-                       <thead>
-                           <tr>
-                               <th>ID</th>
-                               <th>Image</th>
-                               <th>Name</th>
-                               <th>Category</th>
-                               <th>Price</th>
-                               <th>Stock</th>
-                               <th>Actions</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <tr th:each="product : ${products}">
-                               <td th:text="${product.id}"></td>
-                               <td>
-                                   <img th:if="${product.namaFileGambar}" 
-                                        th:src="@{'/images/' + ${product.namaFileGambar}}" 
-                                        style="max-width: 100px; height: auto;">
-                               </td>
-                               <td th:text="${product.nama}"></td>
-                               <td th:text="${product.kategori}"></td>
-                               <td th:text="${'Rp. ' + #numbers.formatDecimal(product.harga, 0, 'COMMA', 0, 'POINT')}"></td>
-                               <td th:text="${product.stok}"></td>
-                               <td>
-                                   <a th:href="@{'/admin/product/edit/' + ${product.id}}" 
-                                      class="btn btn-small btn-primary">
-                                       <i class="fa fa-edit"></i> Edit
-                                   </a>
-                                   <form th:action="@{'/admin/product/delete/' + ${product.id}}" 
-                                         method="post" style="display: inline;">
-                                       <button type="submit" class="btn btn-small btn-danger" 
-                                               onclick="return confirm('Are you sure you want to delete this product?')">
-                                           <i class="fa fa-trash"></i> Delete
-                                       </button>
-                                   </form>
-                               </td>
-                           </tr>
-                       </tbody>
-                   </table>
-               </div>
-           </div>
-       </div>
+                <!-- Product List -->
+                <div class="bg-white rounded-lg shadow-md">
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-800">Daftar Produk</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gambar</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr th:each="product : ${products}">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${product.id}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <img th:if="${product.namaFileGambar}" 
+                                             th:src="@{'/images/' + ${product.namaFileGambar}}" 
+                                             class="h-16 w-16 object-cover rounded">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${product.nama}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${product.kategori}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${'Rp ' + #numbers.formatDecimal(product.harga, 0, 'COMMA', 0, 'POINT')}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${product.stok}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                                        <a th:href="@{'/admin/product/edit/' + ${product.id}}" 
+                                           class="text-red-600 hover:text-red-900">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form th:action="@{'/admin/product/delete/' + ${product.id}}" 
+                                              method="post" class="inline">
+                                            <button type="submit" class="text-red-600 hover:text-red-900"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
 
-       <!-- Footer -->
-       <section class="section-footer">
-           <div class="container">
-               <div class="copyright">
-                   <p>© MyMarketU 2024. All rights reserved.</p>
-               </div>
-           </div>
-       </section>
-   </div>
+    <script>
+        function showAddForm() {
+            document.getElementById('addProductForm').classList.remove('hidden');
+        }
 
-   <script>
-       function showAddForm() {
-           document.getElementById('addProductForm').style.display = 'block';
-       }
-
-       function hideAddForm() {
-           document.getElementById('addProductForm').style.display = 'none';
-       }
-   </script>
+        function hideAddForm() {
+            document.getElementById('addProductForm').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>

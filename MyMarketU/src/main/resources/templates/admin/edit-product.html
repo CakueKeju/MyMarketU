@@ -1,117 +1,142 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Edit Product - MyMarketU</title>
+    <title>Edit Produk - MyMarketU</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link th:href="@{/css/styleA.css}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="wrapper">
-        <!-- Admin Header -->
-        <section class="section-head">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span6">
-                        <div class="logo">
-                            <span class="text">
-                                <a th:href="@{/admin/dashboard}">MyMarketU</a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="span6">
-                        <div class="admin-profile">
-                            <span>Welcome, Admin</span>
-                            <a th:href="@{/logout}">Logout</a>
-                        </div>
-                    </div>
+<body class="bg-gray-50">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-red-600 min-h-screen fixed">
+            <div class="p-4">
+                <div class="flex items-center mb-8">
+                    <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
+                    <div class="text-white text-2xl font-bold">MyMarketU</div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Admin Navigation -->
-        <div class="admin-nav">
-            <div class="container">
-                <ul class="nav nav-tabs">
-                    <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-                    <li class="active"><a th:href="@{/admin/products-admin}">Products</a></li>
-                    <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
-                    <li><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
-                    <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
-                    <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
-                </ul>
+                <nav>
+                    <a href="/admin/dashboard" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Beranda
+                    </a>
+                    <a href="/admin/products-admin" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
+                        <i class="fas fa-box mr-3"></i>
+                        Produk
+                    </a>
+                    <a href="/admin/orders-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-shopping-cart mr-3"></i>
+                        Pesanan
+                    </a>
+                    <a href="/admin/customersmenu-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-users mr-3"></i>
+                        Pelanggan
+                    </a>
+                    <a href="/admin/reports-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Laporan
+                    </a>
+                    <a href="/admin/profile-settings-admin" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-cog mr-3"></i>
+                        Pengaturan
+                    </a>
+                </nav>
             </div>
         </div>
 
-        <!-- Content -->
-        <div class="container">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="content-box">
-                        <h3>Edit Product</h3>
-                        <form th:action="@{'/admin/product/edit/' + ${product.id}}" method="post" enctype="multipart/form-data">
-                            <div class="control-group">
-                                <label>Product Name</label>
-                                <input type="text" name="nama" class="input-block-level" 
-                                       th:value="${product.nama}" required>
+        <!-- Main Content -->
+        <div class="ml-64 flex-1">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-8 py-4">
+                    <div class="text-2xl text-gray-800">Halo, <span th:text="${userName}">Admin</span> 👋</div>
+                    <div class="flex items-center space-x-4">
+                        <a href="/logout" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="p-8">
+                <div class="bg-white rounded-lg shadow-md">
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-800">Edit Produk</h2>
+                    </div>
+                    <div class="p-6">
+                        <form th:action="@{'/admin/product/edit/' + ${product.id}}" method="post" enctype="multipart/form-data" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Produk</label>
+                                <input type="text" name="nama" th:value="${product.nama}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required>
                             </div>
-                            <div class="control-group">
-                                <label>Category</label>
-                                <select name="kategori" class="input-block-level" required>
-                                    <option value="">Select Category</option>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                                <select name="kategori" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required>
+                                    <option value="">Pilih Kategori</option>
                                     <option value="Makanan" th:selected="${product.kategori == 'Makanan'}">Makanan</option>
                                     <option value="Minuman" th:selected="${product.kategori == 'Minuman'}">Minuman</option>
                                     <option value="Kebutuhan" th:selected="${product.kategori == 'Kebutuhan'}">Kebutuhan</option>
                                 </select>
                             </div>
-                            <div class="control-group">
-                                <label>Price (Rupiah)</label>
-                                <input type="number" name="harga" min="0" step="1" required th:value="${product.harga}"/>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Harga (Rupiah)</label>
+                                    <input type="number" name="harga" min="0" step="1" th:value="${product.harga}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Stok</label>
+                                    <input type="number" name="stok" min="0" step="1" th:value="${product.stok}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required>
+                                </div>
                             </div>
-                            <div class="control-group">
-                                <label>Stock</label>
-                                <input type="number" name="stok" min="0" step="1" required th:value="${product.stok}"/>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                                <textarea name="deskripsi" rows="3" th:text="${product.deskripsi}"
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"></textarea>
                             </div>
-                            <div class="control-group">
-                                <label>Description</label>
-                                <textarea name="deskripsi" class="input-block-level" 
-                                          rows="3" th:text="${product.deskripsi}"></textarea>
-                            </div>
-                            <div class="control-group">
-                                <label>Current Image</label>
-                                <div class="current-image">
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Saat Ini</label>
+                                <div class="mt-1 flex items-center">
                                     <img th:if="${product.namaFileGambar}" 
                                          th:src="@{'/images/' + ${product.namaFileGambar}}" 
-                                         height="100">
-                                    <p th:unless="${product.namaFileGambar}">No image uploaded</p>
+                                         class="h-32 w-32 object-cover rounded">
+                                    <span th:unless="${product.namaFileGambar}" 
+                                          class="text-gray-500">Tidak ada gambar</span>
                                 </div>
-                                <label>Change Image (optional)</label>
-                                <input type="file" name="imageFile" class="input-block-level" accept="image/*">
+                                <label class="block text-sm font-medium text-gray-700 mt-4 mb-2">Ganti Gambar (opsional)</label>
+                                <input type="file" name="imageFile" accept="image/*"
+                                       class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-600 hover:file:bg-red-100">
                             </div>
-                            <div class="control-group">
-                                <label>Discount (%)</label>
-                                <input type="number" name="diskon" min="0" max="100" step="1" required th:value="${product.diskon}"/>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Diskon (%)</label>
+                                <input type="number" name="diskon" min="0" max="100" step="1" th:value="${product.diskon}"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Update Product</button>
-                                <a th:href="@{/admin/product/list}" class="btn">Cancel</a>
+
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <a th:href="@{/admin/product/list}" 
+                                   class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Batal
+                                </a>
+                                <button type="submit" 
+                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Simpan Perubahan
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
-
-        <!-- Footer -->
-        <section class="section-footer">
-            <div class="container">
-                <div class="copyright">
-                    <p>© MyMarketU 2024. All rights reserved.</p>
-                </div>
-            </div>
-        </section>
     </div>
 </body>
 </html>
