@@ -45,7 +45,7 @@ public String adminDashboard(Model model) {
     
     @GetMapping("/customer/dashboard")
     public String customerDashboard(Model model) {
-        return "customer";
+        return "customer/customer";
     }
     
     @GetMapping("/admin/products-admin")
