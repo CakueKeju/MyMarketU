@@ -2,20 +2,27 @@ package com.cakwe.MyMarketU.repository;
 
 import com.cakwe.MyMarketU.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
+import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-  boolean existsByEmail(String email);
-  boolean existsByNim(String nim); 
-  Optional<User> findByEmail(String email);
-  Optional<User> findByEmailAndRole_Id(String email, Integer roleId);
-  long countByRole_Id(Integer roleId);
-  
-  // Tambahan untuk customer management
-  long countByCreatedAtGreaterThanEqual(LocalDateTime date);
-  long countByStatus(String status);
-  List<User> findByStatus(String status);
-  List<User> findByNamaLengkapContainingOrEmailContaining(String nama, String email);
+   boolean existsByEmail(String email);
+   boolean existsByNim(String nim); 
+   Optional<User> findByEmail(String email);
+   Optional<User> findByEmailAndRole_Id(String email, Integer roleId);
+   
+   //=====
+   
+   Optional<User> findByNim(String nim);
+
+   @Query("SELECT u FROM User u WHERE u.role.id = :roleId")
+   Optional<User> findFirstByRoleId(Integer roleId);
+    
+   @Query("SELECT u FROM User u WHERE u.role.id = :roleId")
+   List<User> findAllByRoleId(Integer roleId);
+   
+   //=====
+   
+   long countByRole_Id(Integer roleId);
 }

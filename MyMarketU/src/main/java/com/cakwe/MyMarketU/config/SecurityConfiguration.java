@@ -31,7 +31,7 @@ public class SecurityConfiguration {
             http
             .csrf(csrf -> csrf.disable()) // Nonaktifkan CSRF jika tidak diperlukan
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/register", "/registration","/assets/**", "/css/**", "/js/**", "/img/**").permitAll() // Izinkan akses ke /register tanpa login
+                .requestMatchers("/", "/login", "/register", "/registration","/assets/**", "/css/**", "/js/**", "/img/**").permitAll() // Izinkan tanpa login
                 .anyRequest().authenticated() // Semua endpoint lain membutuhkan login
             )
             .formLogin(login -> login

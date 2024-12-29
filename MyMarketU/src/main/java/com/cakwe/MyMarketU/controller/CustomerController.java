@@ -1,66 +1,45 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.cakwe.MyMarketU.controller;
 
-import com.cakwe.MyMarketU.model.User;
-import com.cakwe.MyMarketU.service.UserService;
+import com.cakwe.MyMarketU.model.Product;
+import com.cakwe.MyMarketU.model.TransactionItemDTO;
+import com.cakwe.MyMarketU.service.TransactionService;
+import com.cakwe.MyMarketU.repository.ProductRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
+/**
+ *
+ * @author Cakue
+ */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/customer")
 public class CustomerController {
 
-   @Autowired
-   private UserService userService;
-   
-   @GetMapping("/customersmenu-admin")
-   public String showCustomerMenu(Model model) {
-       List<User> customers = userService.getAllCustomers();
-       
-       model.addAttribute("customers", customers);
-       model.addAttribute("totalCustomers", customers.size());
-       model.addAttribute("newCustomersThisMonth", userService.getNewCustomersThisMonth());
-       model.addAttribute("activeCustomers", userService.getActiveCustomers());
-       
-       return "admin/customersmenu-admin";
-   }
+    @Autowired
+    private ProductRepository productRepository;
 
-   @PostMapping("/customers/{id}/block") 
-   public String blockCustomer(@PathVariable Long id) {
-       userService.updateCustomerStatus(id, "Blocked");
-       return "redirect:/admin/customersmenu-admin";
-   }
+    @Autowired
+    private TransactionService transactionService;
 
-   @GetMapping("/customers/search")
-   public String searchCustomers(@RequestParam String query, Model model) {
-       List<User> searchResults = userService.searchCustomers(query);
-       model.addAttribute("customers", searchResults);
-       return "admin/customersmenu-admin :: customerTable"; 
-   }
+    @GetMapping("/homepage")
+    public String showHomepage(Model model) {
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "customer/homepage";
+    }
 
-   @GetMapping("/customers/filter")
-   public String filterCustomers(
-           @RequestParam String status,
-           @RequestParam String sortBy, 
-           Model model) {
-       List<User> filteredCustomers = userService.filterCustomers(status, sortBy);
-       model.addAttribute("customers", filteredCustomers);
-       return "admin/customersmenu-admin :: customerTable";
-   }
-
-   @GetMapping("/customers/{id}")
-   public String viewCustomerDetails(@PathVariable Long id, Model model) {
-       User customer = userService.getCustomerById(id);
-       model.addAttribute("customer", customer);
-       return "admin/customer-details";
-   }
-
-   @PostMapping("/customers/{id}/edit")
-   public String updateCustomer(@PathVariable Long id, @ModelAttribute User customer) {
-       userService.updateCustomer(id, customer);
-       return "redirect:/admin/customersmenu-admin";
-   }
+    @PostMapping("/add-to-cart")
+    public String addToCart(@RequestParam String transactionId, @RequestParam int productId, @RequestParam int quantity) {
+        TransactionItemDTO itemDTO = new TransactionItemDTO();
+        itemDTO.setProductId(productId);
+        itemDTO.setQuantity(quantity);
+        transactionService.addItemToCart(transactionId, itemDTO);
+        return "redirect:/customer/homepage";
+    }
 }
