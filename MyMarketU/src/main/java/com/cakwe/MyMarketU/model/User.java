@@ -115,6 +115,20 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-    
-    
+
+    @Column(name = "is_active")
+    private Integer isActive = 1;
+
+    public Integer getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
+    }
+
+    // Method helper untuk Thymeleaf
+    public boolean isActive() {
+        return isActive != null && isActive == 1;
+    }
 }

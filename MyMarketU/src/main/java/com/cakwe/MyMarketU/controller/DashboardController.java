@@ -52,11 +52,6 @@ public class DashboardController {
         return "admin/orders-admin";
     }
     
-    @GetMapping("/admin/customersmenu-admin")
-    public String customersAdmin() {
-        return "admin/customersmenu-admin";
-    }
-    
     @GetMapping("/admin/reports-admin")
     public String reportsAdmin() {
         return "admin/reports-admin";

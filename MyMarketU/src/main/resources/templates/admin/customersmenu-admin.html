@@ -1,189 +1,207 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-   <title>Customers Management - MyMarketU</title>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   <link th:href="@{/css/styleA.css}" rel="stylesheet">
+    <title>Kelola Pelanggan - MyMarketU</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-   <div class="wrapper">
-       <!-- Admin Header -->
-       <section class="section-head">
-           <div class="container">
-               <div class="row-fluid">
-                   <div class="span6">
-                       <div class="logo">
-                           <span class="text">
-                               <a th:href="@{/admin/dashboard}">MyMarketU</a>
-                           </span>
-                       </div>
-                   </div>
-                   <div class="span6">
-                       <div class="admin-profile">
-                           <span>Welcome, Admin</span>
-                           <a th:href="@{/logout}">Logout</a>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </section>
+<body class="bg-gray-50">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-red-600 min-h-screen fixed">
+            <div class="p-4">
+                <div class="flex items-center mb-8">
+                    <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
+                    <div class="text-white text-2xl font-bold">MyMarketU</div>
+                </div>
+                <nav>
+                    <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Beranda
+                    </a>
+                    <a th:href="@{/admin/products-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-box mr-3"></i>
+                        Produk
+                    </a>
+                    <a th:href="@{/admin/orders-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-shopping-cart mr-3"></i>
+                        Pesanan
+                    </a>
+                    <a th:href="@{/admin/customersmenu-admin}" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
+                        <i class="fas fa-users mr-3"></i>
+                        Pelanggan
+                    </a>
+                    <a th:href="@{/admin/reports-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Laporan
+                    </a>
+                    <a th:href="@{/admin/profile-settings-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                        <i class="fas fa-cog mr-3"></i>
+                        Pengaturan
+                    </a>
+                </nav>
+            </div>
+        </div>
 
-       <!-- Admin Navigation -->
-       <div class="admin-nav">
-           <div class="container">
-               <ul class="nav nav-tabs">
-                   <li><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-                   <li><a th:href="@{/admin/products-admin}">Products</a></li>
-                   <li><a th:href="@{/admin/orders-admin}">Orders</a></li>
-                   <li class="active"><a th:href="@{/admin/customersmenu-admin}">Customers</a></li>
-                   <li><a th:href="@{/admin/reports-admin}">Reports</a></li>
-                   <li><a th:href="@{/admin/profile-settings-admin}">Settings</a></li>
-               </ul>
-           </div>
-       </div>
+        <!-- Main Content -->
+        <div class="ml-64 flex-1">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-8 py-4">
+                    <div class="text-2xl text-gray-800">Halo, <span th:text="${userName}">Admin</span> 👋</div>
+                    <div class="flex items-center space-x-4">
+                        <a th:href="@{/logout}" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </header>
 
-       <!-- Customer Management Content -->
-       <section class="admin-content">
-           <div class="container">
-               <!-- Customer Statistics -->
-               <div class="row-fluid stats-summary">
-                   <div class="span4">
-                       <div class="stat-box">
-                           <h3>Total Customers</h3>
-                           <span class="stat-number" th:text="${totalCustomers}">2,450</span>
-                       </div>
-                   </div>
-                   <div class="span4">
-                       <div class="stat-box">
-                           <h3>New This Month</h3>
-                           <span class="stat-number" th:text="${newCustomersThisMonth}">145</span>
-                       </div>
-                   </div>
-                   <div class="span4">
-                       <div class="stat-box">
-                           <h3>Active Customers</h3>
-                           <span class="stat-number" th:text="${activeCustomers}">1,890</span>
-                       </div>
-                   </div>
-               </div>
+            <!-- Dashboard Content -->
+            <main class="p-8">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="text-gray-500 text-sm mb-2">Total Pelanggan</div>
+                        <div class="text-2xl font-bold text-gray-800" th:text="${totalCustomers}">0</div>
+                        <div class="text-red-500 text-sm mt-2">
+                            <i class="fas fa-arrow-up"></i> 12.5%
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="text-gray-500 text-sm mb-2">Pelanggan Baru Bulan Ini</div>
+                        <div class="text-2xl font-bold text-gray-800" th:text="${newCustomersThisMonth}">0</div>
+                        <div class="text-red-500 text-sm mt-2">
+                            <i class="fas fa-arrow-up"></i> 8.3%
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="text-gray-500 text-sm mb-2">Pelanggan Aktif</div>
+                        <div class="text-2xl font-bold text-gray-800" th:text="${activeCustomers}">0</div>
+                        <div class="text-red-500 text-sm mt-2">
+                            <i class="fas fa-arrow-up"></i> 5.2%
+                        </div>
+                    </div>
+                </div>
 
-               <!-- Customer Search and Filter -->
-               <div class="row-fluid">
-                   <div class="span12">
-                       <div class="customer-filter-bar">
-                           <div class="row-fluid">
-                               <div class="span4">
-                                   <form th:action="@{/admin/customers/search}" method="GET">
-                                       <input type="text" name="query" class="search-input" placeholder="Search customers...">
-                                   </form>
-                               </div>
-                               <div class="span8">
-                                   <div class="filter-actions">
-                                       <form th:action="@{/admin/customers/filter}" method="GET">
-                                           <select name="status">
-                                               <option value="all">All Customers</option>
-                                               <option value="new">New Customers</option>
-                                               <option value="active">Active Customers</option>
-                                               <option value="inactive">Inactive Customers</option>
-                                           </select>
-                                           <select name="sortBy">
-                                               <option value="name">Sort by Name</option>
-                                               <option value="dateJoined">Sort by Date Joined</option>
-                                               <option value="totalOrders">Sort by Total Orders</option>
-                                               <option value="totalSpent">Sort by Total Spent</option>
-                                           </select>
-                                           <button type="submit" class="btn btn-primary">
-                                               <i class="fa fa-filter"></i> Apply Filters
-                                           </button>
-                                       </form>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
+                <!-- Search and Filter -->
+                <div class="bg-white rounded-lg shadow mb-8 p-6">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="md:w-1/3">
+                            <form th:action="@{/admin/customers/search}" method="GET" class="w-full">
+                                <input type="text" name="query" placeholder="Cari pelanggan..." 
+                                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            </form>
+                        </div>
+                        <div class="md:w-2/3 flex gap-4">
+                            <form th:action="@{/admin/customers/filter}" method="GET" class="flex gap-4 w-full">
+                                <select name="status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                    <option value="all">Semua Pelanggan</option>
+                                    <option value="active">Pelanggan Aktif</option>
+                                    <option value="inactive">Pelanggan Nonaktif</option>
+                                    <option value="new">Pelanggan Baru</option>
+                                </select>
+                                <select name="sortBy" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                    <option value="name">Urutkan berdasarkan Nama</option>
+                                    <option value="dateJoined">Urutkan berdasarkan Tanggal Bergabung</option>
+                                </select>
+                                <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                    <i class="fas fa-filter mr-2"></i>Terapkan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
-               <!-- Customer List -->
-               <div class="row-fluid">
-                   <div class="span12">
-                       <div class="customer-table-container">
-                           <table class="table table-striped customer-table">
-                               <thead>
-                                   <tr>
-                                       <th>Customer ID</th>
-                                       <th>Customer Info</th>
-                                       <th>Status</th>
-                                       <th>Total Orders</th>
-                                       <th>Total Spent</th>
-                                       <th>Last Order</th>
-                                       <th>Actions</th>
-                                   </tr>
-                               </thead>
-                               <tbody>
-                                   <tr th:each="customer : ${customers}">
-                                       <td th:text="${'#CST' + customer.id}"></td>
-                                       <td>
-                                           <div class="customer-info">
-                                               <span class="customer-name" th:text="${customer.namaLengkap}"></span>
-                                               <span class="customer-email" th:text="${customer.email}"></span>
-                                               <span class="customer-phone" th:text="${customer.phone}"></span>
-                                           </div>
-                                       </td>
-                                       <td><span class="status-badge" th:text="${customer.status}" th:class="${'status-badge status-' + #strings.toLowerCase(customer.status)}"></span></td>
-                                       <td th:text="${customer.totalOrders}"></td>
-                                       <td th:text="${'$' + #numbers.formatDecimal(customer.totalSpent, 1, 2)}"></td>
-                                       <td th:text="${#temporals.format(customer.lastOrder, 'yyyy-MM-dd')}"></td>
-                                       <td class="customer-actions">
-                                           <a th:href="@{/admin/customers/{id}/edit(id=${customer.id})}" class="btn btn-small btn-primary">
-                                               <i class="fa fa-edit"></i> Edit
-                                           </a>
-                                           <a th:href="@{/admin/customers/{id}(id=${customer.id})}" class="btn btn-small btn-warning">
-                                               <i class="fa fa-eye"></i> View
-                                           </a>
-                                           <form th:action="@{/admin/customers/{id}/block(id=${customer.id})}" method="POST" style="display: inline;">
-                                               <button type="submit" class="btn btn-small btn-danger">
-                                                   <i class="fa fa-ban"></i> Block
-                                               </button>
-                                           </form>
-                                       </td>
-                                   </tr>
-                               </tbody>
-                           </table>
-                       </div>
+                <!-- Customer Table -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-lg font-semibold text-gray-800">Daftar Pelanggan</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Info Pelanggan</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIM</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Bergabung</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr th:each="customer : ${customers}">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${'#' + customer.id}"></td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-gray-900" th:text="${customer.namaLengkap}"></span>
+                                            <span class="text-sm text-gray-500" th:text="${customer.email}"></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${customer.nim}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span th:if="${customer.isActive == 1}"
+                                              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Aktif
+                                        </span>
+                                        <span th:unless="${customer.isActive == 1}"
+                                              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Nonaktif
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" 
+                                        th:text="${#temporals.format(customer.createdAt, 'dd MMM yyyy')}"></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <div class="flex space-x-3">
+                                            <a th:href="@{/admin/customers/view/{id}(id=${customer.id})}" 
+                                               class="text-red-600 hover:text-red-900" 
+                                               title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a th:href="@{/admin/customers/edit/{id}(id=${customer.id})}" 
+                                               class="text-red-600 hover:text-red-900" 
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form th:action="@{/admin/customers/{id}/toggle-status(id=${customer.id})}" 
+                                                  method="POST" 
+                                                  style="display: inline;">
+                                                <button type="submit" 
+                                                        class="text-red-600 hover:text-red-900" 
+                                                        th:title="${customer.isActive == 1 ? 'Nonaktifkan' : 'Aktifkan'}"
+                                                        onclick="return confirm('Apakah Anda yakin ingin mengubah status akun ini?')">
+                                                    <i class="fas fa-power-off"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                       <!-- Pagination -->
-                       <div class="pagination-container">
-                           <ul class="pagination">
-                               <li><a href="#">«</a></li>
-                               <li class="active"><a href="#">1</a></li>
-                               <li><a href="#">2</a></li>
-                               <li><a href="#">3</a></li>
-                               <li><a href="#">4</a></li>
-                               <li><a href="#">5</a></li>
-                               <li><a href="#">»</a></li>
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </section>
-
-       <!-- Footer -->
-       <section class="section-footer">
-           <div class="container">
-               <div class="copyright">
-                   <p>© MyMarketU 2024. All rights reserved.</p>
-               </div>
-           </div>
-       </section>
-   </div>
-
-   <!-- Scripts -->
-   <script src="js/jquery-1.9.1.min.js"></script>
-   <script src="js/bootstrap.min.js"></script>
-   <script src="js/admin-script.js"></script>
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 flex items-center justify-between border-t border-gray-200">
+                        <div class="flex-1 flex justify-center">
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-red-50 text-sm font-medium text-red-600">1</a>
+                                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
+                                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</a>
+                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
 </body>
 </html>
