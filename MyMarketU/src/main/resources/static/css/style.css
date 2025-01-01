@@ -7,6 +7,18 @@
     align-items: center;
 }
 
+.navbar-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.navbar-center {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .navbar-brand img {
     height: 40px;
 }
@@ -19,23 +31,25 @@
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 15px;
+    width: 100%;
+    max-width: 400px;
 }
 
-.navbar-links a {
+.navbar-links a, .account-icons a {
     color: black;
     text-decoration: none;
     font-size: 14px;
 }
 
-.navbar-links a:hover {
+.navbar-links a:hover, .account-icons a:hover {
     color: #c8102e;
     font-weight: bold;
 }
 
-.badge-sale {
-    font-size: 12px;
-    margin-left: 5px;
+.account-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 
@@ -103,47 +117,21 @@
 }
 
 
-/* Promo Banner */
+.promo-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 30px 0; /* Memberikan margin atas dan bawah */
+}
+
 .promo-banner {
-    margin-left: 300px; 
-    margin-top: 50px;
-    padding: 3rem;
-    border-radius: 10px;
-    background: linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(255, 140, 0, 1) 100%);
+    background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,140,0,1) 100%);
     color: white;
-    margin-bottom: 30px;
-}
-
-/* Produk */
-.product-box {
-    border: 1px solid #ddd;
+    padding: 30px;
     border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    background-color: #f9f9f9;
-    transition: transform 0.2s ease;
-    width: 100%; 
-    height: 300px; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; 
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly; 
-}
-
-.product-box:hover {
-    transform: scale(1.05);
+    max-width: 1200px;
+    width: 90%;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px; /* Tambahkan jarak atas */
 }
 
-.product-img {
-    width: auto; 
-    max-width: 150px; 
-    height: 150px; 
-    object-fit: contain; 
-    margin: 0 auto; 
-}

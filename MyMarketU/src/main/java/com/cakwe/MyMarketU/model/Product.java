@@ -15,13 +15,13 @@ import jakarta.persistence.*;
 @Table(name = "produk")
 public class Product {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     private String nama;
     private String kategori;
     private double harga;
-    
+
     @Column(columnDefinition = "TEXT")
     private String deskripsi;
     private int stok;
@@ -91,5 +91,4 @@ public class Product {
     public void setDiskon(int diskon) {
         this.diskon = diskon;
     }
-   
 }

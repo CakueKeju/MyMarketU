@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cakwe.MyMarketU.model;
 
 import java.time.LocalDateTime;        
 import jakarta.persistence.*;
-/**
- *
- * @author Cakue
- */
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -33,6 +26,9 @@ public class User {
     @Column(name = "foto_profil", nullable = false)
     private String fotoProfil = "default.png";
     
+    @Column
+    private String phone;
+    
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -40,10 +36,13 @@ public class User {
     private LocalDateTime updatedAt;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false) // Foreign key ke tabel role
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    //Getter dan Setter
+    @Column(name = "is_active")
+    private Integer isActive = 1;
+
+    // Getter dan Setter
     public Long getId() {
         return id;
     }
@@ -92,6 +91,14 @@ public class User {
         this.fotoProfil = fotoProfil;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -115,9 +122,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    @Column(name = "is_active")
-    private Integer isActive = 1;
 
     public Integer getIsActive() {
         return isActive;

@@ -6,12 +6,15 @@ package com.cakwe.MyMarketU.service;
 
 import com.cakwe.MyMarketU.model.*;
 import com.cakwe.MyMarketU.repository.*;
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,109 +34,121 @@ public class TransactionService {
     private ProductRepository productRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
+    private static final String CART_SESSION_KEY = "cart";
 
     @Transactional
-    public TransactionDTO getOrCreateTransaction(Long userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Transaction transaction = transactionRepository.findByUserIdAndStatus(userId, Transaction.TransactionStatus.PENDING);
+    public void addItemToCartInSession(HttpSession session, int productId, int quantity) {
+        List<TransactionItemDTO> cart = getCartFromSession(session);
 
-        if (transaction == null) {
-            transaction = new Transaction();
-            transaction.setUser(user);
-            transaction.setInvoiceNumber("INV-" + System.currentTimeMillis());
-            transaction.setTotalCost(0.0);
-            transaction.setStatus(Transaction.TransactionStatus.PENDING);
-            transaction = transactionRepository.save(transaction);
+        // Cek apakah produk sudah ada di keranjang
+        Optional<TransactionItemDTO> existingItem = cart.stream()
+                .filter(item -> item.getProductId() == productId)
+                .findFirst();
+
+        if (existingItem.isPresent()) {
+            // Jika produk sudah ada, tambahkan quantity
+            TransactionItemDTO item = existingItem.get();
+            item.setQuantity(item.getQuantity() + quantity);
+        } else {
+            // Jika produk belum ada, tambahkan ke keranjang
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new IllegalArgumentException("Produk tidak ditemukan"));
+
+            if (product.getStok() < quantity) {
+                throw new IllegalArgumentException("Stok tidak mencukupi untuk produk: " + product.getNama());
+            }
+
+            TransactionItemDTO newItem = new TransactionItemDTO(
+                    product.getId(),
+                    product.getNama(),
+                    quantity,
+                    product.getHarga() * (1 - (product.getDiskon() / 100)) // Harga setelah diskon
+            );
+            cart.add(newItem);
         }
 
-        return mapToDTO(transaction);
+        updateCartInSession(session, cart);
     }
-    
+
     @Transactional
-    public TransactionDTO createCart(User user) { 
+    public List<TransactionItemDTO> getCartFromSession(HttpSession session) {
+        List<TransactionItemDTO> cart = (List<TransactionItemDTO>) session.getAttribute(CART_SESSION_KEY);
+        if (cart == null) {
+            cart = new ArrayList<>();
+            session.setAttribute(CART_SESSION_KEY, cart); // Inisialisasi session jika belum ada
+        }
+        return cart;
+    }
+
+    @Transactional
+    public void updateCartInSession(HttpSession session, List<TransactionItemDTO> cart) {
+        // Perbarui keranjang di session
+        session.setAttribute(CART_SESSION_KEY, cart);
+    }
+
+    @Transactional
+    public List<TransactionItemDTO> removeItemFromCartInSession(HttpSession session, int productId) {
+        List<TransactionItemDTO> cart = getCartFromSession(session);
+
+        // Hapus item berdasarkan ID produk
+        cart.removeIf(item -> item.getProductId() == productId);
+
+        // Perbarui session
+        updateCartInSession(session, cart);
+        return cart;
+    }
+
+    @Transactional
+    public TransactionDTO checkoutFromSession(HttpSession session, String evidence) {
+        // Ambil user saat ini
+        User user = userService.getCurrentUser();
+
+        // Ambil keranjang dari session
+        List<TransactionItemDTO> cart = getCartFromSession(session);
+        if (cart.isEmpty()) {
+            throw new IllegalArgumentException("Keranjang Anda kosong.");
+        }
+
+        // Buat transaksi baru
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setInvoiceNumber("INV-" + System.currentTimeMillis());
-        transaction.setTotalCost(0.0);
         transaction.setStatus(Transaction.TransactionStatus.PENDING);
-        Transaction savedTransaction = transactionRepository.save(transaction);
-        return mapToDTO(savedTransaction);
-    }
+        transaction.setTransactionEvidence(evidence);
 
-    @Transactional
-    public TransactionDTO addItemToCart(int transactionId, int productId, int quantity) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
+        // Proses setiap item di keranjang
+        List<TransactionItem> items = cart.stream().map(dto -> {
+            Product product = productRepository.findById(dto.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("Produk tidak ditemukan: " + dto.getProductName()));
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+            if (product.getStok() < dto.getQuantity()) {
+                throw new IllegalArgumentException("Stok tidak mencukupi untuk produk: " + product.getNama());
+            }
 
-        if (product.getStok() < quantity) {
-            throw new IllegalArgumentException("Insufficient stock");
-        }
+            // Kurangi stok produk
+            product.setStok(product.getStok() - dto.getQuantity());
+            productRepository.save(product);
 
-        TransactionItem item = new TransactionItem();
-        item.setTransaction(transaction);
-        item.setProduct(product);
-        item.setQuantity(quantity);
-        transactionItemRepository.save(item);
+            // Buat item transaksi
+            TransactionItem item = new TransactionItem();
+            item.setTransaction(transaction);
+            item.setProduct(product);
+            item.setQuantity(dto.getQuantity());
+            return item;
+        }).collect(Collectors.toList());
 
-        product.setStok(product.getStok() - quantity);
-        productRepository.save(product);
-
-        transaction.setTotalCost(calculateTotalCost(transaction));
+        // Simpan transaksi dan total biaya
+        transaction.setItems(items);
+        transaction.setTotalCost(cart.stream().mapToDouble(TransactionItemDTO::getPrice).sum());
         transactionRepository.save(transaction);
+
+        // Bersihkan keranjang dari session
+        session.removeAttribute(CART_SESSION_KEY);
 
         return mapToDTO(transaction);
     }
-
-    @Transactional
-    public List<TransactionItemDTO> getCartItems(int transactionId) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-
-        return transaction.getItems().stream()
-            .map(item -> new TransactionItemDTO(
-                    item.getProduct().getId(),
-                    item.getProduct().getNama(),
-                    item.getQuantity(),
-                    item.getProduct().getHarga() * item.getQuantity()
-            ))
-            .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public TransactionDTO checkout(int transactionId, String evidence) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-
-        transaction.setTransactionEvidence(evidence);
-        transaction.setStatus(Transaction.TransactionStatus.PENDING);
-        Transaction updatedTransaction = transactionRepository.save(transaction);
-        return mapToDTO(updatedTransaction);
-    }
-
-    @Transactional
-    public TransactionDTO updateStatus(int transactionId, Transaction.TransactionStatus status) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-
-        transaction.setStatus(status);
-        Transaction updatedTransaction = transactionRepository.save(transaction);
-        return mapToDTO(updatedTransaction);
-    }
-
-    private double calculateTotalCost(Transaction transaction) {
-    return transaction.getItems().stream()
-            .mapToDouble(item -> {
-                double discount = item.getProduct().getDiskon();
-                double discountedPrice = item.getProduct().getHarga() * (1 - (discount / 100));
-                return discountedPrice * item.getQuantity();
-            })
-            .sum();
-}
 
     private TransactionDTO mapToDTO(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
@@ -152,67 +167,9 @@ public class TransactionService {
                 .collect(Collectors.toList()));
         return dto;
     }
-    
+
     @Transactional
-    public TransactionDTO increaseItemInCart(int transactionId, int productId) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-
-        TransactionItem item = transaction.getItems().stream()
-                .filter(i -> i.getProduct().getId() == productId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
-        if (product.getStok() <= 0) {
-            throw new IllegalArgumentException("Insufficient stock");
-        }
-
-        item.setQuantity(item.getQuantity() + 1);
-        product.setStok(product.getStok() - 1);
-
-        transactionItemRepository.save(item);
-        productRepository.save(product);
-
-        transaction.setTotalCost(calculateTotalCost(transaction));
-        transactionRepository.save(transaction);
-
-        return mapToDTO(transaction);
+    public Transaction getPendingTransaction(Long userId) {
+        return transactionRepository.findByUserIdAndStatus(userId, Transaction.TransactionStatus.PENDING);
     }
-    
-    @Transactional
-    public TransactionDTO decreaseItemInCart(int transactionId, int productId, boolean confirmDeletion) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-
-        TransactionItem item = transaction.getItems().stream()
-                .filter(i -> i.getProduct().getId() == productId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
-        if (item.getQuantity() > 1) {
-            item.setQuantity(item.getQuantity() - 1);
-            product.setStok(product.getStok() + 1);
-            transactionItemRepository.save(item);
-            productRepository.save(product);
-        } else if (confirmDeletion) {
-            transaction.getItems().remove(item);
-            transactionItemRepository.delete(item);
-            product.setStok(product.getStok() + item.getQuantity());
-            productRepository.save(product);
-        } else {
-            throw new IllegalStateException("Confirmation required to delete item.");
-        }
-
-        transaction.setTotalCost(calculateTotalCost(transaction));
-        transactionRepository.save(transaction);
-
-        return mapToDTO(transaction);
-    }
-
 }

@@ -1,11 +1,12 @@
 package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.Product;
-import com.cakwe.MyMarketU.model.TransactionDTO;
+import com.cakwe.MyMarketU.model.Transaction;
 import com.cakwe.MyMarketU.model.User;
 import com.cakwe.MyMarketU.repository.ProductRepository;
 import com.cakwe.MyMarketU.repository.UserRepository;
 import com.cakwe.MyMarketU.service.TransactionService;
+import com.cakwe.MyMarketU.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller
 public class DashboardController {
@@ -61,31 +61,31 @@ public class DashboardController {
     public String reportsAdmin() {
         return "admin/reports-admin";
     }
-    
-    @GetMapping("/admin/profile-settings-admin")
-    public String settingsAdmin() {
-        return "admin/profile-settings-admin";
-    }
-    
-    //======================================================================================================================================================================
-    //customer
-    
     @Autowired
     private TransactionService transactionService;
-    
-    @GetMapping("/customer/dashboard")
-    public String customerDashboard(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-        TransactionDTO transaction = transactionService.getOrCreateTransaction(user.getId());
-        
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/customer/homepage")
+    public String customerHomepage(Model model, HttpSession session) {
+        // Ambil user saat ini menggunakan UserService
+        User user = userService.getCurrentUser();
+
+        // Cek apakah ada transaksi PENDING untuk user ini
+        Transaction transaction = transactionService.getPendingTransaction(user.getId());
+        if (transaction != null) {
+            session.setAttribute("transactionId", transaction.getId());
+        } else {
+            session.removeAttribute("transactionId"); // Hapus jika tidak ada transaksi PENDING
+        }
+
+        // Ambil daftar produk untuk ditampilkan
         List<Product> products = productRepository.findAll();
-        model.addAttribute("transactionId", transaction.getId());
         model.addAttribute("products", products);
-        
+        model.addAttribute("userName", user.getNamaLengkap()); // Tambahkan nama user ke halaman
+
         return "customer/homepage";
     }
+
 }

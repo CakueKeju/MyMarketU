@@ -6,6 +6,7 @@ package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.User;
 import com.cakwe.MyMarketU.service.UserService;
+import jakarta.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,15 +44,20 @@ public class LoginController {
     public String login(
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            RedirectAttributes redirectAttributes, Model model) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes, 
+            Model model) {
 
         User user = userService.authenticate(email, password);
         if (user != null) {
+            session.setAttribute("userId", user.getId()); // Simpan userId di session
+            session.setAttribute("userName", user.getNamaLengkap()); // Opsional: Simpan nama untuk header
+            
             String role = user.getRole().getNama();
             if ("Admin".equalsIgnoreCase(role)) {
-                return "redirect:/admin/dashboard";
+                return "redirect:/admin/homepage";
             } else if ("Customer".equalsIgnoreCase(role)) {
-                return "redirect:/customer/dashboard";
+                return "redirect:/customer/homepage";
             } else {
                 model.addAttribute("errorMessage", "Invalid role.");
                 return "login";
