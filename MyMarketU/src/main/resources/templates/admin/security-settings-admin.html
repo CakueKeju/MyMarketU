@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-   <title>Security Settings - MyMarketU</title>
+   <title>Pengaturan Keamanan - MyMarketU</title>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -13,7 +13,7 @@
        <div class="w-64 bg-red-600 min-h-screen fixed">
            <div class="p-4">
                <div class="flex items-center mb-8">
-                   <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
+                   <img src="/img/a.png" alt="Logo MyMarketU" class="h-8 w-auto mr-2">
                    <div class="text-white text-2xl font-bold">MyMarketU</div>
                </div>
                <nav>
@@ -45,9 +45,9 @@
            </div>
        </div>
 
-       <!-- Main Content -->
+       <!-- Konten Utama -->
        <div class="ml-64 flex-1">
-           <!-- Top Header -->
+           <!-- Header Atas -->
            <header class="bg-white shadow-sm">
                <div class="flex justify-between items-center px-8 py-4">
                    <div class="text-2xl text-gray-800">Pengaturan</div>
@@ -59,33 +59,33 @@
                </div>
            </header>
 
-           <!-- Settings Content -->
+           <!-- Konten Pengaturan -->
            <main class="p-8">
                <div class="flex space-x-6">
-                   <!-- Settings Navigation -->
+                   <!-- Navigasi Pengaturan -->
                    <div class="w-1/4">
                     <div class="bg-white rounded-lg shadow">
                         <div class="p-4">
                             <a th:href="@{/admin/profile-settings-admin}" class="flex items-center text-gray-600 p-3 hover:bg-gray-50 rounded">
                                 <i class="fas fa-user mr-3"></i>
-                                Profile Settings
+                                Pengaturan Profil
                             </a>
                             <a th:href="@{/admin/security-settings-admin}" class="flex items-center text-red-600 p-3 mb-2 bg-red-50 rounded">
                                 <i class="fas fa-lock mr-3"></i>
-                                Security Settings
+                                Pengaturan Keamanan
                             </a>
                         </div>
                     </div>
                 </div>
 
-                   <!-- Security Settings Form -->
+                   <!-- Form Pengaturan Keamanan -->
                    <div class="w-3/4">
                        <div class="bg-white rounded-lg shadow">
                            <div class="p-6 border-b border-gray-200">
-                               <h2 class="text-lg font-semibold text-gray-800">Security Settings</h2>
+                               <h2 class="text-lg font-semibold text-gray-800">Pengaturan Keamanan</h2>
                            </div>
                            <div class="p-6">
-                               <!-- Flash Messages -->
+                               <!-- Pesan Flash -->
                                <div th:if="${successMessage}" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
                                    <span th:text="${successMessage}"></span>
                                </div>
@@ -93,22 +93,23 @@
                                    <span th:text="${errorMessage}"></span>
                                </div>
 
-                               <form th:action="@{/admin/settings/save-security}" method="post">
+                               <!-- Form dengan action yang sudah dikoreksi -->
+                               <form th:action="@{/admin/security-settings-admin/save}" method="post">
                                    <div class="mb-6">
-                                       <label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                                       <label class="block text-sm font-medium text-gray-700 mb-2">Kata Sandi Saat Ini</label>
                                        <input type="password" name="currentPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" required>
                                    </div>
                                    <div class="mb-6">
-                                       <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                                       <label class="block text-sm font-medium text-gray-700 mb-2">Kata Sandi Baru</label>
                                        <input type="password" name="newPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" required>
                                    </div>
                                    <div class="mb-6">
-                                       <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                                       <label class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Kata Sandi Baru</label>
                                        <input type="password" name="confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" required>
                                    </div>
                                    <div>
                                        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                           Update Password
+                                           Perbarui Kata Sandi
                                        </button>
                                    </div>
                                </form>

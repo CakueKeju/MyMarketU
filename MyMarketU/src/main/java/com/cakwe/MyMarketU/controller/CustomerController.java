@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -23,43 +24,69 @@ public class CustomerController {
     @Autowired
     private UserService userService;
 
+    private void calculateAndAddStatistics(List<User> allCustomers, Model model) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfCurrentMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfPreviousMonth = startOfCurrentMonth.minusMonths(1);
+        
+        // Hitung statistik untuk bulan ini
+        Long totalCustomers = (long) allCustomers.size();
+        Long newCustomersThisMonth = allCustomers.stream()
+                .filter(user -> user.getCreatedAt().isAfter(startOfCurrentMonth))
+                .count();
+
+        // Hitung statistik untuk bulan sebelumnya
+        Long previousMonthTotal = allCustomers.stream()
+                .filter(user -> user.getCreatedAt().isBefore(startOfCurrentMonth))
+                .count();
+        Long previousMonthNew = allCustomers.stream()
+                .filter(user -> user.getCreatedAt().isAfter(startOfPreviousMonth) 
+                               && user.getCreatedAt().isBefore(startOfCurrentMonth))
+                .count();
+
+        // Hitung persentase pertumbuhan
+        Double totalGrowth = previousMonthTotal > 0 ? 
+            ((totalCustomers - previousMonthTotal) / (double) previousMonthTotal) * 100.0 : 0.0;
+        Double newGrowth = previousMonthNew > 0 ? 
+            ((newCustomersThisMonth - previousMonthNew) / (double) previousMonthNew) * 100.0 : 0.0;
+
+        // Set attribute untuk tampilan
+        model.addAttribute("totalCustomers", totalCustomers);
+        model.addAttribute("newCustomersThisMonth", newCustomersThisMonth);
+        model.addAttribute("totalCustomersGrowth", totalGrowth);
+        model.addAttribute("newCustomersGrowth", newGrowth);
+        model.addAttribute("userName", "Admin");
+    }
+
     @GetMapping("/customersmenu-admin")
     public String showCustomerPage(Model model) {
         List<User> customers = userRepository.findAllByRoleId(2);
-        Long totalCustomers = userRepository.countByRole_Id(2);
-        
-        // Hitung pelanggan baru bulan ini
-        LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0);
-        Long newCustomersThisMonth = customers.stream()
-                .filter(user -> user.getCreatedAt().isAfter(startOfMonth))
-                .count();
-        
-        // Set attribute untuk tampilan
+        calculateAndAddStatistics(customers, model);
         model.addAttribute("customers", customers);
-        model.addAttribute("totalCustomers", totalCustomers);
-        model.addAttribute("newCustomersThisMonth", newCustomersThisMonth);
-        model.addAttribute("activeCustomers", totalCustomers);
         model.addAttribute("userName", "Admin");
-        
         return "admin/customersmenu-admin";
     }
 
     @GetMapping("/customers/search")
     public String searchCustomers(@RequestParam String query, Model model) {
-        List<User> customers;
+        List<User> allCustomers = userRepository.findAllByRoleId(2);
+        List<User> filteredCustomers;
+        
         if (query != null && !query.trim().isEmpty()) {
-            customers = userRepository.findAllByRoleId(2).stream()
+            filteredCustomers = allCustomers.stream()
                 .filter(user -> 
                     user.getNamaLengkap().toLowerCase().contains(query.toLowerCase()) ||
                     user.getEmail().toLowerCase().contains(query.toLowerCase()) ||
                     user.getNim().toLowerCase().contains(query.toLowerCase()))
                 .collect(Collectors.toList());
         } else {
-            customers = userRepository.findAllByRoleId(2);
+            filteredCustomers = allCustomers;
         }
         
-        model.addAttribute("customers", customers);
-        model.addAttribute("totalCustomers", userRepository.countByRole_Id(2));
+        calculateAndAddStatistics(allCustomers, model);
+        model.addAttribute("customers", filteredCustomers);
+        model.addAttribute("userName", "Admin");
+        
         return "admin/customersmenu-admin";
     }
 
@@ -69,19 +96,16 @@ public class CustomerController {
             @RequestParam(required = false) String sortBy,
             Model model) {
         
-        List<User> customers = userRepository.findAllByRoleId(2);
+        List<User> allCustomers = userRepository.findAllByRoleId(2);
+        List<User> filteredCustomers = new ArrayList<>(allCustomers);
         
         if (status != null && !status.equals("all")) {
             LocalDateTime threshold = LocalDateTime.now().minusMonths(1);
-            customers = customers.stream()
+            filteredCustomers = filteredCustomers.stream()
                 .filter(user -> {
                     switch (status) {
                         case "new":
                             return user.getCreatedAt().isAfter(threshold);
-                        case "active":
-                            return user.getIsActive() == 1;
-                        case "inactive":
-                            return user.getIsActive() == 0;
                         default:
                             return true;
                     }
@@ -92,16 +116,18 @@ public class CustomerController {
         if (sortBy != null) {
             switch (sortBy) {
                 case "name":
-                    customers.sort(Comparator.comparing(User::getNamaLengkap));
+                    filteredCustomers.sort(Comparator.comparing(User::getNamaLengkap));
                     break;
                 case "dateJoined":
-                    customers.sort(Comparator.comparing(User::getCreatedAt).reversed());
+                    filteredCustomers.sort(Comparator.comparing(User::getCreatedAt).reversed());
                     break;
             }
         }
         
-        model.addAttribute("customers", customers);
-        model.addAttribute("totalCustomers", userRepository.countByRole_Id(2));
+        calculateAndAddStatistics(allCustomers, model);
+        model.addAttribute("customers", filteredCustomers);
+        model.addAttribute("userName", "Admin");
+        
         return "admin/customersmenu-admin";
     }
 
@@ -117,17 +143,10 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/customers/{id}/toggle-status")
-    public String toggleCustomerStatus(@PathVariable Long id) {
+    @PostMapping("/customers/{id}/delete")
+    public String deleteCustomer(@PathVariable Long id) {
         try {
-            User customer = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pelanggan tidak ditemukan"));
-            
-            // Toggle nilai is_active antara 1 dan 0
-            customer.setIsActive(customer.getIsActive() == 1 ? 0 : 1);
-            customer.setUpdatedAt(LocalDateTime.now());
-            userRepository.save(customer);
-            
+            userRepository.deleteById(id);
             return "redirect:/admin/customersmenu-admin";
         } catch (Exception e) {
             return "redirect:/admin/customersmenu-admin";

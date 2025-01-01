@@ -215,4 +215,12 @@ public class UserService {
                password.matches(".*[a-z].*") &&
                password.matches(".*[0-9].*");
     }
+
+    public boolean isEmailExists(String email) {
+    User currentUser = getCurrentUser();
+    Optional<User> userWithEmail = userRepository.findByEmail(email);
+    
+    // Mengembalikan true jika email exists dan bukan milik user saat ini
+    return userWithEmail.isPresent() && !userWithEmail.get().getId().equals(currentUser.getId());
+}
 }

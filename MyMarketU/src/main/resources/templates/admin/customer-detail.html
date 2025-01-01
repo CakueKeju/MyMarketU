@@ -4,18 +4,21 @@
     <title>Detail Pelanggan - MyMarketU</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS Tailwind dan Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="flex">
-        <!-- Sidebar -->
+        <!-- Sidebar Menu -->
         <div class="w-64 bg-red-600 min-h-screen fixed">
             <div class="p-4">
+                <!-- Logo dan Nama Aplikasi -->
                 <div class="flex items-center mb-8">
                     <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
                     <div class="text-white text-2xl font-bold">MyMarketU</div>
                 </div>
+                <!-- Menu Navigasi -->
                 <nav>
                     <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
                         <i class="fas fa-chart-line mr-3"></i>
@@ -45,17 +48,19 @@
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Konten Utama -->
         <div class="ml-64 flex-1">
-            <!-- Top Header -->
+            <!-- Header -->
             <header class="bg-white shadow-sm">
                 <div class="flex justify-between items-center px-8 py-4">
                     <div class="flex items-center">
+                        <!-- Tombol Kembali -->
                         <a th:href="@{/admin/customersmenu-admin}" class="text-gray-500 hover:text-gray-700 mr-4">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div class="text-2xl text-gray-800">Detail Pelanggan</div>
                     </div>
+                    <!-- Tombol Keluar -->
                     <div class="flex items-center space-x-4">
                         <a th:href="@{/logout}" class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-sign-out-alt"></i> Keluar
@@ -64,15 +69,17 @@
                 </div>
             </header>
 
-            <!-- Detail Content -->
+            <!-- Konten Detail -->
             <main class="p-8">
-                <!-- Profile Card -->
+                <!-- Kartu Profil -->
                 <div class="bg-white rounded-lg shadow mb-8">
                     <div class="p-6 border-b border-gray-200">
                         <div class="flex items-center">
+                            <!-- Foto Profil -->
                             <div class="w-24 h-24 bg-gray-200 rounded-full mr-6 overflow-hidden">
                                 <img th:src="@{'/img/' + ${customer.fotoProfil}}" alt="Profile" class="w-full h-full object-cover">
                             </div>
+                            <!-- Informasi Utama -->
                             <div>
                                 <h2 class="text-2xl font-semibold text-gray-800" th:text="${customer.namaLengkap}">Nama Pelanggan</h2>
                                 <p class="text-gray-600" th:text="${customer.email}">email@example.com</p>
@@ -82,9 +89,9 @@
                     </div>
                 </div>
 
-                <!-- Additional Info -->
+                <!-- Grid Informasi Tambahan -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Account Details -->
+                    <!-- Detail Akun -->
                     <div class="bg-white rounded-lg shadow">
                         <div class="p-6 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Informasi Akun</h3>
@@ -98,30 +105,33 @@
                                 <label class="block text-sm font-medium text-gray-600 mb-1">Terakhir Diperbarui</label>
                                 <p class="text-gray-900" th:text="${#temporals.format(customer.updatedAt, 'dd MMMM yyyy')}">1 Januari 2024</p>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                    Aktif
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Actions -->
+                    <!-- Aksi -->
                     <div class="bg-white rounded-lg shadow">
                         <div class="p-6 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Aksi</h3>
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
-                                <button class="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center">
-                                    <i class="fas fa-ban mr-2"></i>
-                                    Blokir Pelanggan
-                                </button>
-                                <button class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-envelope mr-2"></i>
-                                    Kirim Email
-                                </button>
+                                <!-- Tombol Edit Pelanggan -->
+                                <a th:href="@{/admin/customers/edit/{id}(id=${customer.id})}" 
+                                class="w-full bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 flex items-center justify-center">
+                                    <i class="fas fa-edit mr-2"></i>
+                                    Edit Pelanggan
+                                </a>
+                                
+                                <!-- Form Hapus Pelanggan -->
+                                <form th:action="@{/admin/customers/{id}/delete(id=${customer.id})}" 
+                                    method="POST">
+                                    <button type="submit"
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus akun pelanggan ini? Aksi ini tidak dapat dibatalkan.')"
+                                            class="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center">
+                                        <i class="fas fa-trash mr-2"></i>
+                                        Hapus Akun Pelanggan
+                                    </button>
+                                </form>
+                                
+                                <!-- Tombol Riwayat Pesanan -->
                                 <button class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center justify-center">
                                     <i class="fas fa-history mr-2"></i>
                                     Lihat Riwayat Pesanan
@@ -129,16 +139,15 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- History Section -->
+                <!-- Riwayat Aktivitas -->
                 <div class="bg-white rounded-lg shadow mt-8">
                     <div class="p-6 border-b border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-800">Riwayat Aktivitas</h3>
                     </div>
                     <div class="p-6">
                         <div class="space-y-4">
-                            <!-- Contoh riwayat aktivitas -->
+                            <!-- Aktivitas Pembelian -->
                             <div class="flex items-start">
                                 <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-shopping-cart text-blue-500"></i>
@@ -150,6 +159,7 @@
                                 </div>
                             </div>
                             
+                            <!-- Aktivitas Bergabung -->
                             <div class="flex items-start">
                                 <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-4">
                                     <i class="fas fa-user-check text-green-500"></i>

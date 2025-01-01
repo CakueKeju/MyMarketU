@@ -62,26 +62,30 @@
             <!-- Dashboard Content -->
             <main class="p-8">
                 <!-- Stats Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Total Pelanggan -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="text-gray-500 text-sm mb-2">Total Pelanggan</div>
                         <div class="text-2xl font-bold text-gray-800" th:text="${totalCustomers}">0</div>
-                        <div class="text-red-500 text-sm mt-2">
-                            <i class="fas fa-arrow-up"></i> 12.5%
+                        <div class="text-sm mt-2">
+                            <span th:if="${totalCustomersGrowth != null}" 
+                                th:text="${#numbers.formatDecimal(totalCustomersGrowth, 1, 1)} + '%'"
+                                th:class="${totalCustomersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}">
+                                0%
+                            </span>
                         </div>
                     </div>
+
+                    <!-- Pelanggan Baru -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="text-gray-500 text-sm mb-2">Pelanggan Baru Bulan Ini</div>
                         <div class="text-2xl font-bold text-gray-800" th:text="${newCustomersThisMonth}">0</div>
-                        <div class="text-red-500 text-sm mt-2">
-                            <i class="fas fa-arrow-up"></i> 8.3%
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="text-gray-500 text-sm mb-2">Pelanggan Aktif</div>
-                        <div class="text-2xl font-bold text-gray-800" th:text="${activeCustomers}">0</div>
-                        <div class="text-red-500 text-sm mt-2">
-                            <i class="fas fa-arrow-up"></i> 5.2%
+                        <div class="text-sm mt-2">
+                            <span th:if="${newCustomersGrowth != null}" 
+                                th:text="${#numbers.formatDecimal(newCustomersGrowth, 1, 1)} + '%'"
+                                th:class="${newCustomersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}">
+                                0%
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -99,8 +103,6 @@
                             <form th:action="@{/admin/customers/filter}" method="GET" class="flex gap-4 w-full">
                                 <select name="status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
                                     <option value="all">Semua Pelanggan</option>
-                                    <option value="active">Pelanggan Aktif</option>
-                                    <option value="inactive">Pelanggan Nonaktif</option>
                                     <option value="new">Pelanggan Baru</option>
                                 </select>
                                 <select name="sortBy" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -127,7 +129,6 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Info Pelanggan</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIM</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Bergabung</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                 </tr>
@@ -142,16 +143,6 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${customer.nim}"></td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span th:if="${customer.isActive == 1}"
-                                              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
-                                        <span th:unless="${customer.isActive == 1}"
-                                              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Nonaktif
-                                        </span>
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" 
                                         th:text="${#temporals.format(customer.createdAt, 'dd MMM yyyy')}"></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -166,14 +157,14 @@
                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form th:action="@{/admin/customers/{id}/toggle-status(id=${customer.id})}" 
+                                            <form th:action="@{/admin/customers/{id}/delete(id=${customer.id})}" 
                                                   method="POST" 
                                                   style="display: inline;">
                                                 <button type="submit" 
                                                         class="text-red-600 hover:text-red-900" 
-                                                        th:title="${customer.isActive == 1 ? 'Nonaktifkan' : 'Aktifkan'}"
-                                                        onclick="return confirm('Apakah Anda yakin ingin mengubah status akun ini?')">
-                                                    <i class="fas fa-power-off"></i>
+                                                        title="Hapus Pelanggan"
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
