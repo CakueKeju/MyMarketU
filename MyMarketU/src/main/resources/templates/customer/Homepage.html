@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage - MyMarketU</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
-        .product-box {
+       .product-box {
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
             background-color: #f9f9f9;
             transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 350px;
         }
 
         .product-box:hover {
@@ -21,27 +27,77 @@
         }
 
         .product-img {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             object-fit: contain;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            display: block;
-            margin: 0 auto;
-            margin-bottom: 10px;
+            margin: 0 auto 10px;
+        }
+
+        .product-box h5 {
+            font-size: 16px;
+            margin: 10px 0;
+            height: auto;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-wrap: break-word;
+        }
+
+        .product-box p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .product-box form {
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="bg-white py-2 border-bottom shadow-sm">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a href="/customer/homepage" class="d-flex align-items-center text-decoration-none text-danger fw-bold fs-4">
-                <img src="img/a.png" alt="Logo MyMarketU" width="40" height="48" class="me-2">
-                MyMarketU
-            </a>
+    <nav class="navbar">
+        <div class="navbar-links">
+            <a href="#">Tentang Kami</a>
+            <a href="#">Akun Saya</a>
+            <a href="#">Wishlist</a>
+            <a href="#">Pelacak Pesanan</a>
         </div>
-    </header>
+        <div class="d-flex align-items-center w-100">
+            <a class="navbar-brand" href="/">
+                <img src="../img/a.png" alt="MyMarketU">
+            </a>
+            <form class="search-bar">
+                <input class="form-control" type="search" placeholder="Cari produk, makanan atau minuman.." aria-label="Search">
+            </form>
+            <div class="account-icons">
+                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
+                    🛒
+                </a>
+            </div>
+        </div>
+        <div class="navbar-links mt-3">
+            <a href="#">Beranda</a>
+            <a href="#">Toko</a>
+            <a href="#">Makanan</a>
+            <a href="#">Minuman</a>
+            <a href="#" class="text-danger">Hampir Selesai <span class="badge bg-danger text-white badge-sale">SALE</span></a>
+        </div>
+    </nav>
+
+    <div class="promo-container">
+        <section class="promo-banner">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h4 class="fw-bold">Diskon Harian</h4>
+                    <h1 class="mb-3">Belanja bersama kami untuk kualitas yang lebih baik dengan harga terbaik.</h1>
+                    <p class="lead">Kami telah menyiapkan diskon khusus untuk Anda pada produk kebutuhan sehari-hari. Jangan lewatkan kesempatan ini...</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="img/promo-product.jpg" alt="Promo Product" class="img-fluid rounded">
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Produk Section -->
     <main class="container py-5">
@@ -53,10 +109,12 @@
                     <img th:src="@{'/images/' + ${product.namaFileGambar}}" 
                          th:alt="${product.nama}" class="product-img">
                     <h5 th:text="${product.nama}"></h5>
-                    <p class="text-muted" th:text="${product.harga}"></p>
-                    <form th:action="@{/customer/add-to-cart}" method="POST">
-                        <input type="hidden" name="transactionId" th:value="${transactionId}">
+                    <p class="text-muted" th:text="'Rp ' + ${product.harga}"></p>
+                    <form th:action="@{/customer/cart/add-to-cart}" method="POST">
                         <input type="hidden" name="productId" th:value="${product.id}">
+                        <input type="hidden" name="productName" th:value="${product.nama}">
+                        <input type="hidden" name="productPrice" th:value="${product.harga}">
+                        <input type="hidden" name="imageName" th:value="${product.namaFileGambar}">
                         <div class="mb-2">
                             <input type="number" name="quantity" class="form-control" placeholder="Jumlah" min="1" th:max="${product.stok}" required>
                         </div>
@@ -68,9 +126,47 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-auto">
-        <div class="container text-center">
-            <p class="text-muted small mb-0">&copy; 2024 MyMarketU. Semua Hak Dilindungi.</p>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <!-- Newsletter Section -->
+                <div class="col-md-4 newsletter-section">
+                    <h6>Bergabunglah dengan buletin kami secara gratis</h6>
+                    <p>Daftar sekarang untuk mendapatkan update terkini tentang promosi & kupon. Jangan khawatir, kami tidak mengirim spam!</p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Masukkan Alamat Email Anda" aria-label="Email">
+                            <button class="btn btn-danger" type="submit">KIRIM</button>
+                        </div>
+                        <small>Dengan bergabung, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi & Cookie</a> kami.</small>
+                    </form>
+                </div>
+
+                <!-- Contact Info Section -->
+                <div class="col-md-4 contact-info">
+                    <h6>Butuh Bantuan?</h6>
+                    <p>Senin-Jumat: 08 pagi - 09 malam</p>
+                    <p><b>62 188 1881 1111</b></p>
+                    <p>Email: <a href="mailto:info@contoh.com">info@contoh.com</a></p>
+                </div>
+
+                <!-- Quick Links Section -->
+                <div class="col-md-4 quick-links">
+                    <h6>Biarkan Kami Membantu Anda</h6>
+                    <ul>
+                        <li><a href="#">Pernyataan Aksesibilitas</a></li>
+                        <li><a href="#">Pesanan Anda</a></li>
+                        <li><a href="#">Pengembalian & Penggantian</a></li>
+                        <li><a href="#">Tarif & Kebijakan Pengiriman</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat dan Ketentuan</a></li>
+                        <li><a href="#">Pusat Bantuan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom text-center mt-3">
+                <p>&copy; 2024 MyMarketU. Semua hak dilindungi.</p>
+            </div>
         </div>
     </footer>
 

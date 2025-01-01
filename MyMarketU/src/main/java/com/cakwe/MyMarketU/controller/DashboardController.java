@@ -68,6 +68,6 @@ public class DashboardController {
     public String customerDashboard(Model model) {
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
-        return "customer/homepage";
+        return "customer/Homepage";
     }
 }
