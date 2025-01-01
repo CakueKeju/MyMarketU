@@ -57,10 +57,6 @@ public class DashboardController {
         return "admin/reports-admin";
     }
     
-    @GetMapping("/admin/profile-settings-admin")
-    public String settingsAdmin() {
-        return "admin/profile-settings-admin";
-    }
     
     //======================================================================================================================================================================
     //customer
