@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.cakwe.MyMarketU.model.User;
 import com.cakwe.MyMarketU.service.UserService;
@@ -15,6 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -25,10 +34,14 @@ public class SettingsController {
     @Autowired
     private UserService userService;
     
+    @Value("${app.upload.dir:${user.home}}")
+    private String uploadDir;
+    
     @GetMapping("/profile-settings-admin")
     public String showProfileSettings(Model model) {
         try {
             User currentUser = userService.getCurrentUser();
+            model.addAttribute("user", currentUser); // Menambahkan objek user lengkap untuk foto
             model.addAttribute("userName", currentUser.getNamaLengkap());
             model.addAttribute("email", currentUser.getEmail());
             return "admin/profile-settings-admin";
@@ -43,6 +56,7 @@ public class SettingsController {
     public String saveProfileSettings(
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
+            @RequestParam(value = "fotoProfil", required = false) MultipartFile fotoProfil,
             RedirectAttributes redirectAttributes) {
         try {
             logger.info("Mencoba menyimpan profil dengan email: {}", email);
@@ -65,10 +79,54 @@ public class SettingsController {
                 return "redirect:/login";
             }
             
-            // Cek apakah ada perubahan pada nama dan email
-            if (userName.equals(currentUser.getNamaLengkap()) && email.equals(currentUser.getEmail())) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Tidak ada perubahan yang dilakukan pada profil");
-                return "redirect:/admin/profile-settings-admin";
+            // Proses foto profil jika ada
+            if (fotoProfil != null && !fotoProfil.isEmpty()) {
+                try {
+                    // Validasi ukuran file (maksimal 2MB)
+                    if (fotoProfil.getSize() > 2 * 1024 * 1024) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "Ukuran file terlalu besar (maksimal 2MB)");
+                        return "redirect:/admin/profile-settings-admin";
+                    }
+
+                    // Validasi tipe file
+                    String contentType = fotoProfil.getContentType();
+                    if (contentType == null || !contentType.startsWith("image/")) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "File harus berupa gambar");
+                        return "redirect:/admin/profile-settings-admin";
+                    }
+                    
+                    // Buat direktori upload jika belum ada
+                    String uploadPath = uploadDir + "/img/profile";
+                    Path uploadDirPath = Paths.get(uploadPath);
+                    if (!Files.exists(uploadDirPath)) {
+                        Files.createDirectories(uploadDirPath);
+                    }
+                    
+                    // Generate nama file unik
+                    String fileName = UUID.randomUUID().toString() + "_" + fotoProfil.getOriginalFilename();
+                    Path filePath = uploadDirPath.resolve(fileName);
+                    
+                    // Simpan file
+                    Files.copy(fotoProfil.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                    
+                    // Hapus foto lama jika bukan default.png
+                    if (!"default.png".equals(currentUser.getFotoProfil())) {
+                        try {
+                            Path oldFilePath = uploadDirPath.resolve(currentUser.getFotoProfil());
+                            Files.deleteIfExists(oldFilePath);
+                        } catch (IOException e) {
+                            logger.warn("Gagal menghapus foto profil lama: ", e);
+                        }
+                    }
+                    
+                    // Update path foto profil di user
+                    currentUser.setFotoProfil(fileName);
+                    
+                } catch (IOException e) {
+                    logger.error("Error saat menyimpan foto profil: ", e);
+                    redirectAttributes.addFlashAttribute("errorMessage", "Gagal menyimpan foto profil");
+                    return "redirect:/admin/profile-settings-admin";
+                }
             }
             
             // Simpan email lama
@@ -118,6 +176,7 @@ public class SettingsController {
         try {
             User currentUser = userService.getCurrentUser();
             model.addAttribute("userName", currentUser.getNamaLengkap());
+            model.addAttribute("user", currentUser); // Untuk foto profil di sidebar
             return "admin/security-settings-admin";
         } catch (Exception e) {
             logger.error("Error pada showSecuritySettings: ", e);
@@ -174,7 +233,7 @@ public class SettingsController {
         return "redirect:/admin/security-settings-admin";
     }
     
-    // Helper method untuk validasi email
+    // Method helper untuk validasi email
     private boolean isValidEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             return false;

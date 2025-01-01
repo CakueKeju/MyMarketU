@@ -9,41 +9,41 @@
 </head>
 <body class="bg-gray-50">
     <div class="flex">
-        <!-- Sidebar -->
-        <div class="w-64 bg-red-600 min-h-screen fixed">
-            <div class="p-4">
-                <div class="flex items-center mb-8">
-                    <img src="/img/a.png" alt="MyMarketU Logo" class="h-8 w-auto mr-2">
-                    <div class="text-white text-2xl font-bold">MyMarketU</div>
-                </div>
-                <nav>
-                    <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                        <i class="fas fa-chart-line mr-3"></i>
-                        Beranda
-                    </a>
-                    <a th:href="@{/admin/products-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                        <i class="fas fa-box mr-3"></i>
-                        Produk
-                    </a>
-                    <a th:href="@{/admin/orders-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                        <i class="fas fa-shopping-cart mr-3"></i>
-                        Pesanan
-                    </a>
-                    <a th:href="@{/admin/customersmenu-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                        <i class="fas fa-users mr-3"></i>
-                        Pelanggan
-                    </a>
-                    <a th:href="@{/admin/reports-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                        <i class="fas fa-file-alt mr-3"></i>
-                        Laporan
-                    </a>
-                    <a th:href="@{/admin/settings/profile}" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
-                        <i class="fas fa-cog mr-3"></i>
-                        Pengaturan
-                    </a>
-                </nav>
+       <!-- Sidebar -->
+       <div class="w-64 bg-red-600 min-h-screen fixed">
+        <div class="p-4">
+            <div class="flex items-center mb-8">
+                <img src="/img/a.png" alt="Logo MyMarketU" class="h-8 w-auto mr-2">
+                <div class="text-white text-2xl font-bold">MyMarketU</div>
             </div>
+            <nav>
+                <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    Beranda
+                </a>
+                <a th:href="@{/admin/products-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-box mr-3"></i>
+                    Produk
+                </a>
+                <a th:href="@{/admin/orders-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    Pesanan
+                </a>
+                <a th:href="@{/admin/customersmenu-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-users mr-3"></i>
+                    Pelanggan
+                </a>
+                <a th:href="@{/admin/reports-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Laporan
+                </a>
+                <a th:href="@{/admin/settings/profile}" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
+                    <i class="fas fa-cog mr-3"></i>
+                    Pengaturan
+                </a>
+            </nav>
         </div>
+    </div>
 
         <!-- Main Content -->
         <div class="ml-64 flex-1">
@@ -52,10 +52,20 @@
                 <div class="flex justify-between items-center px-8 py-4">
                     <div class="text-2xl text-gray-800">Pengaturan</div>
                     <div class="flex items-center space-x-4">
-                        <div class="text-gray-600">
-                            <span th:text="${userName}">Admin Name</span>
+                        <div class="flex items-center">
+                            <!-- Gunakan th:if untuk menangani kasus ketika fotoProfil null -->
+                            <img th:if="${user != null && user.fotoProfil != null}"
+                                 th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                                 src="/img/profile/default.png"
+                                 alt="Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <img th:unless="${user != null && user.fotoProfil != null}"
+                                 src="/img/profile/default.png"
+                                 alt="Default Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-gray-600" th:text="${userName}">Admin Name</span>
                         </div>
-                        <a th:href="@{/logout}" class="text-gray-500 hover:text-gray-700">
+                        <a href="/logout" class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-sign-out-alt"></i> Keluar
                         </a>
                     </div>
@@ -69,11 +79,11 @@
                     <div class="w-1/4">
                         <div class="bg-white rounded-lg shadow">
                             <div class="p-4">
-                                <a th:href="@{/admin/profile-settings-admin}" class="flex items-center text-red-600 p-3 mb-2 bg-red-50 rounded">
+                                <a href="/admin/profile-settings-admin" class="flex items-center text-red-600 p-3 mb-2 bg-red-50 rounded">
                                     <i class="fas fa-user mr-3"></i>
                                     Pengaturan Profil
                                 </a>
-                                <a th:href="@{/admin/security-settings-admin}" class="flex items-center text-gray-600 p-3 hover:bg-gray-50 rounded">
+                                <a href="/admin/security-settings-admin" class="flex items-center text-gray-600 p-3 hover:bg-gray-50 rounded">
                                     <i class="fas fa-lock mr-3"></i>
                                     Pengaturan Keamanan
                                 </a>
@@ -88,16 +98,53 @@
                                 <h2 class="text-lg font-semibold text-gray-800">Pengaturan Profil</h2>
                             </div>
                             <div class="p-6">
-                                <form th:action="@{/admin/profile-settings-admin/save}" method="post" class="space-y-6">
-                                    <!-- Pesan Sukses -->
+                                <form action="/admin/profile-settings-admin/save" 
+                                      method="post" 
+                                      enctype="multipart/form-data" 
+                                      class="space-y-6">
+                                    
+                    <!-- Profile Photo Section -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Foto Profil</label>
+                            <div class="flex items-center space-x-6">
+                                <div class="relative w-24 h-24 border-2 border-gray-200 rounded-full overflow-hidden">
+                                    <!-- Default image fallback -->
+                                    <img th:if="${user != null && user.fotoProfil != null && user.fotoProfil != 'default.png'}"
+                                        th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                                        alt="Current profile photo" 
+                                        class="w-full h-full object-cover">
+                                    <img th:unless="${user != null && user.fotoProfil != null && user.fotoProfil != 'default.png'}"
+                                        th:src="@{'/img/profile/default.png'}"
+                                        alt="Default profile photo" 
+                                        class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <input type="file" 
+                                        id="photo-upload" 
+                                        name="fotoProfil" 
+                                        accept="image/*"
+                                        class="hidden">
+                                    <label for="photo-upload" 
+                                        class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md cursor-pointer hover:bg-gray-200">
+                                        <i class="fas fa-camera mr-2"></i>
+                                        Pilih Foto Baru
+                                    </label>
+                                    <p class="mt-1 text-sm text-gray-500">
+                                        PNG, JPG, atau GIF (Maks. 2MB)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                                    <!-- Alert Messages -->
                                     <div th:if="${successMessage}" class="mb-4 p-4 bg-green-100 text-green-700 rounded">
                                         <p th:text="${successMessage}"></p>
                                     </div>
-                                    <!-- Pesan Error -->
                                     <div th:if="${errorMessage}" class="mb-4 p-4 bg-red-100 text-red-700 rounded">
                                         <p th:text="${errorMessage}"></p>
                                     </div>
-                                    
+
+                                    <!-- Form Fields -->
                                     <div class="mb-6">
                                         <label for="userName" class="block text-sm font-medium text-gray-700 mb-2">Nama Admin</label>
                                         <input type="text" 
@@ -109,7 +156,7 @@
                                     </div>
                                     
                                     <div class="mb-6">
-                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Alamat Email</label>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                         <input type="email" 
                                                id="email"
                                                name="email" 
@@ -132,5 +179,19 @@
             </main>
         </div>
     </div>
+
+    <script>
+        // Preview image before upload
+        document.getElementById('photo-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('img[alt="Current profile photo"]').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>
