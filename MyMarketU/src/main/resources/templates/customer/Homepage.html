@@ -30,6 +30,35 @@
             margin: 0 auto;
             margin-bottom: 10px;
         }
+        /* Promo Banner Style */
+        .promo-banner {
+            background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,140,0,1) 100%);
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+        }
+    
+        .promo-banner h4 {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    
+        .promo-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+    
+        .promo-banner p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+    
+        .promo-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -42,11 +71,24 @@
             </a>
         </div>
     </header>
-
+    
     <!-- Produk Section -->
     <main class="container py-5">
         <h2 class="text-center mb-4">Selamat Datang</h2>
         <div class="row g-4">
+            <!-- Promo Banner -->
+            <section class="promo-banner">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h4 class="fw-bold">Diskon Harian</h4>
+                        <h1 class="mb-3">Belanja bersama kami untuk kualitas yang lebih baik dengan harga terbaik.</h1>
+                        <p class="lead">Kami telah menyiapkan diskon khusus untuk Anda pada produk kebutuhan sehari-hari. Jangan lewatkan kesempatan ini...</p>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <img src="img/promo-product.jpg" alt="Promo Product" class="img-fluid rounded">
+                    </div>
+                </div>
+            </section>
             <!-- Generate Produk -->
             <div th:each="product : ${products}" class="col-md-3">
                 <div class="product-box">
