@@ -12,21 +12,19 @@ import java.util.List;
  * @author Cakue
  */
 public class TransactionDTO {
-    private String userId; 
+    private int id;
     private String invoiceNumber;
     private double totalCost;
-    private String status; 
-    private List<TransactionItemDTO> items; 
+    private Transaction.TransactionStatus status;
     private Date transactionDate;
-    private Date lastUpdated;
-    private String transactionEvidence;
+    private List<TransactionItemDTO> items;
 
-    public String getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getInvoiceNumber() {
@@ -45,20 +43,12 @@ public class TransactionDTO {
         this.totalCost = totalCost;
     }
 
-    public String getStatus() {
+    public Transaction.TransactionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Transaction.TransactionStatus status) {
         this.status = status;
-    }
-
-    public List<TransactionItemDTO> getItems() {
-        return items;
-    }
-
-    public void setItems(List<TransactionItemDTO> items) {
-        this.items = items;
     }
 
     public Date getTransactionDate() {
@@ -69,20 +59,13 @@ public class TransactionDTO {
         this.transactionDate = transactionDate;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public List<TransactionItemDTO> getItems() {
+        return items;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setItems(List<TransactionItemDTO> items) {
+        this.items = items;
     }
 
-    public String getTransactionEvidence() {
-        return transactionEvidence;
-    }
-
-    public void setTransactionEvidence(String transactionEvidence) {
-        this.transactionEvidence = transactionEvidence;
-    }
     
 }

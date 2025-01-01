@@ -5,7 +5,7 @@
 package com.cakwe.MyMarketU.model;
 
 import jakarta.persistence.*;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,11 +14,12 @@ import java.util.List;
  * @author Cakue
  */
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -29,14 +30,14 @@ public class Transaction {
 
     @Column(name = "total_cost", nullable = false)
     private double totalCost;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private TransactionStatus status;
-    
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TransactionItem> items;
-    
+
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<TransactionItem> items = new ArrayList<>();
+
     @Column(name = "transaction_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDate;
@@ -48,15 +49,26 @@ public class Transaction {
     @Column(name = "transaction_evidence")
     private String transactionEvidence;
 
-    public enum TransactionStatus {
-         PENDING, APPROVED, DECLINED
+    @PrePersist
+    protected void onCreate() {
+        transactionDate = new Date();
+        lastUpdated = new Date();
     }
 
-    public String getId() {
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdated = new Date();
+    }
+
+    public enum TransactionStatus {
+        PENDING, APPROVED, DECLINED
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -123,16 +135,6 @@ public class Transaction {
 
     public void setTransactionEvidence(String transactionEvidence) {
         this.transactionEvidence = transactionEvidence;
-    }
-    
-    @PrePersist
-    protected void onCreate() {
-        this.transactionDate = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.lastUpdated = new Date();
     }
 }
     

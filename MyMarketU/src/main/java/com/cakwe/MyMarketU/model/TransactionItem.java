@@ -16,8 +16,8 @@ import jakarta.persistence.*;
 public class TransactionItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id", nullable = false)
@@ -30,11 +30,11 @@ public class TransactionItem {
     @Column(name = "quantity", nullable = false)
     private int quantity;
     
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

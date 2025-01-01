@@ -1,6 +1,8 @@
 package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.Product;
+import com.cakwe.MyMarketU.model.TransactionDTO;
+import com.cakwe.MyMarketU.model.User;
 import com.cakwe.MyMarketU.repository.ProductRepository;
 import com.cakwe.MyMarketU.repository.UserRepository;
 import com.cakwe.MyMarketU.service.TransactionService;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DashboardController {
@@ -70,8 +75,17 @@ public class DashboardController {
     
     @GetMapping("/customer/dashboard")
     public String customerDashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        TransactionDTO transaction = transactionService.getOrCreateTransaction(user.getId());
+        
         List<Product> products = productRepository.findAll();
+        model.addAttribute("transactionId", transaction.getId());
         model.addAttribute("products", products);
+        
         return "customer/homepage";
     }
 }

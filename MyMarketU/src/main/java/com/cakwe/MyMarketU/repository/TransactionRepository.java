@@ -6,16 +6,11 @@ package com.cakwe.MyMarketU.repository;
 
 import com.cakwe.MyMarketU.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.Optional;
 /**
  *
  * @author Cakue
  */
-public interface TransactionRepository extends JpaRepository<Transaction, String> {
-    List<Transaction> findByUserId(Long userId); // Mendapatkan semua transaksi berdasarkan user ID
-    
-    Optional<Transaction> findByInvoiceNumber(String invoiceNumber);
+public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
+     Transaction findByUserIdAndStatus(Long userId, Transaction.TransactionStatus status);
 
 }
