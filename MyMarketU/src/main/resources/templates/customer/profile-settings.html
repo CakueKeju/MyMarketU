@@ -32,6 +32,13 @@
             background-color: #bb2d3b;
             border-color: #bb2d3b;
         }
+
+        #profilePhotoPreview {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -44,16 +51,35 @@
             <a href="#">Pelacak Pesanan</a>
         </div>
         <div class="d-flex align-items-center w-100">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/customer/homepage">
                 <img src="../img/a.png" alt="MyMarketU">
             </a>
-            <form class="search-bar">
-                <input class="form-control" type="search" placeholder="Cari produk, makanan atau minuman.." aria-label="Search">
-            </form>
+                <form class="search-bar">
+                <input
+                class="form-control"
+                    type="search"
+                    id="search-box"
+                    placeholder="Cari produk, makanan atau minuman.."
+                    aria-label="Search"
+                    />
+                </form> 
             <div class="account-icons">
                 <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
                     🛒
                 </a>
+                <div class="flex items-center" style="margin-left: 15px;">
+                    <a href="/customer/profile-settings" title="Pengaturan Profil">
+                        <img th:if="${user != null && user.fotoProfil != null}"
+                             th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                             src="/img/profile/yasir.jpg"
+                             alt="Profile" 
+                             style="width: 40px; height: 40px; border-radius: 50%;">
+                        <img th:unless="${user != null && user.fotoProfil != null}"
+                             src="/img/profile/yasir.jpg"
+                             alt="Default Profile" 
+                             style="width: 40px; height: 40px; border-radius: 50%;">
+                    </a>
+                </div>
             </div>
         </div>
         <div class="navbar-links mt-3">
@@ -80,8 +106,14 @@
             <div class="card-header bg-white">
                 <h5 class="mb-0">Pengaturan Profil</h5>
             </div>
+            
             <div class="card-body">
-                <form th:action="@{/customer/profile-settings/save}" method="post">
+                <form th:action="@{/customer/profile-settings/save}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="profilePhoto" class="form-label">Foto Profil</label>
+                        <img id="profilePhotoPreview" th:src="@{'/img/profile/' + ${user.fotoProfil}}" alt="Foto Profil" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
+                        <input type="file" class="form-control mt-2" id="profilePhoto" name="profilePhoto" accept="image/*">
+                    </div>                    
                     <div class="mb-3">
                         <label for="userName" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" id="userName" name="userName" th:value="${userName}" required>
@@ -100,6 +132,15 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("profilePhoto").addEventListener("change", function(event) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profilePhotoPreview").src = e.target.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
