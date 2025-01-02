@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class CartService {
 
-     private final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     // Simpan keranjang sementara (bisa diganti dengan database jika perlu)
     private final List<CartItem> cart = new ArrayList<>();
@@ -90,5 +91,25 @@ public class CartService {
         return cart.stream()
                 .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
                 .sum();
+    }
+    
+    @Autowired
+    private PromoService promoService;
+
+    private String currentPromoCode = null;
+
+    public double applyPromo(String promoCode) {
+        if (promoCode == null || promoCode.isEmpty()) {
+            throw new IllegalArgumentException("Kode promo tidak boleh kosong");
+        }
+
+        double subtotal = calculateSubtotal();
+        double discount = promoService.calculateDiscount(subtotal, promoCode);
+        currentPromoCode = promoCode; // Simpan kode promo yang valid
+        return discount;
+    }
+
+    public String getCurrentPromoCode() {
+        return currentPromoCode;
     }
 }

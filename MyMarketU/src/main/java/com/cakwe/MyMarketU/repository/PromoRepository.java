@@ -13,5 +13,5 @@ import java.util.Optional;
  * @author Cakue
  */
 public interface PromoRepository extends JpaRepository<Promo, Long> {
-    Optional<Promo> findByCodeAndActive(String code, boolean active);
+    Optional<Promo> findByCode(String code);
 }

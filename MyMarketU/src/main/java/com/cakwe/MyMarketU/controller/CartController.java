@@ -3,6 +3,7 @@ package com.cakwe.MyMarketU.controller;
 import com.cakwe.MyMarketU.model.CartItem;
 import com.cakwe.MyMarketU.model.CartItemDTO;
 import com.cakwe.MyMarketU.service.CartService;
+import com.cakwe.MyMarketU.service.PromoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import org.springframework.ui.Model;
 @RequestMapping("/customer/cart")
 public class CartController {
 
+    @Autowired
+    private PromoService promoService;
+    
     @Autowired
     private CartService cartService;
 
@@ -62,10 +66,28 @@ public class CartController {
         double subtotal = cartItems.stream()
                                    .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
                                    .sum();
+        double discount = 0;
+        String currentPromoCode = cartService.getCurrentPromoCode();
+        if (currentPromoCode != null) {
+            discount = promoService.calculateDiscount(subtotal, currentPromoCode);
+        }
+        double totalPrice = subtotal - discount;
+
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("subtotal", subtotal);
-        model.addAttribute("discount", 0); // Diskon default, bisa diubah
-        model.addAttribute("totalPrice", subtotal); // Total harga
-        return "customer/cart"; // Mengarahkan ke cart.html di templates
+        model.addAttribute("discount", discount);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("promoCode", currentPromoCode);
+        return "customer/cart";
+    }
+    
+    @GetMapping("/apply-promo")
+    public ResponseEntity<Double> applyPromo(@RequestParam String promoCode) {
+        try {
+            double discount = cartService.applyPromo(promoCode);
+            return ResponseEntity.ok(discount);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(0.0);
+        }
     }
 }

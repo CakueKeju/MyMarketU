@@ -22,13 +22,13 @@ public class PenilaianController {
     }
 
     @GetMapping("/produk/{idProduk}")
-    public ResponseEntity<List<Penilaian>> getByProduk(@PathVariable int idProduk) {
+    public ResponseEntity<List<Penilaian>> getByProduk(@PathVariable Long idProduk) {
         List<Penilaian> penilaianList = penilaianRepository.findByIdProduk(idProduk);
         return ResponseEntity.ok(penilaianList);
     }
 
     @GetMapping("/pelanggan/{idPelanggan}")
-    public ResponseEntity<List<Penilaian>> getByPelanggan(@PathVariable int idPelanggan) {
+    public ResponseEntity<List<Penilaian>> getByPelanggan(@PathVariable Long idPelanggan) {
         List<Penilaian> penilaianList = penilaianRepository.findByIdPelanggan(idPelanggan);
         return ResponseEntity.ok(penilaianList);
     }

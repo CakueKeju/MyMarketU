@@ -39,6 +39,9 @@ public class OrderService {
             throw new IllegalStateException("Keranjang belanja kosong");
         }
 
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User tidak ditemukan"));
+        
         // Validasi stok untuk setiap item di keranjang
         for (CartItem item : cartItems) {
             Product product = productRepository.findById(item.getProduct().getId())
@@ -56,22 +59,20 @@ public class OrderService {
         // Hitung diskon jika ada promo
         double discount = 0.0;
         if (promoCode != null && !promoCode.isEmpty()) {
-            Promo promo = promoService.validatePromoCode(promoCode);
+            Promo promo = promoService.validatePromo(promoCode);
             discount = subtotal * (promo.getDiscountPercentage() / 100);
         }
 
         // Hitung total harga setelah diskon
         double totalPrice = subtotal - discount;
 
-        // Ambil user berdasarkan userId
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Pengguna tidak ditemukan dengan ID: " + userId));
 
         // Buat dan simpan pesanan baru
         Order order = new Order();
         order.setUser(user);
         order.setTotalPrice(totalPrice);
         order.setStatus(Order.OrderStatus.PENDING);
+        
         Order savedOrder = orderRepository.save(order);
 
         // Simpan item pesanan
@@ -90,14 +91,8 @@ public class OrderService {
         return orderRepository.findByUserId(userId);
     }
 
-    public Order getOrderById(int id, int userId) {
-        Order order = orderRepository.findById(id)
+    public Order getOrderById(int orderId) {
+        return orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Pesanan tidak ditemukan"));
-
-        if (order.getUser().getId() != userId) {
-            throw new IllegalArgumentException("Anda tidak memiliki akses ke pesanan ini");
-        }
-
-        return order;
     }
 }

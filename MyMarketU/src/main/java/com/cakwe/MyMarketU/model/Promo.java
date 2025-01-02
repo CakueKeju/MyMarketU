@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cakwe.MyMarketU.model;
 
 import jakarta.persistence.*;
-/**
- *
- * @author Cakue
- */
+
 @Entity
 public class Promo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,11 +13,18 @@ public class Promo {
     private String code;
 
     @Column(nullable = false)
-    private double discountPercentage; // Diskon dalam persentase (misal: 10.0 untuk 10%)
-
-    @Column(nullable = false)
     private boolean active;
 
+    @Column(nullable = false)
+    private double discountPercentage;
+
+    @Column(nullable = false)
+    private double minimumSpend;
+
+    @Column(nullable = false)
+    private double maximumDiscount;
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -40,14 +41,6 @@ public class Promo {
         this.code = code;
     }
 
-    public double getDiscountPercentage() {
-        return discountPercentage;
-    }
-
-    public void setDiscountPercentage(double discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -56,4 +49,27 @@ public class Promo {
         this.active = active;
     }
 
+    public double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public double getMinimumSpend() {
+        return minimumSpend;
+    }
+
+    public void setMinimumSpend(double minimumSpend) {
+        this.minimumSpend = minimumSpend;
+    }
+
+    public double getMaximumDiscount() {
+        return maximumDiscount;
+    }
+
+    public void setMaximumDiscount(double maximumDiscount) {
+        this.maximumDiscount = maximumDiscount;
+    }
 }
