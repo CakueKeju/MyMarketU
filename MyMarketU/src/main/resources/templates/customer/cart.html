@@ -6,7 +6,7 @@
     <title>Your Shopping Cart - MyMarketU</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/css/styleB.css">
 </head>
 <body>
     <!-- Header -->
@@ -18,14 +18,24 @@
             <a href="#">Pelacak Pesanan</a>
         </div>
         <div class="d-flex align-items-center w-100">
-            <a class="navbar-brand" href="/">
-                <img src="../img/a.png" alt="MyMarketU">
+            <a class="navbar-brand" href="/customer/homepage">
+                <img src="/img/a.png" alt="MyMarketU">
             </a>
+            <form class="search-bar">
+                <input class="form-control" type="search" placeholder="Cari produk, makanan atau minuman.." aria-label="Search">
+            </form>
             <div class="account-icons">
                 <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
                     🛒
                 </a>
             </div>
+        </div>
+        <div class="navbar-links mt-3">
+            <a href="#">Beranda</a>
+            <a href="#">Toko</a>
+            <a href="#">Makanan</a>
+            <a href="#">Minuman</a>
+            <a href="#" class="text-danger">Hampir Selesai <span class="badge bg-danger text-white badge-sale">SALE</span></a>
         </div>
     </nav>
 
@@ -41,14 +51,14 @@
                 <div th:if="${!cartItems.isEmpty()}" class="row">
                     <div th:each="item : ${cartItems}" class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img th:src="@{'/images/' + ${item.imageName}}" class="card-img-top product-img" th:alt="${item.productName}">
+                            <img th:src="@{'/images/' + ${item.product.namaFileGambar}}" class="card-img-top product-img" th:alt="${item.product.nama}">
                             <div class="card-body d-flex flex-column">
-                                <h5 th:text="${item.productName}" class="card-title"></h5>
-                                <p th:text="'Rp ' + ${item.price}" class="text-muted"></p>
+                                <h5 th:text="${item.product.nama}" class="card-title"></h5>
+                                <p th:text="'Rp ' + ${item.product.harga}" class="text-muted"></p>
                                 <p class="text-muted small mb-3" th:text="'Jumlah: ' + ${item.quantity}"></p>
                                 <div class="mt-auto">
                                     <form th:action="@{/customer/cart/remove}" method="POST">
-                                        <input type="hidden" name="productId" th:value="${item.productId}">
+                                        <input type="hidden" name="productId" th:value="${item.product.id}">
                                         <button type="submit" class="btn btn-danger btn-sm w-100">Hapus</button>
                                     </form>
                                 </div>
@@ -62,14 +72,37 @@
             <div class="col-md-4">
                 <div class="border p-3 rounded">
                     <h3 class="mb-3">Ringkasan Keranjang</h3>
+                    <!-- Harga Asli (Subtotal) -->
                     <div class="d-flex justify-content-between">
                         <span>Subtotal</span>
-                        <span th:text="'Rp ' + ${cartTotal}"></span>
+                        <span th:text="'Rp ' + ${subtotal}"></span>
                     </div>
-                    <form th:action="@{/customer/checkout}" method="POST" class="mt-3">
-                        <button type="submit" class="btn btn-success w-100">Checkout</button>
+
+                    <!-- Diskon -->
+                    <div class="d-flex justify-content-between">
+                        <span>Diskon</span>
+                        <span th:text="'- Rp ' + ${discount}"></span>
+                    </div>
+
+                    <!-- Total Setelah Diskon -->
+                    <div class="d-flex justify-content-between border-top pt-3">
+                        <strong>Total</strong>
+                        <strong th:text="'Rp ' + ${totalPrice}"></strong>
+                    </div>
+
+                    <!-- Form Promo Code -->
+                    <form th:action="@{/customer/cart/apply-promo}" method="post" class="mt-3">
+                        <div class="input-group">
+                            <input type="text" name="promoCode" class="form-control" th:value="${promoCode}" placeholder="Masukkan kode promo">
+                            <button type="submit" class="btn btn-success">Terapkan</button>
+                        </div>
+                        <div th:if="${promoError}" class="text-danger mt-2" th:text="${promoError}"></div>
                     </form>
-                    <a href="/customer/homepage" class="btn btn-outline-primary w-100 mt-3">Tambahkan Produk</a>
+
+                    <!-- Tombol Checkout -->
+                    <form th:action="@{/customer/orders/checkout}" method="POST" class="mt-3">
+                        <button type="submit" class="btn btn-primary w-100">Checkout</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -121,5 +154,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/cart.js"></script>
 </body>
 </html>

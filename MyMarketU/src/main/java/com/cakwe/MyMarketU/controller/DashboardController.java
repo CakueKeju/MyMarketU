@@ -1,11 +1,10 @@
 package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.Product;
-import com.cakwe.MyMarketU.model.Transaction;
 import com.cakwe.MyMarketU.model.User;
 import com.cakwe.MyMarketU.repository.ProductRepository;
 import com.cakwe.MyMarketU.repository.UserRepository;
-import com.cakwe.MyMarketU.service.TransactionService;
+import com.cakwe.MyMarketU.service.ProductService;
 import com.cakwe.MyMarketU.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,31 +60,30 @@ public class DashboardController {
     public String reportsAdmin() {
         return "admin/reports-admin";
     }
-    @Autowired
-    private TransactionService transactionService;
+    
+    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProductService productService;
+    
     @GetMapping("/customer/homepage")
     public String customerHomepage(Model model, HttpSession session) {
-        // Ambil user saat ini menggunakan UserService
-        User user = userService.getCurrentUser();
-
-        // Cek apakah ada transaksi PENDING untuk user ini
-        Transaction transaction = transactionService.getPendingTransaction(user.getId());
-        if (transaction != null) {
-            session.setAttribute("transactionId", transaction.getId());
-        } else {
-            session.removeAttribute("transactionId"); // Hapus jika tidak ada transaksi PENDING
+        // Ambil pengguna yang sedang login
+         User user = userService.getCurrentUser();
+        if (user == null) {
+            return "redirect:/login"; 
         }
 
-        // Ambil daftar produk untuk ditampilkan
-        List<Product> products = productRepository.findAll();
+        // Ambil daftar produk untuk ditampilkan di homepage
+        List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-        model.addAttribute("userName", user.getNamaLengkap()); // Tambahkan nama user ke halaman
+
+        // Tambahkan nama user untuk dipakai di halaman
+        model.addAttribute("userName", user.getNamaLengkap());
 
         return "customer/homepage";
     }
-
 }

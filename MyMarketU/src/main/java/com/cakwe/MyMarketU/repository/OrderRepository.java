@@ -4,11 +4,15 @@
  */
 package com.cakwe.MyMarketU.repository;
 
-import com.cakwe.MyMarketU.model.TransactionItem;
+import com.cakwe.MyMarketU.model.Order;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 /**
  *
  * @author Cakue
  */
-public interface TransactionItemRepository extends JpaRepository<TransactionItem, String> {
+public interface OrderRepository extends JpaRepository<Order, Integer> {
+    List<Order> findByUserId(int userId); // Order berdasarkan pengguna
+    List<Order> findByStatus(String status); 
 }

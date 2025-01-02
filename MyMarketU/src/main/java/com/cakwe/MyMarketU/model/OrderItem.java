@@ -12,16 +12,16 @@ import jakarta.persistence.*;
  * @author Cakue
  */
 @Entity
-@Table(name = "transaction_items")
-public class TransactionItem {
+@Table(name = "order_items")
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id", nullable = false)
-    private Transaction transaction;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -29,7 +29,7 @@ public class TransactionItem {
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
-    
+
     public int getId() {
         return id;
     }
@@ -38,12 +38,12 @@ public class TransactionItem {
         this.id = id;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {
@@ -61,4 +61,6 @@ public class TransactionItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    
+    
 }

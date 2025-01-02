@@ -222,5 +222,17 @@ public class UserService {
     
     // Mengembalikan true jika email exists dan bukan milik user saat ini
     return userWithEmail.isPresent() && !userWithEmail.get().getId().equals(currentUser.getId());
-}
+    }
+    
+    public User getUserById(Long userId) {
+        // Validasi parameter
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID tidak boleh null");
+        }
+
+        // Cari user berdasarkan ID
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User dengan ID " + userId + " tidak ditemukan"));
+    }
+
 }

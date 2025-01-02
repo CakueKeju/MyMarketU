@@ -1,42 +1,24 @@
 package com.cakwe.MyMarketU.model;
 
 public class CartItem {
-    private int productId;
-    private String productName;
-    private double productPrice;
+    private int id;
+    private Product product;
     private int quantity;
-    private String imageName;
 
-    public CartItem(int productId, String productName, double productPrice, int quantity, String imageName) {
-        this.productId = productId;
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.quantity = quantity;
-        this.imageName = imageName;
+    public int getId() {
+        return id;
     }
 
-    public int getProductId() {
-        return productId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public double getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -47,11 +29,4 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
 }

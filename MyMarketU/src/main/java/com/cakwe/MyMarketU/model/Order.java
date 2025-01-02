@@ -14,8 +14,8 @@ import java.util.List;
  * @author Cakue
  */
 @Entity
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,30 +28,30 @@ public class Transaction {
     @Column(name = "invoice_number", nullable = false, unique = true)
     private String invoiceNumber;
 
-    @Column(name = "total_cost", nullable = false)
-    private double totalCost;
+    @Column(name = "total_Price", nullable = false)
+    private double totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TransactionStatus status;
+    private OrderStatus status;
 
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<TransactionItem> items = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    @Column(name = "transaction_date", nullable = false, updatable = false)
+    @Column(name = "order_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date transactionDate;
+    private Date orderDate;
 
     @Column(name = "last_updated")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
 
-    @Column(name = "transaction_evidence")
-    private String transactionEvidence;
+    @Column(name = "order_evidence")
+    private String orderEvidence;
 
     @PrePersist
     protected void onCreate() {
-        transactionDate = new Date();
+        orderDate = new Date();
         lastUpdated = new Date();
     }
 
@@ -60,7 +60,7 @@ public class Transaction {
         lastUpdated = new Date();
     }
 
-    public enum TransactionStatus {
+    public enum OrderStatus {
         PENDING, APPROVED, DECLINED
     }
 
@@ -71,7 +71,6 @@ public class Transaction {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public User getUser() {
         return user;
@@ -89,36 +88,36 @@ public class Transaction {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public double getTotalCost() {
-        return totalCost;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public TransactionStatus getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(TransactionStatus status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    public List<TransactionItem> getItems() {
-        return items;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setItems(List<TransactionItem> items) {
-        this.items = items;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
-    public Date getTransactionDate() {
-        return transactionDate;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     public Date getLastUpdated() {
@@ -129,12 +128,13 @@ public class Transaction {
         this.lastUpdated = lastUpdated;
     }
 
-    public String getTransactionEvidence() {
-        return transactionEvidence;
+    public String getOrderEvidence() {
+        return orderEvidence;
     }
 
-    public void setTransactionEvidence(String transactionEvidence) {
-        this.transactionEvidence = transactionEvidence;
+    public void setOrderEvidence(String orderEvidence) {
+        this.orderEvidence = orderEvidence;
     }
+
 }
     
