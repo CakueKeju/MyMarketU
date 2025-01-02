@@ -14,10 +14,8 @@
     <!-- Header -->
     <nav class="navbar">
         <div class="navbar-links">
-            <a href="#">Tentang Kami</a>
             <a href="#">Akun Saya</a>
-            <a href="#">Wishlist</a>
-            <a href="#">Pelacak Pesanan</a>
+            <a href="/logout" class="text-danger">Logout</a>
         </div>
         <div class="d-flex align-items-center w-100">
             <a class="navbar-brand" href="/customer/homepage">
@@ -27,11 +25,26 @@
                 <input class="form-control" type="search" id="search-box" placeholder="Cari produk, makanan atau minuman.." aria-label="Search" />
             </form> 
             <div class="account-icons">
-                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">🛒</a>
+                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
+                    🛒
+                </a>
+                <div class="flex items-center" style="margin-left: 15px;">
+                    <a href="/customer/profile-settings" title="Pengaturan Profil">
+                        <img th:if="${user != null && user.fotoProfil != null}"
+                             th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                             src="/img/profile/default.png"
+                             alt="Profile" 
+                             style="width: 40px; height: 40px; border-radius: 50%;">
+                        <img th:unless="${user != null && user.fotoProfil != null}"
+                             src="/img/profile/default.png"
+                             alt="Default Profile" 
+                             style="width: 40px; height: 40px; border-radius: 50%;">
+                    </a>
+                </div>
             </div>
         </div>
         <div class="navbar-links mt-3">
-            <a href="#">Beranda</a>
+            <a href="/customer/homepage">Beranda</a>
             <a href="#">Toko</a>
             <a href="#">Makanan</a>
             <a href="#">Minuman</a>
@@ -91,11 +104,28 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
+                <!-- Newsletter Section -->
+                <div class="col-md-4 newsletter-section">
+                    <h6>Bergabunglah dengan buletin kami secara gratis</h6>
+                    <p>Daftar sekarang untuk mendapatkan update terkini tentang promosi & kupon. Jangan khawatir, kami tidak mengirim spam!</p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Masukkan Alamat Email Anda" aria-label="Email">
+                            <button class="btn btn-danger" type="submit">KIRIM</button>
+                        </div>
+                        <small>Dengan bergabung, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi & Cookie</a> kami.</small>
+                    </form>
+                </div>
+
+                <!-- Contact Info Section -->
                 <div class="col-md-4 contact-info">
                     <h6>Butuh Bantuan?</h6>
                     <p>Senin-Jumat: 08 pagi - 09 malam</p>
                     <p><b>62 188 1881 1111</b></p>
+                    <p>Email: <a href="mailto:info@contoh.com">info@contoh.com</a></p>
                 </div>
+
+                <!-- Quick Links Section -->
                 <div class="col-md-4 quick-links">
                     <h6>Biarkan Kami Membantu Anda</h6>
                     <ul>
