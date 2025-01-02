@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    Optional<User> findByEmail(String email);
    Optional<User> findByEmailAndRole_Id(String email, Integer roleId);
    Optional<User> findByNim(String nim);
-   Optional<User> findById(Long id); //aaaaaaaaaaaaaaaaaaaaaaa
+   Optional<User> findById(Long id); 
    
    @Query("SELECT u FROM User u WHERE u.role.id = :roleId")
    Optional<User> findFirstByRoleId(Integer roleId);
