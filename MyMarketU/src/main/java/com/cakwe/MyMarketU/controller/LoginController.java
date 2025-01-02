@@ -51,6 +51,7 @@ public class LoginController {
             if ("Admin".equalsIgnoreCase(role)) {
                 return "redirect:/admin/homepage";
             } else if ("Customer".equalsIgnoreCase(role)) {
+                session.setAttribute("userId", user.getId());
                 return "redirect:/customer/homepage";
             } else {
                 model.addAttribute("errorMessage", "Invalid role.");

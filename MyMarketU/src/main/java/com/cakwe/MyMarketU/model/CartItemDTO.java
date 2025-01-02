@@ -10,12 +10,9 @@ package com.cakwe.MyMarketU.model;
  */
 public class CartItemDTO {
     private int productId;
+    private String productName;
+    private double productPrice;
     private int quantity;
-
-    public CartItemDTO(int productId, int quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-    }
 
     public int getProductId() {
         return productId;
@@ -25,6 +22,22 @@ public class CartItemDTO {
         this.productId = productId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -32,6 +45,7 @@ public class CartItemDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    
     
     
 }

@@ -91,7 +91,7 @@ public class DashboardController {
     @GetMapping("/customer/homepage")
     public String customerHomepage(Model model, HttpSession session) {
         // Ambil pengguna yang sedang login
-         User user = userService.getCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "redirect:/login"; 
         }
@@ -102,6 +102,7 @@ public class DashboardController {
 
         // Tambahkan nama user untuk dipakai di halaman
         model.addAttribute("userName", user.getNamaLengkap());
+       
 
         return "customer/homepage";
     }

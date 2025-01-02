@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Shopping Cart - MyMarketU</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="/css/styleB.css">
 </head>
 <body>
@@ -22,18 +23,10 @@
                 <img src="/img/a.png" alt="MyMarketU">
             </a>
             <form class="search-bar">
-                <input
-                class="form-control"
-                    type="search"
-                    id="search-box"
-                    placeholder="Cari produk, makanan atau minuman.."
-                    aria-label="Search"
-                    />
-                </form> 
+                <input class="form-control" type="search" id="search-box" placeholder="Cari produk, makanan atau minuman.." aria-label="Search" />
+            </form> 
             <div class="account-icons">
-                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
-                    🛒
-                </a>
+                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">🛒</a>
             </div>
         </div>
         <div class="navbar-links mt-3">
@@ -51,69 +44,35 @@
         <div class="row">
             <!-- Cart Items -->
             <div class="col-md-8">
-                <div th:if="${cartItems.isEmpty()}" class="alert alert-warning">
+                <div id="empty-cart-message" class="alert alert-warning d-none">
                     Keranjang belanja Anda kosong. <a href="/customer/homepage">Belanja sekarang</a>.
                 </div>
-                <div th:if="${!cartItems.isEmpty()}" class="row">
-                    <div th:each="item : ${cartItems}" class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <img th:src="@{'/images/' + ${item.product.namaFileGambar}}" class="card-img-top product-img" th:alt="${item.product.nama}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 th:text="${item.product.nama}" class="card-title"></h5>
-                                <p th:text="'Rp ' + ${item.product.harga}" class="text-muted"></p>
-                                <p class="text-muted small mb-3" th:text="'Jumlah: ' + ${item.quantity}"></p>
-                                <div class="mt-auto">
-                                    <form th:action="@{/customer/cart/remove}" method="POST">
-                                        <input type="hidden" name="productId" th:value="${item.product.id}">
-                                        <button type="submit" class="btn btn-danger btn-sm w-100">Hapus</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="cart-items" class="row"></div>
             </div>
 
             <!-- Cart Summary -->
             <div class="col-md-4">
                 <div class="border p-3 rounded">
                     <h3 class="mb-3">Ringkasan Keranjang</h3>
-                    <!-- Harga Asli (Subtotal) -->
                     <div class="d-flex justify-content-between">
                         <span>Subtotal</span>
-                        <span th:text="'Rp ' + ${subtotal}"></span>
+                        <span id="subtotal">Rp 0</span>
                     </div>
-
-                    <!-- Diskon -->
                     <div class="d-flex justify-content-between">
                         <span>Diskon</span>
-                        <span th:text="'- Rp ' + ${discount}"></span>
+                        <span id="discount">- Rp 0</span>
                     </div>
-
-                    <!-- Total Setelah Diskon -->
                     <div class="d-flex justify-content-between border-top pt-3">
                         <strong>Total</strong>
-                        <strong th:text="'Rp ' + ${totalPrice}"></strong>
+                        <strong id="total-price">Rp 0</strong>
                     </div>
-
-                    <!-- Form Promo Code -->
-                    <form th:action="@{/customer/cart/apply-promo}" method="post" class="mt-3">
-                        <div class="input-group">
-                            <input type="text" name="promoCode" class="form-control" th:value="${promoCode}" placeholder="Masukkan kode promo">
-                            <button type="submit" class="btn btn-success">Terapkan</button>
-                        </div>
-                        <div th:if="${promoError}" class="text-danger mt-2" th:text="${promoError}"></div>
-                    </form>
-
-                    <!-- Tombol Checkout -->
-                    <form th:action="@{/customer/orders/checkout}" method="POST" class="mt-3">
-                        <button type="submit" class="btn btn-primary w-100"
-                                th:disabled="${cartItems.isEmpty()}">Checkout</button>
-                        <p th:if="${cartItems.isEmpty()}" class="text-danger mt-2">
-                            Keranjang belanja Anda kosong. Tambahkan produk untuk melanjutkan!
-                        </p>
-                    </form>
-
+                    <div class="input-group mt-3">
+                        <input type="text" id="promo-code" class="form-control" placeholder="Masukkan kode promo">
+                        <button class="btn btn-success" id="apply-promo">Terapkan</button>
+                    </div>
+                    <div id="promo-error" class="text-danger mt-2"></div>
+                    <button id="checkout-button" class="btn btn-primary w-100 mt-3" disabled>Checkout</button>
+                    <button id="clear-cart-button" class="btn btn-secondary w-100 mt-2">Kosongkan Keranjang</button>
                 </div>
             </div>
         </div>
@@ -123,14 +82,11 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <!-- Contact Info Section -->
                 <div class="col-md-4 contact-info">
                     <h6>Butuh Bantuan?</h6>
                     <p>Senin-Jumat: 08 pagi - 09 malam</p>
                     <p><b>62 188 1881 1111</b></p>
                 </div>
-
-                <!-- Quick Links Section -->
                 <div class="col-md-4 quick-links">
                     <h6>Biarkan Kami Membantu Anda</h6>
                     <ul>
@@ -149,64 +105,10 @@
             </div>
         </div>
     </footer>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#search-box').on('input', function() {
-                const query = $(this).val().trim(); // Ambil nilai input pencarian dan hapus spasi berlebih
-    
-                if (query === "") {
-                    $('#product-list').empty(); // Kosongkan elemen produk jika input kosong
-                    return; // Keluar dari fungsi jika input kosong
-                }
-    
-                $.ajax({
-                    url: '/customer/search', // Endpoint backend untuk pencarian
-                    type: 'GET',
-                    data: { query }, // Kirim query pencarian ke backend
-                    success: function(data) {
-                        $('#product-list').empty(); // Kosongkan elemen produk sebelum menampilkan hasil baru
-                        if (data.length > 0) {
-                            data.forEach(product => {
-                                $('#product-list').append(`
-                                    <div class="product-card card p-3 mb-3">
-                                        <img src="/images/${product.namaFileGambar}" alt="${product.nama}" class="product-img card-img-top">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${product.nama}</h5>
-                                            <p class="card-text text-muted">Harga: Rp${product.harga}</p>
-                                            <p class="card-text text-muted small">Stok tersedia: ${product.stok}</p>
-                                            <form method="POST" action="/customer/cart/add">
-                                                <input type="hidden" name="productId" value="${product.id}">
-                                                <div class="input-group mb-2">
-                                                    <input type="number" name="quantity" class="form-control form-control-sm" placeholder="Jumlah" min="1" max="${product.stok}" required>
-                                                </div>
-                                                <button type="submit" class="btn btn-danger btn-sm">Tambahkan</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                `);
-                            });
-                        } else {
-                            $('#product-list').append('<p>Produk tidak ditemukan</p>');
-                        }
-                    },
-                    error: function() {
-                        alert('Terjadi kesalahan saat memuat produk.');
-                    }
-                });
-            });
-    
-            // Tangani pencarian saat input dihapus
-            $('#search-box').on('keyup', function() {
-                const query = $(this).val().trim();
-                if (query === "") {
-                    $('#product-list').empty(); // Kosongkan elemen jika input kosong
-                }
-            });
-        });
-        </script>
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="/js/cart.js"></script>
 </body>
 </html>

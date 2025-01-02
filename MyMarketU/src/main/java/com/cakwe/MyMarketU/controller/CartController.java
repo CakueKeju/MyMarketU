@@ -1,124 +1,71 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cakwe.MyMarketU.controller;
 
 import com.cakwe.MyMarketU.model.CartItem;
-import com.cakwe.MyMarketU.model.Product;
+import com.cakwe.MyMarketU.model.CartItemDTO;
 import com.cakwe.MyMarketU.service.CartService;
-import com.cakwe.MyMarketU.service.ProductService;
-import com.cakwe.MyMarketU.service.PromoService;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+import org.springframework.ui.Model;
 
-/**
- *
- * @author Cakue
- */
 @Controller
 @RequestMapping("/customer/cart")
 public class CartController {
+
     @Autowired
     private CartService cartService;
-    
-    @Autowired
-    private ProductService productService;
-    
-    @Autowired
-    private PromoService promoService;
-
-    @GetMapping
-    public ResponseEntity<List<CartItem>> getCart(HttpSession session) {
-        List<CartItem> cart = cartService.getCart(session);
-        return ResponseEntity.ok(cart);
-    }
 
     @PostMapping("/add")
-    public String addToCart(HttpSession session, @RequestParam int productId, @RequestParam int quantity, RedirectAttributes redirectAttributes) {
-       try{
-            Product product = productService.getProductById(productId);
-
-            // Buat CartItem baru
-            CartItem cartItem = new CartItem();
-            cartItem.setProduct(product);
-
-            // Tambahkan ke keranjang
-            cartService.addToCart(session, cartItem, quantity);
-        
-        // Tambahkan pesan sukses ke RedirectAttributes
-            redirectAttributes.addFlashAttribute("popupMessage", "Produk berhasil ditambahkan ke keranjang!");
-            redirectAttributes.addFlashAttribute("popupType", "success"); // Tipe popup
+    public ResponseEntity<String> addToCart(@RequestBody CartItemDTO cartItemDTO) {
+        try {
+            cartService.addToCart(cartItemDTO);
+            return ResponseEntity.ok("Produk berhasil ditambahkan ke keranjang.");
         } catch (IllegalArgumentException e) {
-            // Tambahkan pesan error ke RedirectAttributes
-            redirectAttributes.addFlashAttribute("popupMessage", "Gagal menambahkan produk: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("popupType", "error"); // Tipe popup
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return "redirect:/customer/homepage";
     }
 
-
-    @PutMapping("/{productId}")
-    public ResponseEntity<String> updateCart(HttpSession session, @PathVariable int productId, @RequestParam int quantity) {
-        cartService.updateCart(session, productId, quantity);
-        return ResponseEntity.ok("Jumlah produk berhasil diperbarui");
+    @GetMapping
+    public ResponseEntity<List<CartItem>> getCartItems() {
+        return ResponseEntity.ok(cartService.getCartItems());
     }
 
-    @PostMapping("/remove")
-    public String removeFromCart(HttpSession session, @RequestParam int productId) {
-        cartService.removeFromCart(session, productId);
-        return "redirect:/customer/cart/view";
+    @PutMapping("/update")
+    public ResponseEntity<String> updateCart(@RequestParam int productId, @RequestParam int quantity) {
+        try {
+            cartService.updateCart(productId, quantity);
+            return ResponseEntity.ok("Jumlah produk berhasil diperbarui.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> clearCart(HttpSession session) {
-        cartService.clearCart(session);
-        return ResponseEntity.ok("Keranjang berhasil dikosongkan");
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeFromCart(@RequestParam int productId) {
+        cartService.removeFromCart(productId);
+        return ResponseEntity.ok("Produk berhasil dihapus dari keranjang.");
     }
-    
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearCart() {
+        cartService.clearCart();
+        return ResponseEntity.ok("Keranjang berhasil dikosongkan.");
+    }
     
     @GetMapping("/view")
-    public String viewCart(HttpSession session, Model model) {
-        // Ambil keranjang dari session
-        List<CartItem> cartItems = cartService.getCart(session);
-
-         // Hitung subtotal (harga asli tanpa diskon)
-        double subtotal = cartService.calculateSubtotal(session);
-
-        // Ambil promo code dari session
-        String promoCode = cartService.getPromoCode(session);
-        
-        // Hitung diskon jika ada promo
-       double discount = 0.0;
-       if (promoCode != null && !promoCode.isEmpty()) {
-           try {
-               discount = promoService.calculateDiscount(subtotal, promoCode); // Gunakan PromoService
-           } catch (IllegalArgumentException e) {
-               model.addAttribute("promoError", "Kode promo tidak valid atau tidak berlaku.");
-               cartService.clearPromoCode(session); // Hapus promo yang tidak valid
-           }
-       }
-
-        // Hitung total setelah diskon
-        double totalPrice = subtotal - discount;
-
-        // Tambahkan data ke model
+    public String viewCart(Model model) {
+        List<CartItem> cartItems = cartService.getCartItems();
+        double subtotal = cartItems.stream()
+                                   .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
+                                   .sum();
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("subtotal", subtotal); // Harga asli tanpa diskon
-        model.addAttribute("discount", discount); // Total diskon
-        model.addAttribute("totalPrice", totalPrice); // Total setelah diskon
-        model.addAttribute("promoCode", promoCode);
-
-        return "customer/cart"; // Mengarah ke cart.html
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("discount", 0); // Diskon default, bisa diubah
+        model.addAttribute("totalPrice", subtotal); // Total harga
+        return "customer/cart"; // Mengarahkan ke cart.html di templates
     }
 }
-

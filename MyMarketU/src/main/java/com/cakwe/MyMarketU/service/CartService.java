@@ -1,112 +1,94 @@
 package com.cakwe.MyMarketU.service;
 
 import com.cakwe.MyMarketU.model.CartItem;
+import com.cakwe.MyMarketU.model.CartItemDTO;
 import com.cakwe.MyMarketU.model.Product;
-import org.springframework.stereotype.Service;
-import jakarta.servlet.http.HttpSession;
-
+import com.cakwe.MyMarketU.repository.ProductRepository;
 import java.util.ArrayList;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CartService {
-    private static final String CART_SESSION_KEY = "cart";
-    
-    private static final String PROMO_SESSION_KEY = "promoCode";
 
-    public List<CartItem> getCart(HttpSession session) {
-        // Mendapatkan keranjang dari session
-        List<CartItem> cart = (List<CartItem>) session.getAttribute(CART_SESSION_KEY);
-        if (cart == null) {
-            cart = new ArrayList<>();
-            session.setAttribute(CART_SESSION_KEY, cart);
-        }
-        return cart;
+     private final ProductRepository productRepository;
+
+    // Simpan keranjang sementara (bisa diganti dengan database jika perlu)
+    private final List<CartItem> cart = new ArrayList<>();
+
+    public CartService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public void addToCart(HttpSession session, CartItem cartItem, int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Jumlah produk harus lebih dari 0");
+
+    public void addToCart(CartItemDTO cartItemDTO) {
+        // Validasi jumlah
+        if (cartItemDTO.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Jumlah produk harus lebih dari 0.");
         }
 
-            // Validasi stok produk
-        Product product = cartItem.getProduct();
-        if (product.getStok() < quantity) {
-            throw new IllegalArgumentException("Stok produk tidak mencukupi");
-        }        
-        // Ambil keranjang belanja dari session
-        List<CartItem> cart = getCart(session);
+        // Validasi produk
+        Product product = productRepository.findById(cartItemDTO.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Produk tidak ditemukan dengan ID: " + cartItemDTO.getProductId()));
+
+        // Cek stok
+        if (product.getStok() < cartItemDTO.getQuantity()) {
+            throw new IllegalArgumentException("Stok produk tidak mencukupi.");
+        }
 
         // Cek apakah produk sudah ada di keranjang
         boolean found = false;
         for (CartItem item : cart) {
-            if (item.getProduct().getId() == cartItem.getProduct().getId()) {
-                // Jika produk sudah ada, tambahkan quantity
-                item.setQuantity(item.getQuantity() + quantity);
+            if (item.getProduct().getId() == product.getId()) {
+                // Update jumlah produk
+                item.setQuantity(item.getQuantity() + cartItemDTO.getQuantity());
                 found = true;
                 break;
             }
         }
 
-        // Jika produk belum ada di keranjang, tambahkan sebagai item baru
+        // Jika produk belum ada, tambahkan sebagai item baru
         if (!found) {
-            cartItem.setQuantity(quantity); // Set quantity untuk item baru
-            cart.add(cartItem);
+            CartItem newItem = new CartItem();
+            newItem.setProduct(product);
+            newItem.setQuantity(cartItemDTO.getQuantity());
+            cart.add(newItem);
         }
-
-        // Simpan kembali keranjang ke session
-        session.setAttribute(CART_SESSION_KEY, cart);
     }
 
-    public void updateCart(HttpSession session, int productId, int quantity) {
-        // Memperbarui jumlah item di keranjang
-        List<CartItem> cart = getCart(session);
+
+    public void updateCart(int productId, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Jumlah produk harus lebih dari 0.");
+        }
+
         for (CartItem item : cart) {
             if (item.getProduct().getId() == productId) {
                 item.setQuantity(quantity);
-                break;
+                return;
             }
         }
-        session.setAttribute(CART_SESSION_KEY, cart);
+
+        throw new IllegalArgumentException("Produk tidak ditemukan di keranjang.");
     }
 
-    public void removeFromCart(HttpSession session, int productId) {
-        // Menghapus item dari keranjang
-        List<CartItem> cart = getCart(session);
+    public void removeFromCart(int productId) {
         cart.removeIf(item -> item.getProduct().getId() == productId);
-        session.setAttribute(CART_SESSION_KEY, cart);
     }
 
-    public void clearCart(HttpSession session) {
-        // Menghapus semua item dari keranjang
-        session.setAttribute(CART_SESSION_KEY, new ArrayList<>());
-        
-    }
-    public void setPromoCode(HttpSession session, String promoCode) {
-    session.setAttribute(PROMO_SESSION_KEY, promoCode);
+    public List<CartItem> getCartItems() {
+        return new ArrayList<>(cart); // Kembalikan salinan untuk menghindari modifikasi langsung
     }
 
-    /**
-     * Mengambil promo code dari session.
-     */
-    public String getPromoCode(HttpSession session) {
-        return (String) session.getAttribute(PROMO_SESSION_KEY);
+
+    public void clearCart() {
+        cart.clear();
     }
 
-    /**
-     * Menghapus promo code dari session.
-     */
-    public void clearPromoCode(HttpSession session) {
-        session.removeAttribute(PROMO_SESSION_KEY);
-    }
-
-    public double calculateSubtotal(HttpSession session) {
-        List<CartItem> cart = getCart(session);
+    public double calculateSubtotal() {
         return cart.stream()
-                .mapToDouble(item -> {
-                    double hargaSetelahDiskon = item.getProduct().getHarga() * (1 - (item.getProduct().getDiskon() / 100.0));
-                    return hargaSetelahDiskon * item.getQuantity();
-                })
+                .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
                 .sum();
     }
 }
