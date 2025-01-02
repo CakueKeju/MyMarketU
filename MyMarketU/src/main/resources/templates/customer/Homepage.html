@@ -75,10 +75,8 @@
     <!-- Header -->
     <nav class="navbar">
         <div class="navbar-links">
-            <a href="#">Tentang Kami</a>
-            <a href="#">Akun Saya</a>
-            <a href="#">Wishlist</a>
-            <a href="#">Pelacak Pesanan</a>
+            <a th:href="@{/customer/profile-settings}">Akun Saya</a>
+            <a href="/logout" class="text-danger">Logout</a>
         </div>
         <div class="d-flex align-items-center w-100">
             <a class="navbar-brand" href="/customer/homepage">
@@ -93,14 +91,27 @@
                     aria-label="Search"
                     />
                 </form> 
-            <div class="account-icons">
-                <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
-                    🛒
-                </a>
-            </div>
+                <div class="account-icons">
+                    <a href="/customer/cart/view" title="Keranjang Belanja" style="margin-left: 10px;">
+                        🛒
+                    </a>
+                    <div class="flex items-center" style="margin-left: 15px;">
+                        <a href="/customer/profile-settings" title="Pengaturan Profil">
+                            <img th:if="${user != null && user.fotoProfil != null}"
+                                 th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                                 src="/img/profile/default.png"
+                                 alt="Profile" 
+                                 style="width: 40px; height: 40px; border-radius: 50%;">
+                            <img th:unless="${user != null && user.fotoProfil != null}"
+                                 src="/img/profile/default.png"
+                                 alt="Default Profile" 
+                                 style="width: 40px; height: 40px; border-radius: 50%;">
+                        </a>
+                    </div>
+                </div>
         </div>
         <div class="navbar-links mt-3">
-            <a href="#">Beranda</a>
+            <a href="/customer/homepage">Beranda</a>
             <a href="#">Toko</a>
             <a href="#">Makanan</a>
             <a href="#">Minuman</a>
