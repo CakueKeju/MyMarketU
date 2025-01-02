@@ -154,6 +154,15 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/search")
+    @ResponseBody
+    public List<Product> searchProducts(@RequestParam("query") String query) {
+        System.out.println("Query: " + query); // Logging untuk memastikan query diterima
+        List<Product> products = repo.findByNamaContainingIgnoreCase(query);
+        System.out.println("Results: " + products); // Logging untuk memeriksa hasil query
+        return products;
+    }
+
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable("id") Integer id,
                               @Valid @ModelAttribute ProductDTO productDTO,
