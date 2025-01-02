@@ -125,6 +125,21 @@ CREATE TABLE `produk` (
   `stok` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `penilaian`
+--
+
+CREATE TABLE `penilaian` (
+  `idRating` INT NOT NULL,
+  `idProduk` INT NOT NULL,
+  `idPelanggan` INT NULL,
+  `rating` INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  `comment` TEXT DEFAULT NULL,
+  `tanggalRating` DATETIME DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -172,6 +187,12 @@ ALTER TABLE `produk`
   ADD PRIMARY KEY (`idProduk`);
 
 --
+-- Indeks untuk tabel `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD PRIMARY KEY (`idRating`);
+  
+--
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
@@ -212,6 +233,12 @@ ALTER TABLE `produk`
   MODIFY `idProduk` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT untuk tabel `penilaian`
+--
+ALTER TABLE `penilaian`
+  MODIFY `idRating` int NOT NULL AUTO_INCREMENT;
+
+--
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
@@ -227,6 +254,13 @@ ALTER TABLE `keranjang`
 ALTER TABLE `keranjang_produk`
   ADD CONSTRAINT `keranjang_produk_ibfk_1` FOREIGN KEY (`idKeranjang`) REFERENCES `keranjang` (`idKeranjang`) ON DELETE CASCADE,
   ADD CONSTRAINT `keranjang_produk_ibfk_2` FOREIGN KEY (`idProduk`) REFERENCES `produk` (`idProduk`) ON DELETE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD CONSTRAINT `penilaian_ibfk_1` FOREIGN KEY (`idProduk`) REFERENCES `produk` (`idProduk`) ON DELETE CASCADE,
+  ADD CONSTRAINT `penilaian_ibfk_2` FOREIGN KEY (`idPelanggan`) REFERENCES `pelanggan` (`idPelanggan`) ON DELETE SET NULL;
 
 --
 -- Ketidakleluasaan untuk tabel `pesanan`

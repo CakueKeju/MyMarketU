@@ -11,53 +11,66 @@
    <div class="flex">
        <!-- Sidebar -->
        <div class="w-64 bg-red-600 min-h-screen fixed">
-           <div class="p-4">
-               <div class="flex items-center mb-8">
-                   <img src="/img/a.png" alt="Logo MyMarketU" class="h-8 w-auto mr-2">
-                   <div class="text-white text-2xl font-bold">MyMarketU</div>
-               </div>
-               <nav>
-                   <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                       <i class="fas fa-chart-line mr-3"></i>
-                       Beranda
-                   </a>
-                   <a th:href="@{/admin/products-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                       <i class="fas fa-box mr-3"></i>
-                       Produk
-                   </a>
-                   <a th:href="@{/admin/orders-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                       <i class="fas fa-shopping-cart mr-3"></i>
-                       Pesanan
-                   </a>
-                   <a th:href="@{/admin/customersmenu-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                       <i class="fas fa-users mr-3"></i>
-                       Pelanggan
-                   </a>
-                   <a th:href="@{/admin/reports-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
-                       <i class="fas fa-file-alt mr-3"></i>
-                       Laporan
-                   </a>
-                   <a th:href="@{/admin/settings/profile}" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
-                       <i class="fas fa-cog mr-3"></i>
-                       Pengaturan
-                   </a>
-               </nav>
-           </div>
-       </div>
+        <div class="p-4">
+            <div class="flex items-center mb-8">
+                <img src="/img/a.png" alt="Logo MyMarketU" class="h-8 w-auto mr-2">
+                <div class="text-white text-2xl font-bold">MyMarketU</div>
+            </div>
+            <nav>
+                <a th:href="@{/admin/dashboard}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    Beranda
+                </a>
+                <a th:href="@{/admin/products-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-box mr-3"></i>
+                    Produk
+                </a>
+                <a th:href="@{/admin/orders-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    Pesanan
+                </a>
+                <a th:href="@{/admin/customersmenu-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-users mr-3"></i>
+                    Pelanggan
+                </a>
+                <a th:href="@{/admin/reports-admin}" class="flex items-center text-gray-300 p-3 mb-2 hover:bg-red-500 rounded">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Laporan
+                </a>
+                <a th:href="@{/admin/settings/profile}" class="flex items-center text-white p-3 mb-2 bg-red-500 rounded">
+                    <i class="fas fa-cog mr-3"></i>
+                    Pengaturan
+                </a>
+            </nav>
+        </div>
+    </div>
 
-       <!-- Konten Utama -->
-       <div class="ml-64 flex-1">
-           <!-- Header Atas -->
-           <header class="bg-white shadow-sm">
-               <div class="flex justify-between items-center px-8 py-4">
-                   <div class="text-2xl text-gray-800">Pengaturan</div>
-                   <div class="flex items-center space-x-4">
-                       <a th:href="@{/logout}" class="text-gray-500 hover:text-gray-700">
-                           <i class="fas fa-sign-out-alt"></i> Keluar
-                       </a>
-                   </div>
-               </div>
-           </header>
+        <!-- Main Content -->
+        <div class="ml-64 flex-1">
+            <!-- Top Header -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-8 py-4">
+                    <div class="text-2xl text-gray-800">Pengaturan</div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <!-- Gunakan th:if untuk menangani kasus ketika fotoProfil null -->
+                            <img th:if="${user != null && user.fotoProfil != null}"
+                                 th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                                 src="/img/profile/default.png"
+                                 alt="Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <img th:unless="${user != null && user.fotoProfil != null}"
+                                 src="/img/profile/default.png"
+                                 alt="Default Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-gray-600" th:text="${userName}">Admin Name</span>
+                        </div>
+                        <a href="/logout" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </header>
 
            <!-- Konten Pengaturan -->
            <main class="p-8">

@@ -47,12 +47,25 @@
 
         <!-- Main Content -->
         <div class="ml-64 flex-1">
-            <!-- Top Header -->
-            <header class="bg-white shadow-sm">
-                <div class="flex justify-between items-center px-8 py-4">
-                    <div class="text-2xl text-gray-800">Halo, <span th:text="${userName}">Admin</span> 👋</div>
-                    <div class="flex items-center space-x-4">
-                        <a th:href="@{/logout}" class="text-gray-500 hover:text-gray-700">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm">
+            <div class="flex justify-between items-center px-8 py-4">
+                <div class="text-2xl text-gray-800">Pelanggan</div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                            <!-- Profile Photo -->
+                            <img th:if="${user != null && user.fotoProfil != null}"
+                                 th:src="@{'/img/profile/' + ${user.fotoProfil}}"
+                                 src="/img/profile/default.png"
+                                 alt="Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <img th:unless="${user != null && user.fotoProfil != null}"
+                                 src="/img/profile/default.png"
+                                 alt="Default Profile" 
+                                 class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-gray-600" th:text="${userName}">Admin Name</span>
+                        </div>
+                        <a href="/logout" class="text-gray-500 hover:text-gray-700">
                             <i class="fas fa-sign-out-alt"></i> Keluar
                         </a>
                     </div>
