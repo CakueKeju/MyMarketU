@@ -50,9 +50,27 @@
         .product-box form {
             margin-top: auto;
         }
+        
     </style>
 </head>
 <body>
+    <!-- modal -->
+    <div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="popupModalLabel">Notifikasi</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p th:text="${popupMessage}">Pesan notifikasi akan muncul di sini</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+          </div>
+        </div>
+    </div>
     <!-- Header -->
     <nav class="navbar">
         <div class="navbar-links">
@@ -106,7 +124,11 @@
 
     <!-- Produk Section -->
     <main class="container py-5">
-        <h2 class="text-center mb-4">Selamat Datang</h2>
+            <!-- Elemen untuk Notifikasi -->
+        <div th:if="${message}" class="alert" th:classappend="${alertType}" th:text="${message}">
+            <!-- Pesan notifikasi akan muncul di sini -->
+        </div>
+        <h2 class="text-center mb-4">Selamat Datang di MyMarketU</h2>
         <div class="row g-4">
             <div id="product-list"  class="product-container">
                 <!-- Produk akan dimuat di sini -->
@@ -236,5 +258,16 @@
         </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Periksa apakah ada pesan popup
+            const popupMessage = /*[[${popupMessage != null}]]*/ false;
+
+            if (popupMessage) {
+                const popupModal = new bootstrap.Modal(document.getElementById('popupModal'));
+                popupModal.show(); // Tampilkan modal
+            }
+        });
+    </script>
 </body>
 </html>

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -42,17 +43,27 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addToCart(HttpSession session, @RequestParam int productId, @RequestParam int quantity) {
-        Product product = productService.getProductById(productId);
+    public String addToCart(HttpSession session, @RequestParam int productId, @RequestParam int quantity, RedirectAttributes redirectAttributes) {
+       try{
+            Product product = productService.getProductById(productId);
 
-        // Buat CartItem baru
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(product);
+            // Buat CartItem baru
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
 
-        // Tambahkan ke keranjang
-        cartService.addToCart(session, cartItem, quantity);
+            // Tambahkan ke keranjang
+            cartService.addToCart(session, cartItem, quantity);
+        
+        // Tambahkan pesan sukses ke RedirectAttributes
+            redirectAttributes.addFlashAttribute("popupMessage", "Produk berhasil ditambahkan ke keranjang!");
+            redirectAttributes.addFlashAttribute("popupType", "success"); // Tipe popup
+        } catch (IllegalArgumentException e) {
+            // Tambahkan pesan error ke RedirectAttributes
+            redirectAttributes.addFlashAttribute("popupMessage", "Gagal menambahkan produk: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("popupType", "error"); // Tipe popup
+        }
 
-        return ResponseEntity.ok("Produk berhasil ditambahkan ke keranjang");
+        return "redirect:/customer/homepage";
     }
 
 

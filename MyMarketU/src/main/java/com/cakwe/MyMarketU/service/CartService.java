@@ -103,7 +103,10 @@ public class CartService {
     public double calculateSubtotal(HttpSession session) {
         List<CartItem> cart = getCart(session);
         return cart.stream()
-                .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
+                .mapToDouble(item -> {
+                    double hargaSetelahDiskon = item.getProduct().getHarga() * (1 - (item.getProduct().getDiskon() / 100.0));
+                    return hargaSetelahDiskon * item.getQuantity();
+                })
                 .sum();
     }
 }

@@ -107,8 +107,13 @@
 
                     <!-- Tombol Checkout -->
                     <form th:action="@{/customer/orders/checkout}" method="POST" class="mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Checkout</button>
+                        <button type="submit" class="btn btn-primary w-100"
+                                th:disabled="${cartItems.isEmpty()}">Checkout</button>
+                        <p th:if="${cartItems.isEmpty()}" class="text-danger mt-2">
+                            Keranjang belanja Anda kosong. Tambahkan produk untuk melanjutkan!
+                        </p>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -118,25 +123,11 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <!-- Newsletter Section -->
-                <div class="col-md-4 newsletter-section">
-                    <h6>Bergabunglah dengan buletin kami secara gratis</h6>
-                    <p>Daftar sekarang untuk mendapatkan update terkini tentang promosi & kupon. Jangan khawatir, kami tidak mengirim spam!</p>
-                    <form>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Masukkan Alamat Email Anda" aria-label="Email">
-                            <button class="btn btn-danger" type="submit">KIRIM</button>
-                        </div>
-                        <small>Dengan bergabung, Anda menyetujui <a href="#">Syarat & Ketentuan</a> serta <a href="#">Kebijakan Privasi & Cookie</a> kami.</small>
-                    </form>
-                </div>
-
                 <!-- Contact Info Section -->
                 <div class="col-md-4 contact-info">
                     <h6>Butuh Bantuan?</h6>
                     <p>Senin-Jumat: 08 pagi - 09 malam</p>
                     <p><b>62 188 1881 1111</b></p>
-                    <p>Email: <a href="mailto:info@contoh.com">info@contoh.com</a></p>
                 </div>
 
                 <!-- Quick Links Section -->
