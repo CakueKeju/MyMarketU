@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface PenilaianRepository extends JpaRepository<Penilaian, Integer> {
-
-    List<Penilaian> findByIdProduk(int idProduk);
-
-    List<Penilaian> findByIdPelanggan(int idPelanggan);
+    List<Penilaian> findByIdProduk(Long idProduk);
+    List<Penilaian> findByIdPelanggan(Long idPelanggan);  // Ubah parameter menjadi Long
 }
