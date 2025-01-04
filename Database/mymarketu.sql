@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 03:05 PM
+-- Generation Time: Jan 04, 2025 at 03:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -168,12 +168,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `created_at`, `email`, `foto_profil`, `nama_lengkap`, `nim`, `password`, `updated_at`, `role_id`, `is_active`, `phone`) VALUES
-(1, '2024-01-01 10:00:00.000000', 'user1@example.com', 'default-profile.jpg', 'Jane Doe', '123456789', '$2a$10$eEh.ULVLkgH0KFl6i6U5MO6hOizOF9iU9fE0aCFbj2UAZwXk/oPy2', '2025-01-01 14:10:26.000000', 1, NULL, NULL),
-(2, '2024-12-23 22:55:25.000000', 'azki@gmail.com', 'default.png', 'Azki', '1301223255', '$2a$10$xxKU6gUdtAhBFhhzRtPrduKPNKcoaE3U21LBOC4oQEYPnOIltiMNi', '2024-12-23 22:55:25.000000', 2, NULL, NULL),
-(3, '2024-12-24 09:08:52.000000', 'contoh@gmail.com', 'default.png', 'Skibidi', '1301223252', '$2a$10$nuqJ0XzHgvdqm54jYmXpmeutkQFd0hW5T0RAOe0GoR3Y2y3suEEcW', '2024-12-24 09:08:52.000000', 2, NULL, NULL),
-(5, '2024-12-24 16:37:24.000000', 'test@gmail.com', 'default.png', 'cobacoba', '1301223253', '$2a$10$GDpNo0uh2YNw7XF6xpLr6.opY29ok5VFgRuPXyVxnMHYWDq19g25O', '2024-12-24 16:37:24.000000', 2, NULL, NULL),
-(6, '2025-01-01 12:44:07.000000', 'mualani123@gmail.com', 'default.png', 'mualani', '1301223299', '$2a$10$ebZZ6LV1khK5ZbXTAmPRyeQTOlxHTFUjPTSqDDBJ/MaWqaKklTaj6', '2025-01-01 12:44:07.000000', 2, 1, NULL),
-(10, '2025-01-01 19:44:07.000000', 'admin@contoh.com', 'fa747905-aade-4e9e-93d4-5f9d77c823e9_skibididsihdaisd.jpg', 'Supaadmin', '1301223250', '$2a$10$H0FGuSzgTc47cnKy8ULzxux8m4iK7WAbf.3TFIMLHF.T0h0Ixhk.K', '2025-01-02 05:26:19.000000', 1, 1, '08123456789');
+(11, '2025-01-04 14:24:13.000000', 'SuperAdmin@admin.com', '42c79df3-7e87-48d7-9732-fb1cd53316c0_default.png', 'SuperAdmin', '0000000001', '$2a$10$HD9R0SmP3tF7PtyzTjbui.6zjK36tjI6YYqvxod2WA4ccT7U.H8Bu', '2025-01-04 14:26:25.000000', 1, 1, NULL),
+(13, '2025-01-04 14:31:04.000000', 'Customer@customer.com', '1736001457220_default.png', 'Customer', '1000000001', '$2a$10$WkFNpNGiNYGPPnGbWiqaDeRTtvvHOUFv7evoST.q8O5e3DLczOj8S', '2025-01-04 14:37:43.000000', 2, 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -273,7 +269,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
