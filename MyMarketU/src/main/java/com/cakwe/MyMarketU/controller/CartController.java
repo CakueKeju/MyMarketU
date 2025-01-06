@@ -25,6 +25,7 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemDTO cartItemDTO) {
+        System.out.println("Received request: " + cartItemDTO);
         try {
             cartService.addToCart(cartItemDTO);
             return ResponseEntity.ok("Produk berhasil ditambahkan ke keranjang.");
@@ -80,14 +81,16 @@ public class CartController {
         model.addAttribute("promoCode", currentPromoCode);
         return "customer/cart";
     }
-    
+
     @GetMapping("/apply-promo")
-    public ResponseEntity<Double> applyPromo(@RequestParam String promoCode) {
+    public ResponseEntity<?> applyPromo(@RequestParam String promoCode, @RequestParam double subtotal) {
         try {
-            double discount = cartService.applyPromo(promoCode);
+            System.out.println("Received subtotal: " + subtotal); // Debugging subtotal
+            double discount = promoService.calculateDiscount(subtotal, promoCode);
             return ResponseEntity.ok(discount);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(0.0);
+            System.err.println("Error: " + e.getMessage()); // Debugging error
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

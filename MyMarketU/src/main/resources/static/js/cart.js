@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    $('#apply-promo-button').click(applyPromo);
     function loadCart() {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         renderCart(cart);
@@ -38,24 +37,39 @@ $(document).ready(function () {
             cartContainer.append(productCard);
         });
 
-        $('#subtotal').text(`Rp ${subtotal}`);
-        $('#total-price').text(`Rp ${subtotal}`);
+        $('#subtotal').text(`Rp ${subtotal.toLocaleString()}`);
+        $('#total-price').text(`Rp ${subtotal.toLocaleString()}`);
     }
 
-    function addToCart(productId, productName, productPrice, quantity, imageName) {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const existingItem = cart.find(item => item.productId === productId);
+    function applyPromoCode() {
+         const promoCode = document.getElementById('promo-code').value;
 
-        if (existingItem) {
-            existingItem.quantity += quantity;
-        } else {
-            cart.push({ productId, productName, productPrice, quantity, imageName });
-        }
+         // Hitung subtotal dari local storage
+         const cart = JSON.parse(localStorage.getItem("cart")) || [];
+         const subtotal = cart.reduce((sum, item) => sum + (item.productPrice * item.quantity), 0);
 
-        localStorage.setItem("cart", JSON.stringify(cart));
-        toastr.success(`Produk "${productName}" berhasil ditambahkan ke keranjang!`);
-        loadCart();
-    }
+         console.log("Calculated Subtotal:", subtotal); // Debugging subtotal
+
+         fetch(`/customer/cart/apply-promo?promoCode=${promoCode}&subtotal=${subtotal}`)
+             .then(response => {
+                 if (!response.ok) {
+                     return response.text().then(text => { throw new Error(text); });
+                 }
+                 return response.json();
+             })
+             .then(discount => {
+                 document.getElementById('discount').textContent = `- Rp ${discount.toLocaleString()}`;
+                 document.getElementById('total-price').textContent = `Rp ${(subtotal - discount).toLocaleString()}`;
+                 toastr.success("Promo berhasil diterapkan!", "Sukses");
+             })
+             .catch(error => {
+                 console.error("Error while applying promo:", error); // Debugging error
+                 document.getElementById('promo-error').textContent = error.message; w
+                 toastr.error(error.message || "Terjadi kesalahan", "Gagal");
+             });
+     }
+
+    document.getElementById('apply-promo-button').addEventListener('click', applyPromoCode);
 
     function removeFromCart(productId) {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -72,89 +86,48 @@ $(document).ready(function () {
         loadCart();
     }
 
-    
-    $(document).on('click', '.add-to-cart-btn', function () {
-        const form = $(this).closest('form');
-        const productId = parseInt(form.find('input[name="productId"]').val());
-        const productName = form.find('input[name="productName"]').val();
-        const productPrice = parseFloat(form.find('input[name="productPrice"]').val());
-        const quantity = parseInt(form.find('input[name="quantity"]').val());
-        const imageName = form.find('input[name="imageName"]').val();
-
-        addToCart(productId, productName, productPrice, quantity, imageName);
-    });
-
     $(document).on('click', '.remove-from-cart', function () {
         const productId = $(this).data('id');
         removeFromCart(productId);
     });
 
-    $('#checkout-button').click(checkout);
-    $('#clear-cart-button').click(clearCart);
-
-    loadCart();
-    
-    function applyPromo() {
-    const promoCode = document.getElementById('promo-code').value;
-    const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('Rp ', '').replace(',', ''));
-
-    fetch(`/customer/cart/apply-promo?subtotal=${subtotal}&promoCode=${promoCode}`)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Kode promo tidak valid");
-            }
-        })
-        .then(discount => {
-            document.getElementById('discount').textContent = `- Rp ${discount}`;
-            document.getElementById('total-price').textContent = `Rp ${subtotal - discount}`;
-            document.getElementById('promo-error').textContent = ""; // Reset error
-        })
-        .catch(error => {
-            document.getElementById('promo-error').textContent = error.message;
-        });
-    }
-
-});
-
-function checkout() {
+    $('#checkout-button').click(function () {
+        const userId = 2;
+        const promoCode = document.getElementById('promo-code').value || null;
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const promoCode = document.getElementById("promo-code").value;
 
         if (cart.length === 0) {
-            alert("Keranjang Anda kosong!");
+            toastr.error("Keranjang belanja kosong. Tambahkan produk terlebih dahulu!");
             return;
         }
 
-        // Siapkan payload untuk dikirim
-        const payload = {
-            userId: 1, // Ganti dengan userId aktual jika tersedia
-            promoCode: promoCode,
-            cartItems: cart
-        };
-
-        // Kirim request POST ke backend
-        fetch('/customer/cart/checkout', {
+        fetch(`/customer/orders/checkout?userId=${userId}&promoCode=${promoCode}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(cart)
         })
         .then(response => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw new Error("Checkout gagal!");
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text); });
             }
+            return response.json();
         })
-        .then(data => {
-            console.log(data);
-            window.location.href = data; // Redirect ke halaman checkout
+        .then(orderId => {
+            console.log("Order ID:", orderId);
+            localStorage.removeItem("cart");
+            toastr.success("Checkout berhasil! Mengarahkan ke halaman checkout...");
+            window.location.href = `/customer/orders/checkout/${orderId}`;
         })
         .catch(error => {
-            console.error(error);
-            alert("Terjadi kesalahan saat checkout.");
+            console.error("Error during checkout:", error);
+            toastr.error(error.message || "Terjadi kesalahan saat proses checkout.", "Gagal");
         });
-}
+    });
+
+
+    $('#clear-cart-button').click(clearCart);
+
+    loadCart();
+});

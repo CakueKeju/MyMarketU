@@ -215,66 +215,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="/js/cart.js"></script>
-
-    <script>
-    $(document).ready(function() {
-        $('#search-box').on('input', function() {
-            const query = $(this).val().trim();
-
-            if (query === "") {
-                $('#product-list').empty();
-                return;
-            }
-
-            $.ajax({
-                url: '/customer/search',
-                type: 'GET',
-                data: { query },
-                beforeSend: function () {
-                    $('#product-list').html('<p>Memuat produk...</p>');
-                },
-                success: function(data) {
-                    $('#product-list').empty();
-                    if (data.length > 0) {
-                        data.forEach(product => {
-                            $('#product-list').append(`
-                                <div class="product-card card p-3 mb-3">
-                                    <img src="/images/${product.namaFileGambar}" alt="${product.nama}" class="product-img card-img-top">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.nama}</h5>
-                                        <p class="card-text text-muted">Harga: Rp${product.harga}</p>
-                                        <p class="card-text text-muted small">Stok tersedia: ${product.stok}</p>
-                                        <form class="add-to-cart-form">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <input type="hidden" name="productName" value="${product.nama}">
-                                            <input type="hidden" name="productPrice" value="${product.harga}">
-                                            <div class="input-group mb-2">
-                                                <input type="number" name="quantity" class="form-control form-control-sm" placeholder="Jumlah" min="1" max="${product.stok}" required>
-                                            </div>
-                                            <button type="button" class="btn btn-danger btn-sm add-to-cart-btn">Tambahkan</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            `);
-                        });
-                    } else {
-                        $('#product-list').html('<p>Produk tidak ditemukan</p>');
-                    }
-                },
-                error: function() {
-                    toastr.error('Terjadi kesalahan saat memuat produk.');
-                }
-            });
-        });
-
-        $('#search-box').on('keyup', function() {
-            const query = $(this).val().trim();
-            if (query === "") {
-                $('#product-list').empty();
-            }
-        });
-    });
-    </script>
+    <script src="/js/homepage.js"></script>
 </body>
 </html>

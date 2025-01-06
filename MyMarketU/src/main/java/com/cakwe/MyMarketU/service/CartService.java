@@ -79,6 +79,7 @@ public class CartService {
     }
 
     public List<CartItem> getCartItems() {
+        System.out.println("Current cart contents: " + cart);
         return new ArrayList<>(cart); // Kembalikan salinan untuk menghindari modifikasi langsung
     }
 
@@ -88,25 +89,44 @@ public class CartService {
     }
 
     public double calculateSubtotal() {
-        return cart.stream()
-                .mapToDouble(item -> item.getProduct().getHarga() * item.getQuantity())
+        List<CartItem> cartItems = getCartItems();
+
+        // Debugging isi keranjang
+        System.out.println("Cart Items: " + cartItems);
+
+        double subtotal = cartItems.stream()
+                .mapToDouble(item -> {
+                    double harga = item.getProduct().getHarga();
+                    int quantity = item.getQuantity();
+
+                    // Debugging setiap item dalam keranjang
+                    System.out.println("Product: " + item.getProduct().getNama());
+                    System.out.println("Harga: " + harga + ", Quantity: " + quantity);
+
+                    return harga * quantity;
+                })
                 .sum();
+
+        System.out.println("Calculated Subtotal: " + subtotal);
+        return subtotal;
     }
-    
+
+
     @Autowired
     private PromoService promoService;
 
     private String currentPromoCode = null;
 
     public double applyPromo(String promoCode) {
-        if (promoCode == null || promoCode.isEmpty()) {
-            throw new IllegalArgumentException("Kode promo tidak boleh kosong");
+        try {
+            double subtotal = calculateSubtotal();
+            double discount = promoService.calculateDiscount(subtotal, promoCode);
+            currentPromoCode = promoCode; // Simpan promo yang valid
+            return discount;
+        } catch (IllegalArgumentException e) {
+            currentPromoCode = null; // Hapus promo jika gagal
+            throw e; // Teruskan kesalahan agar controller dapat mengatasinya
         }
-
-        double subtotal = calculateSubtotal();
-        double discount = promoService.calculateDiscount(subtotal, promoCode);
-        currentPromoCode = promoCode; // Simpan kode promo yang valid
-        return discount;
     }
 
     public String getCurrentPromoCode() {

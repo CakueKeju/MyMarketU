@@ -5,49 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation - MyMarketU</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<<body>
-    <div class="container my-5">
-        <h1>Detail Pesanan</h1>
-        <!-- Nomor Invoice -->
-        <div class="alert alert-info">
-            <strong>Nomor Invoice:</strong> <span th:text="${order.invoiceNumber}"></span>
-        </div>
-        <!-- Daftar Barang -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Rincian Barang</h5>
-                <ul class="list-group list-group-flush">
-                    <li th:each="item : ${orderItems}" class="list-group-item">
-                        <strong th:text="${item.product.nama}"></strong> - 
-                        <span th:text="'Rp ' + ${item.product.harga}"></span> x 
-                        <span th:text="${item.quantity}"></span> =
-                        <span th:text="'Rp ' + (${item.product.harga} * ${item.quantity})"></span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- Ringkasan Harga -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Ringkasan Pembayaran</h5>
-                <p><strong>Subtotal:</strong> <span th:text="'Rp ' + ${order.totalPrice}"></span></p>
-            </div>
+<body>
+<div class="container my-5">
+    <h1>Detail Pesanan</h1>
+    <div class="alert alert-info">
+        <strong>Nomor Invoice:</strong> <span th:text="${order.invoiceNumber}"></span>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Rincian Barang</h5>
+            <ul class="list-group list-group-flush">
+                <li th:each="item : ${orderItems}" class="list-group-item">
+                    <strong th:text="${item.product.nama}"></strong> -
+                    <span th:text="'Rp ' + ${item.product.harga}"></span> x
+                    <span th:text="${item.quantity}"></span> =
+                    <span th:text="'Rp ' + (${item.product.harga} * ${item.quantity})"></span>
+                </li>
+            </ul>
         </div>
     </div>
-  
-   
-
-    <!-- Footer -->
-    <footer class="bg-light py-4 mt-auto">
-        <div class="container text-center">
-            <p class="text-muted small mb-0">&copy; 2024 MyMarketU. Semua Hak Dilindungi.</p>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Ringkasan Pembayaran</h5>
+            <p><strong>Total Harga:</strong> <span th:text="'Rp ' + ${order.totalPrice}"></span></p>
         </div>
-    </footer>
+    </div>
+    <button id="confirm-order-button" class="btn btn-primary">Konfirmasi Pesanan</button>
+</div>
 
-    <!-- Bootstrap Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/cart.js"></script>
+<script>
+    document.getElementById('confirm-order-button').addEventListener('click', function () {
+        const orderId = /* Ambil order ID dari backend */;
+        fetch(`/customer/orders/confirm/${orderId}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text); });
+            }
+            return response.text();
+        })
+        .then(message => {
+            alert(message);
+            window.location.href = '/customer/message';
+        })
+        .catch(error => {
+            console.error("Error during confirmation:", error);
+            alert(error.message || "Terjadi kesalahan saat konfirmasi pesanan.");
+        });
+    });
+</script>
 </body>
 </html>

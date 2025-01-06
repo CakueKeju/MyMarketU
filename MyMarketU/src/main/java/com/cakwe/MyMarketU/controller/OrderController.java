@@ -35,22 +35,14 @@ public class OrderController {
             // Panggil service untuk memproses pesanan
             Order order = orderService.checkout(cartItems, userId, promoCode);
             redirectAttributes.addAttribute("orderId", order.getId());
-            // Redirect ke halaman checkout
             return "redirect:/customer/orders/checkout/" + order.getId();
         } catch (IllegalArgumentException e) {
-            // Tangani error dan kembalikan pesan ke halaman keranjang
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/customer/cart";
         }
     }
 
-    
-    
-   
-    
-    
-    
-
+    // Halaman detail checkout
     @GetMapping("/checkout/{orderId}")
     public String viewCheckoutPage(@PathVariable int orderId, Model model) {
         Order order = orderService.getOrderById(orderId);
@@ -58,40 +50,22 @@ public class OrderController {
             throw new IllegalArgumentException("Pesanan tidak ditemukan.");
         }
 
-        // Persiapkan data untuk ditampilkan di halaman checkout
-        List<OrderItem> orderItems = order.getOrderItems();
         model.addAttribute("order", order);
-        model.addAttribute("orderItems", orderItems);
-
-        return "checkout"; // Nama file HTML yang akan digunakan
-    }
-    
-    
-    
-    
-    
-    
-    
-    // Mendapatkan daftar pesanan berdasarkan userId
-    @GetMapping
-    public ResponseEntity<List<Order>> getOrders(@RequestParam int userId) {
-        try {
-            List<Order> orders = orderService.getOrdersByUser(userId);
-            return ResponseEntity.ok(orders);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null); // Tangani jika userId tidak valid
-        }
+        model.addAttribute("orderItems", order.getOrderItems());
+        return "checkout"; // File HTML untuk halaman checkout
     }
 
-    // Mendapatkan detail pesanan berdasarkan orderId
-   @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable int id) {
+    // Konfirmasi pesanan oleh pengguna
+    @PostMapping("/confirm/{orderId}")
+    public ResponseEntity<?> userConfirmOrder(@PathVariable int orderId) {
         try {
-            Order order = orderService.getOrderById(id);
-            return ResponseEntity.ok(order);
+            Order order = orderService.getOrderById(orderId);
+            if (order == null) {
+                throw new IllegalArgumentException("Pesanan tidak ditemukan.");
+            }
+            return ResponseEntity.ok("Pesanan Anda telah dikonfirmasi dan akan diproses.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null); // Tangani jika pesanan tidak ditemukan atau userId tidak valid
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
- 

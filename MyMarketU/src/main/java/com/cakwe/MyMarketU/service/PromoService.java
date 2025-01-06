@@ -42,6 +42,8 @@ public class PromoService {
     public double calculateDiscount(double subtotal, String promoCode) {
         Promo promo = validatePromo(promoCode);
 
+        System.out.println("Subtotal: " + subtotal);
+        System.out.println("Minimum Spend: " + promo.getMinimumSpend());
         if (subtotal < promo.getMinimumSpend()) {
             throw new IllegalArgumentException("Total belanja tidak memenuhi syarat minimum promo.");
         }
